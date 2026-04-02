@@ -40,8 +40,8 @@ enum AppColors {
     static let black = UIColor(resource: .black900)
     static let white = UIColor(resource: .fixedWhite)
     static let black900 = UIColor(resource: .black900)
-    static let grey600 = UIColor(resource: .grey400)
-    static let grey400 = UIColor(resource: .grey600)
+    static let grey600 = UIColor(resource: .grey600)
+    static let grey400 = UIColor(resource: .grey400)
     static let grey200 = UIColor(resource: .grey200)
     static let grey50 = UIColor(resource: .grey50)
 }
