@@ -83,7 +83,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				8689AEBE2F7F105100950D1B /* PBXTargetDependency */,
+				86E8B9F32F7FBFE90072F87B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				86FD340A2F7BD630005B4FC1 /* Swaply */,
@@ -127,7 +127,6 @@
 				86FD343D2F7BDDAF005B4FC1 /* XCRemoteSwiftPackageReference "snapkit" */,
 				86FD34422F7BE057005B4FC1 /* XCRemoteSwiftPackageReference "Moya" */,
 				86FD34472F7BE5AB005B4FC1 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				862EF8EF2F7BFE1300237E9E /* XCRemoteSwiftPackageReference "swiftlint" */,
 				8689AEBC2F7F0FF500950D1B /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -161,9 +160,9 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		8689AEBE2F7F105100950D1B /* PBXTargetDependency */ = {
+		86E8B9F32F7FBFE90072F87B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 8689AEBD2F7F105100950D1B /* SwiftLintBuildToolPlugin */;
+			productRef = 86E8B9F22F7FBFE90072F87B /* SwiftLintBuildToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -375,14 +374,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		862EF8EF2F7BFE1300237E9E /* XCRemoteSwiftPackageReference "swiftlint" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/swiftlint";
-			requirement = {
-				kind = exactVersion;
-				version = 0.63.2;
-			};
-		};
 		8689AEBC2F7F0FF500950D1B /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
@@ -418,9 +409,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8689AEBD2F7F105100950D1B /* SwiftLintBuildToolPlugin */ = {
+		86E8B9F22F7FBFE90072F87B /* SwiftLintBuildToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 862EF8EF2F7BFE1300237E9E /* XCRemoteSwiftPackageReference "swiftlint" */;
+			package = 8689AEBC2F7F0FF500950D1B /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
 		};
 		86FD343E2F7BDDAF005B4FC1 /* SnapKit */ = {
