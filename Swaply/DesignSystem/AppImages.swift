@@ -8,7 +8,6 @@
 import UIKit
 
 enum AppImages {
-    
     // State illustrations
     static let illustrationChangeNumber = UIImage(resource: .phone)
     static let illustrationChangeMail = UIImage(resource: .mail)
@@ -16,12 +15,10 @@ enum AppImages {
     static let illustrationModeration = UIImage(resource: .watchInFrame)
     static let illustrationChangePassword = UIImage(resource: .password)
     static let illustrationError = UIImage(resource: .error)
-    
     // Logo icons
     static let logoBlack = UIImage(resource: .logoBlack)
     static let logoWhite = UIImage(resource: .logoWhite)
     static let logoOrange = UIImage(resource: .logo)
-    
     // Social and Auth icons
     static let iconInstagram = UIImage(resource: .instagram)
     static let iconVk = UIImage(resource: .VK)
@@ -35,8 +32,7 @@ enum AppImages {
     static let iconWhatsapp = UIImage(resource: .whatsApp)
     static let iconYoutube = UIImage(resource: .youtube)
     static let iconEmail = UIImage(resource: .eMail)
-    
-    //TabBar icons
+    // TabBar icons
     static let iconTabBarLikesFilled = UIImage(resource: .tabBarLikesFilled)
     static let iconTabBarLikes = UIImage(resource: .tabBarLikes)
     static let iconTabBarHomeFilled = UIImage(resource: .tabBarMainFilled)
@@ -45,8 +41,7 @@ enum AppImages {
     static let iconTabBarChats = UIImage(resource: .tabBarChats)
     static let iconTabBarProjectsFilled = UIImage(resource: .tabBarProjectsFilled)
     static let iconTabBarProjects = UIImage(resource: .tabBarProjects)
-    
-    //Other icons
+    // Other icons
     static let iconAddFile = UIImage(resource: .addFile)
     static let iconArchiveProject = UIImage(resource: .archive)
     static let iconArrowSend = UIImage(resource: .arrowUpLine)

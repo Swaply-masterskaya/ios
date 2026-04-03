@@ -8,7 +8,7 @@
 import UIKit
 
 enum AppTypography {
-    
+
     // Headline Fonts
     static let titleLargeBold = UIFont.systemFont(ofSize: 34, weight: .regular)
     static let titleLarge = UIFont.systemFont(ofSize: 34, weight: .bold)

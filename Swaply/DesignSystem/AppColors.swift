@@ -10,32 +10,25 @@ import UIKit
 enum AppColors {
     // Primary Colors
     static let primary = UIColor(resource: .fixedWhite)
-
     // Secondary Colors
     static let secondary = UIColor(resource: .grey200)
-
     // Background Colors
     static let backgroundPrimary = UIColor(resource: .black900)
     static let backgroundSecondary = UIColor(resource: .secondaryBg)
-
-    //Accent Color
-    static let accentColor = UIColor(resource: .orange)
-    
-    //Gradient Color
+    // Accent Color
+    static let accentColor = UIColor(resource: .accent)
+    // Gradient Color
     static let gradientColor1 = UIColor(resource: .gradient1)
     static let gradientColor2 = UIColor(resource: .gradient2)
     static let gradientColor3 = UIColor(resource: .gradient3)
-    
     // Text Colors
     static let textPrimary = UIColor(resource: .fixedWhite)
     static let textSecondary = UIColor(resource: .grey200)
     static let textPlaceholder = UIColor(resource: .grey400)
-  
     // Status Colors
-    static let statusGreen = UIColor(resource: .green)
-    static let statusRed = UIColor(resource: .red)
-    static let statusYellow = UIColor(resource: .yellow)
-    
+    static let statusGreen = UIColor(resource: .swaplyGreen)
+    static let statusRed = UIColor(resource: .swaplyRed)
+    static let statusYellow = UIColor(resource: .swaplyYellow)
     // Base Colors
     static let black = UIColor(resource: .black900)
     static let white = UIColor(resource: .fixedWhite)
