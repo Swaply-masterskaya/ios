@@ -33,4 +33,7 @@ enum AppTypography {
     static let caption1 = UIFont.systemFont(ofSize: 12, weight: .regular)
     static let caption2Bold = UIFont.systemFont(ofSize: 11, weight: .bold)
     static let caption2 = UIFont.systemFont(ofSize: 11, weight: .regular)
+
+    // Button Fonts
+    static let accentButtonTitle = UIFont.systemFont(ofSize: 16, weight: .semibold)
 }

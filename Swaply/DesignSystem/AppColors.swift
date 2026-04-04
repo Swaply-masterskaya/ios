@@ -37,4 +37,15 @@ enum AppColors {
     static let grey400 = UIColor(resource: .grey400)
     static let grey200 = UIColor(resource: .grey200)
     static let grey50 = UIColor(resource: .grey50)
+    // Button Colors
+    static let buttonDefaultNormal = UIColor(resource: .buttonDefaultNormal)
+    static let buttonDefaultPressed = UIColor(resource: .buttonDefaultPressed)
+    static let buttonDefaultDisabled = UIColor(resource: .buttonDefaultDisabled)
+    static let buttonDefaultDisabledTypography = UIColor(resource: .buttonDefaultDisabledTypography)
+
+    static let buttonSecondaryPressed = UIColor(resource: .buttonSecondaryPressed)
+    static let buttonSecondaryDisabled = UIColor(resource: .buttonSecondaryDisabled)
+
+    static let buttonAdditionalNormal = UIColor(resource: .buttonAdditionalNormal)
+    static let buttonAdditionalNormalTypography = UIColor(resource: .buttonAdditionalNormalTypography)
 }
