@@ -10,3 +10,5 @@
 
 # These owners will be the default owners for develop branch in the repo:
 develop/* @superaydumov
+
+# This is a comment.
