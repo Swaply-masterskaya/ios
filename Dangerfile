@@ -1,7 +1,32 @@
-lines_changed = git.insertions + git.deletions
+# 🔹 Исключаем технические файлы из подсчета
+ignored_patterns = [
+  %r{^Gemfile\.lock$},
+  %r{^Package\.resolved$},
+  %r{^\.github/workflows/},
+  %r{^fastlane/},
+  %r{\.md$},
+  %r{\.pbxproj$}
+]
 
+# 🔹 Собираем файлы
+files = git.modified_files + git.added_files
+
+# 🔹 Считаем изменения только по "важным" файлам
+lines_changed = files.sum do |file|
+  next 0 if ignored_patterns.any? { |pattern| file.match?(pattern) }
+
+  diff = git.diff_for_file(file)
+  next 0 unless diff && diff.patch
+
+  additions = diff.patch.scan(/^\+(?!\+\+)/).size
+  deletions = diff.patch.scan(/^\-(?!\-\-)/).size
+
+  additions + deletions
+end
+
+# 🔹 Предупреждение о большом PR
 if lines_changed > 400
-  warn("⚠️ Большой PR: #{lines_changed} строк. Рекомендуется разбить на части")
+  warn("⚠️ Большой PR: #{lines_changed} строк (без техничких). Рекомендуется разбить на части")
 end
 
 # 🔹 Проверка описания PR
