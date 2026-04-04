@@ -4,6 +4,17 @@ on:
   push:
     branches:
       - develop
+    paths:
+      - 'Swaply/**'
+      - 'Swaply.xcodeproj/**'
+      - 'fastlane/**'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '.github/workflows/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-develop:
@@ -38,4 +49,3 @@ jobs:
         with:
           name: swaply-build
           path: build
-          

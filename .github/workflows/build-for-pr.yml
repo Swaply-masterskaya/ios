@@ -4,11 +4,27 @@ on:
   pull_request:
     branches:
       - develop
+    paths:
+      - 'Swaply/**'
+      - 'Swaply.xcodeproj/**'
+      - 'fastlane/**'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'Dangerfile'
+      - '.github/workflows/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-for-pr:
     name: build-for-pr
     runs-on: macos-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
 
     env:
       FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 120
@@ -32,4 +48,8 @@ jobs:
 
       - name: Run Fastlane build_for_pr
         run: bundle exec fastlane build_for_pr
-        
+
+      - name: Run Danger
+        run: bundle exec danger
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
