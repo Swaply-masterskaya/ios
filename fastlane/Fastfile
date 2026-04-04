@@ -23,7 +23,7 @@ platform :ios do
       scheme: "Swaply",
       configuration: "Debug",
       sdk: "iphonesimulator",
-      destination: "platform=iOS Simulator,OS=16.0,name=iPhone 14",
+      destination: "platform=iOS Simulator,OS=18.5,name=iPhone 16",
       skip_package_dependencies_resolution: false,
       skip_codesigning: true,
       skip_archive: true
@@ -37,7 +37,7 @@ platform :ios do
       scheme: "Swaply",
       configuration: "Debug",
       sdk: "iphonesimulator",
-      destination: "platform=iOS Simulator,OS=16.0,name=iPhone 14",
+      destination: "platform=iOS Simulator,OS=18.5,name=iPhone 16",
       skip_package_dependencies_resolution: false,
       skip_codesigning: true,
       skip_archive: true,
