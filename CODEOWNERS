@@ -1,0 +1,12 @@
+##############################################################
+#
+# List of approvers/reviewers for Swaply iOS repository
+#
+##############################################################
+#
+# Learn about CODEOWNERS file format: 
+#  https://help.github.com/en/articles/about-code-owners
+#
+
+# Default owner for all files in the repository:
+* @superaydumov
