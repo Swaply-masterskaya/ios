@@ -25,8 +25,8 @@ lines_changed = files.sum do |file|
 end
 
 # 🔹 Предупреждение о большом PR
-if lines_changed > 400
-  warn("⚠️ Большой PR: #{lines_changed} строк (без техничких). Рекомендуется разбить на части")
+if lines_changed > 600
+  warn("⚠️ Большой PR: #{lines_changed} строк (без технических). Рекомендуется разбить на части")
 end
 
 # 🔹 Проверка описания PR
