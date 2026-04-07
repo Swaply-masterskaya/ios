@@ -6,17 +6,15 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol MainTabBarViewDelegate: AnyObject {
     func didSelectTab(at index: Int)
 }
 
 final class MainTabBarView: UIView {
-    
     weak var delegate: MainTabBarViewDelegate?
     private var buttons: [CustomTabButton] = []
-    private var activeIndex: Int = 0
-    
     private let stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -26,7 +24,6 @@ final class MainTabBarView: UIView {
         stack.spacing = 0
         return stack
     }()
-    
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.9)
@@ -36,75 +33,58 @@ final class MainTabBarView: UIView {
         view.layer.masksToBounds = true
         return view
     }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     private func setupUI() {
         backgroundColor = .clear
-        
         addSubview(containerView)
         containerView.addSubview(stackView)
-        
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: AppSpacing.large),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -AppSpacing.large),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
-            
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
-            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
-            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
-            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -4)
-        ])
+        containerView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(0)
+            make.leading.equalToSuperview().offset(AppSpacing.large)
+            make.trailing.equalToSuperview().offset(-AppSpacing.large)
+            make.bottom.equalToSuperview().offset(0)
+        }
+        stackView.snp.makeConstraints { make in
+            make.top.equalTo(containerView).offset(4)
+            make.leading.equalTo(containerView).offset(8)
+            make.trailing.equalTo(containerView).offset(-8)
+            make.bottom.equalTo(containerView).offset(-4)
+        }
     }
-    
     func configure(with items: [TabBarItem]) {
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         buttons.removeAll()
-        
         for (index, item) in items.enumerated() {
             let button = CustomTabButton()
             button.configure(with: item)
             button.tag = index
             button.addTarget(self, action: #selector(tabButtonTapped(_:)), for: .touchUpInside)
-            
             stackView.addArrangedSubview(button)
             buttons.append(button)
         }
-        
         selectTab(at: 0)
     }
-    
     func selectTab(at index: Int) {
         guard index < buttons.count else { return }
-        
-        for button in buttons {
-            button.setNormalState()
+        for (i, button) in buttons.enumerated() {
+            if i == index {
+                button.setSelectedState()
+            } else {
+                button.setNormalState()
+            }
         }
-        
-        buttons[index].setSelectedState()
-        activeIndex = index
     }
-    
     @objc private func tabButtonTapped(_ sender: CustomTabButton) {
         let index = sender.tag
-        guard index != activeIndex else { return }
-        selectTab(at: index)
         delegate?.didSelectTab(at: index)
-        
         animateButtonTap(sender)
     }
-    
     private func animateButtonTap(_ button: UIButton) {
         UIView.animate(withDuration: 0.1, animations: {
             button.transform = CGAffineTransform(scaleX: 0.92, y: 0.92)

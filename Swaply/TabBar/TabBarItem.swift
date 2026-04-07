@@ -15,7 +15,6 @@ enum TabBarItem: Int, CaseIterable {
     case projects
     case chats
     case profile
-    
     var title: String {
         switch self {
         case .home: return "Главная"
@@ -25,7 +24,6 @@ enum TabBarItem: Int, CaseIterable {
         case .profile: return "Профиль"
         }
     }
-    
     var defaultImage: UIImage? {
         switch self {
         case .home: return AppImages.iconTabBarHome
@@ -35,7 +33,6 @@ enum TabBarItem: Int, CaseIterable {
         case .profile: return AppImages.logoBlack
         }
     }
-    
     var selectedImage: UIImage? {
         switch self {
         case .home: return AppImages.iconTabBarHomeFilled
