@@ -1,0 +1,49 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Build project for pull request"
+  lane :build_for_pr do
+    build_app(
+      project: "Swaply.xcodeproj",
+      scheme: "Swaply",
+      configuration: "Debug",
+      sdk: "iphonesimulator",
+      destination: "platform=iOS Simulator,OS=18.5,name=iPhone 16",
+      skip_package_dependencies_resolution: false,
+      skip_codesigning: true,
+      skip_archive: true,
+      xcargs: "-skipPackagePluginValidation"
+    )
+  end
+
+  desc "Build project for develop branch"
+  lane :build_for_develop do
+    build_app(
+      project: "Swaply.xcodeproj",
+      scheme: "Swaply",
+      configuration: "Debug",
+      sdk: "iphonesimulator",
+      destination: "platform=iOS Simulator,OS=18.5,name=iPhone 16",
+      skip_package_dependencies_resolution: false,
+      skip_codesigning: true,
+      skip_archive: true,
+      derived_data_path: "build",
+      xcargs: "-skipPackagePluginValidation"
+    )
+  end
+end
