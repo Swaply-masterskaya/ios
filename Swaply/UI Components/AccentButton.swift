@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 final class AccentButton: UIButton {
 
@@ -42,17 +43,18 @@ final class AccentButton: UIButton {
 
     // MARK: - Private Methods
     private func setupButton() {
-        layer.cornerRadius = 24
+        layer.cornerRadius = AppRadius.extraLarge
         layer.masksToBounds = true
         titleLabel?.font = AppTypography.accentButtonTitle
         setTitle(title, for: .normal)
-        heightAnchor.constraint(equalToConstant: 52).isActive = true
+        snp.makeConstraints { make in
+            make.height.equalTo(52)
+        }
         translatesAutoresizingMaskIntoConstraints = false
 
         switch buttonView {
         case .defaultView:
             setTitleColor(.buttonDefaultDisabledTypography, for: .disabled)
-            setTitleColor(.white, for: .highlighted)
             setTitleColor(.white, for: .normal)
         case .secondaryView:
             setTitleColor(.buttonSecondaryDisabled, for: .disabled)
