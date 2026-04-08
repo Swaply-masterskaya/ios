@@ -6,11 +6,16 @@
 //
 
 import Foundation
+import RxSwift
 
 final class MainTabBarViewModel {
-    @Published private(set) var selectedIndex: Int = 0
+    private let selectedIndexSubject = BehaviorSubject<Int>(value: 0)
+    var selectedIndex: Observable<Int> {
+        return selectedIndexSubject.asObservable()
+    }
+
     func selectTab(at index: Int) {
         guard index >= 0 && index < TabBarItem.allCases.count else { return }
-        selectedIndex = index
+        selectedIndexSubject.onNext(index)
     }
 }

@@ -6,14 +6,15 @@
 //
 
 import UIKit
-import Combine
+import RxSwift
 import SnapKit
 
 final class MainTabBarController: UITabBarController {
     private let customTabBarView = MainTabBarView()
     private let tabBarItems: [TabBarItem] = TabBarItem.allCases
     private let viewModel = MainTabBarViewModel()
-    private var cancellables = Set<AnyCancellable>()
+    private let disposeBag = DisposeBag()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCustomTabBar()
@@ -26,7 +27,6 @@ final class MainTabBarController: UITabBarController {
         tabBar.isHidden = true
         let bottomSafeArea = view.safeAreaInsets.bottom
         let tabBarHeight: CGFloat = 58
-        let bottomOffset: CGFloat = 8
         customTabBarView.frame = CGRect(
             x: 0,
             y: view.frame.height - tabBarHeight - bottomSafeArea - AppSpacing.xsmall,
@@ -46,12 +46,13 @@ final class MainTabBarController: UITabBarController {
         view.addSubview(customTabBarView)
     }
     private func bindViewModel() {
-        viewModel.$selectedIndex
-            .sink { [weak self] index in
+        viewModel.selectedIndex
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] index in
                 self?.selectedIndex = index
-                self?.customTabBarView.selectTab(at: index)
-            }
-            .store(in: &cancellables)
+                self?.customTabBarView.renderTab(at: index)
+            })
+            .disposed(by: disposeBag)
     }
     private func configureViewControllers() {
         var viewControllers: [UIViewController] = []

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 import SnapKit
 
 protocol MainTabBarViewDelegate: AnyObject {
@@ -68,9 +69,9 @@ final class MainTabBarView: UIView {
             stackView.addArrangedSubview(button)
             buttons.append(button)
         }
-        selectTab(at: 0)
+        renderTab(at: 0)
     }
-    func selectTab(at index: Int) {
+    func renderTab(at index: Int) {
         guard index < buttons.count else { return }
         for (i, button) in buttons.enumerated() {
             if i == index {
