@@ -91,10 +91,15 @@ final class DropdownView: UIView {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		setupViews()
+		setupConstraints()
+		updateStyles()
 	}
 
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
+		setupViews()
+		setupConstraints()
+		updateStyles()
 	}
 
 	private func setupViews() {
