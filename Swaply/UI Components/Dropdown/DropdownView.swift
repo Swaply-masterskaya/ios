@@ -39,6 +39,7 @@ final class DropdownView: UIView {
 		let dropdownView = UIView()
 		dropdownView.backgroundColor = AppColors.backgroundPrimary
 		dropdownView.layer.cornerRadius = AppRadius.medium
+		dropdownView.layer.masksToBounds = true
 		let tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
 		dropdownView.addGestureRecognizer(tap)
 		return dropdownView
