@@ -22,7 +22,7 @@ final class DropdownCell: UITableViewCell {
 	private(set) lazy var valueLabel: UILabel = {
 		let label = UILabel()
 		label.font = AppTypography.body
-		label.textColor = AppColors.black
+		label.textColor = AppColors.grey400
 		return label
 	}()
 
@@ -38,6 +38,7 @@ final class DropdownCell: UITableViewCell {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		setupConstraints()
 		selectionStyle = .none
+		backgroundColor = .clear
 	}
 
 	required init?(coder: NSCoder) {
@@ -59,20 +60,18 @@ final class DropdownCell: UITableViewCell {
 			$0.width.equalTo(24)
 			$0.height.equalTo(24)
 		}
-
 		contentView.backgroundColor = .clear
 	}
 
 	func configureCell(text: String, isSelected: Bool = false) {
 		valueLabel.text = text
+		valueLabel.textColor = isSelected ? AppColors.textPrimary : AppColors.grey400
 		updateCheckBox(isSelected: isSelected)
 	}
 
 	private func updateCheckBox(isSelected: Bool) {
 		let imageName = isSelected ? "checkmark.square.fill" : "square"
-		let image = UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
-		checkboxImageView.image = image
-		checkboxImageView.image = UIImage(systemName: imageName)
+		checkboxImageView.image = UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
 		checkboxImageView.tintColor = isSelected ? AppColors.secondaryOrange : AppColors.grey400
 	}
 }
