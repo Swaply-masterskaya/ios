@@ -50,7 +50,6 @@ final class AccentButton: UIButton {
         snp.makeConstraints { make in
             make.height.equalTo(52)
         }
-        translatesAutoresizingMaskIntoConstraints = false
 
         switch buttonView {
         case .defaultView:
