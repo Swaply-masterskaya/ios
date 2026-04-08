@@ -24,7 +24,11 @@ final class DropdownView: UIView {
 
 	private let maxVisibleRows = 7
 	private let rowHeight: CGFloat = 50
+	private let customScrollIndicatorView = CustomScrollIndicatorView()
+
 	private var tableViewHeightConstraint: Constraint?
+	private var tableContainerHeightConstraint: Constraint?
+	private var selectedIndexPath: IndexPath?
 
 	private lazy var titleLabel: UILabel = {
 		let titleLabel = UILabel()
@@ -125,6 +129,9 @@ final class DropdownView: UIView {
 		addSubview(dropdownContent)
 		dropdownView.addSubview(placeholderLabel)
 		dropdownView.addSubview(arrowImageView)
+		dropdownTableContainerView.addSubview(separatorView)
+		dropdownTableContainerView.addSubview(dropdownTableView)
+		dropdownTableContainerView.addSubview(customScrollIndicatorView)
 	}
 
 	private func setupConstraints() {
@@ -136,19 +143,37 @@ final class DropdownView: UIView {
 			$0.height.equalTo(48)
 		}
 
-		arrowImageView.snp.makeConstraints {
-			$0.trailing.equalToSuperview().inset(16)
-			$0.centerY.equalToSuperview()
-			$0.width.height.equalTo(20)
-		}
-
 		placeholderLabel.snp.makeConstraints {
 			$0.leading.equalTo(dropdownView.snp.leading).offset(16)
 			$0.centerY.equalToSuperview()
 			$0.trailing.lessThanOrEqualTo(arrowImageView.snp.leading).offset(-8)
 		}
 
+		arrowImageView.snp.makeConstraints {
+			$0.trailing.equalToSuperview().inset(16)
+			$0.centerY.equalToSuperview()
+			$0.width.height.equalTo(20)
+		}
+
+		dropdownTableContainerView.snp.makeConstraints {
+			tableContainerHeightConstraint = $0.height.equalTo(0).constraint
+		}
+
+		separatorView.snp.makeConstraints {
+			$0.top.leading.trailing.equalToSuperview()
+			$0.height.equalTo(1)
+		}
+
+		customScrollIndicatorView.snp.makeConstraints {
+			$0.top.equalTo(separatorView.snp.bottom).offset(8)
+			$0.trailing.equalToSuperview().inset(8)
+			$0.bottom.equalToSuperview().inset(8)
+			$0.width.equalTo(8)
+		}
+
 		dropdownTableView.snp.makeConstraints {
+			$0.top.equalTo(separatorView.snp.bottom)
+			$0.leading.trailing.bottom.equalToSuperview()
 			tableViewHeightConstraint = $0.height.equalTo(0).constraint
 		}
 	}
