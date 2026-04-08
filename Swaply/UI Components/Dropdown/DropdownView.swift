@@ -203,10 +203,12 @@ final class DropdownView: UIView {
 	func configureDropdown(
 		title: String,
 		placeholder: String,
+		items: [String],
 		state: DropdownState
 	) {
 		titleLabel.text = title
 		placeholderLabel.text = placeholder
+		self.items = items
 		self.state = state
 	}
 
