@@ -37,4 +37,8 @@ enum AppColors {
     static let grey400 = UIColor(resource: .grey400)
     static let grey200 = UIColor(resource: .grey200)
     static let grey50 = UIColor(resource: .grey50)
+    // Buttons with Image States background color
+    static let buttonWithImNormal = UIColor(resource: .secondaryOrange)
+    static let buttonWithImPressed = UIColor(resource: .accentOrange)
+    static let buttonWithImDisActivated = UIColor(resource: .grey300)
 }
