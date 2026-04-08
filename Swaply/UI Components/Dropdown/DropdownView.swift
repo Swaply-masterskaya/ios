@@ -115,6 +115,7 @@ final class DropdownView: UIView {
 		super.init(frame: frame)
 		setupViews()
 		setupConstraints()
+		setupActions()
 		updateStyles()
 	}
 
@@ -122,6 +123,7 @@ final class DropdownView: UIView {
 		super.init(coder: coder)
 		setupViews()
 		setupConstraints()
+		setupActions()
 		updateStyles()
 	}
 
