@@ -298,7 +298,19 @@ final class DropdownView: UIView {
 		state = shouldExpand ? .expanded : .normal
 
 		let newHeight = shouldExpand ? calculateHeightTableView() : .zero
+		let containerHeight = shouldExpand ? newHeight + 1 : .zero
+
 		tableViewHeightConstraint?.update(offset: newHeight)
+		tableContainerHeightConstraint?.update(offset: containerHeight)
+
+		layoutIfNeeded()
+		dropdownTableView.layoutIfNeeded()
+
+		if shouldExpand {
+			updateCustomScrollIndicator()
+		} else {
+			updateCollapsedState()
+		}
 	}
 }
 
