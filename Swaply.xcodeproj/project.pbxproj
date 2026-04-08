@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8691B4ED2F85868700E8A771 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8691B4EC2F85868700E8A771 /* RxSwift */; };
+		8691B4F02F8586C800E8A771 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8691B4EF2F8586C800E8A771 /* Alamofire */; };
 		86FD343F2F7BDDAF005B4FC1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 86FD343E2F7BDDAF005B4FC1 /* SnapKit */; };
-		86FD34442F7BE057005B4FC1 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 86FD34432F7BE057005B4FC1 /* CombineMoya */; };
 		86FD34462F7BE057005B4FC1 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 86FD34452F7BE057005B4FC1 /* Moya */; };
 		86FD34492F7BE5AB005B4FC1 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 86FD34482F7BE5AB005B4FC1 /* Kingfisher */; };
 /* End PBXBuildFile section */
@@ -44,8 +45,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				86FD343F2F7BDDAF005B4FC1 /* SnapKit in Frameworks */,
+				8691B4ED2F85868700E8A771 /* RxSwift in Frameworks */,
+				8691B4F02F8586C800E8A771 /* Alamofire in Frameworks */,
 				86FD34462F7BE057005B4FC1 /* Moya in Frameworks */,
-				86FD34442F7BE057005B4FC1 /* CombineMoya in Frameworks */,
 				86FD34492F7BE5AB005B4FC1 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -53,10 +55,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		862E995D2F8581CC00BC33CD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		86FD33FF2F7BD62F005B4FC1 = {
 			isa = PBXGroup;
 			children = (
 				86FD340A2F7BD630005B4FC1 /* Swaply */,
+				862E995D2F8581CC00BC33CD /* Frameworks */,
 				86FD34092F7BD630005B4FC1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,9 +101,10 @@
 			name = Swaply;
 			packageProductDependencies = (
 				86FD343E2F7BDDAF005B4FC1 /* SnapKit */,
-				86FD34432F7BE057005B4FC1 /* CombineMoya */,
 				86FD34452F7BE057005B4FC1 /* Moya */,
 				86FD34482F7BE5AB005B4FC1 /* Kingfisher */,
+				8691B4EC2F85868700E8A771 /* RxSwift */,
+				8691B4EF2F8586C800E8A771 /* Alamofire */,
 			);
 			productName = Swaply;
 			productReference = 86FD34082F7BD630005B4FC1 /* Swaply.app */;
@@ -128,6 +139,8 @@
 				86FD34422F7BE057005B4FC1 /* XCRemoteSwiftPackageReference "Moya" */,
 				86FD34472F7BE5AB005B4FC1 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				8689AEBC2F7F0FF500950D1B /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				8691B4E92F85866200E8A771 /* XCRemoteSwiftPackageReference "rxswift" */,
+				8691B4EE2F8586C800E8A771 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 86FD34092F7BD630005B4FC1 /* Products */;
@@ -382,6 +395,22 @@
 				version = 0.63.2;
 			};
 		};
+		8691B4E92F85866200E8A771 /* XCRemoteSwiftPackageReference "rxswift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/reactivex/rxswift";
+			requirement = {
+				kind = exactVersion;
+				version = 6.10.2;
+			};
+		};
+		8691B4EE2F8586C800E8A771 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.11.2;
+			};
+		};
 		86FD343D2F7BDDAF005B4FC1 /* XCRemoteSwiftPackageReference "snapkit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/snapkit/snapkit";
@@ -409,6 +438,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8691B4EC2F85868700E8A771 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8691B4E92F85866200E8A771 /* XCRemoteSwiftPackageReference "rxswift" */;
+			productName = RxSwift;
+		};
+		8691B4EF2F8586C800E8A771 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8691B4EE2F8586C800E8A771 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
 		86E8B9F22F7FBFE90072F87B /* SwiftLintBuildToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8689AEBC2F7F0FF500950D1B /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
@@ -418,11 +457,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 86FD343D2F7BDDAF005B4FC1 /* XCRemoteSwiftPackageReference "snapkit" */;
 			productName = SnapKit;
-		};
-		86FD34432F7BE057005B4FC1 /* CombineMoya */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 86FD34422F7BE057005B4FC1 /* XCRemoteSwiftPackageReference "Moya" */;
-			productName = CombineMoya;
 		};
 		86FD34452F7BE057005B4FC1 /* Moya */ = {
 			isa = XCSwiftPackageProductDependency;
