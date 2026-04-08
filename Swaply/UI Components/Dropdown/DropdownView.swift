@@ -67,12 +67,30 @@ final class DropdownView: UIView {
 		dropdownTableView.dataSource = self
 		dropdownTableView.delegate = self
 		dropdownTableView.separatorStyle = .none
+		dropdownTableView.backgroundColor = .clear
+		dropdownTableView.showsVerticalScrollIndicator = false
+		dropdownTableView.bounces = false
 		dropdownTableView.register(DropdownCell.self, forCellReuseIdentifier: DropdownCell.reuseIdentifier)
 		return dropdownTableView
 	}()
 
+	private lazy var dropdownTableContainerView: UIView = {
+		let view = UIView()
+		view.backgroundColor = AppColors.backgroundPrimary
+		view.layer.cornerRadius = AppRadius.medium
+		view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+		view.clipsToBounds = true
+		return view
+	}()
+
+	private lazy var separatorView: UIView = {
+		let view = UIView()
+		view.backgroundColor = AppColors.backgroundSecondary
+		return view
+	}()
+
 	private lazy var dropdownItemContent: UIStackView = {
-		let dropdownItemContent = UIStackView(arrangedSubviews: [dropdownView, dropdownTableView])
+		let dropdownItemContent = UIStackView(arrangedSubviews: [dropdownView, dropdownTableContainerView])
 		dropdownItemContent.axis = .vertical
 		dropdownItemContent.spacing = .zero
 		dropdownItemContent.alignment = .fill
