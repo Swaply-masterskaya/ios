@@ -239,14 +239,56 @@ final class DropdownView: UIView {
 
 	func setItems(_ items: [String]) {
 		self.items = items
-		dropdownTableView.reloadData()
 	}
 
 	private func calculateHeightTableView() -> CGFloat {
 		let contentHeight = CGFloat(items.count) * rowHeight
 		let maxHeight = CGFloat(maxVisibleRows) * rowHeight
-		dropdownTableView.isScrollEnabled = items.count > maxVisibleRows
+		let shouldScroll = items.count > maxVisibleRows
+
+		dropdownTableView.isScrollEnabled = shouldScroll
+		customScrollIndicatorView.isHidden = !shouldScroll
+
 		return min(contentHeight, maxHeight)
+	}
+
+	private func updateCustomScrollIndicator() {
+		customScrollIndicatorView.updateIndicator(
+			contentHeight: dropdownTableView.contentSize.height,
+			visibleHeight: dropdownTableView.bounds.height,
+			contentOffsetY: dropdownTableView.contentOffset.y
+		)
+	}
+
+	private func setupActions() {
+		customScrollIndicatorView.onScrollProgressChanged = { [weak self] progress in
+			guard let self else { return }
+
+			let contentHeight = self.dropdownTableView.contentSize.height
+			let visibleHeight = self.dropdownTableView.bounds.height
+			let maxOffsetY = contentHeight - visibleHeight
+			guard maxOffsetY > 0 else { return }
+
+			let targetOffsetY = progress * maxOffsetY
+			self.dropdownTableView.setContentOffset(
+				CGPoint(x: 0, y: targetOffsetY),
+				animated: false
+			)
+		}
+	}
+
+	private func applySelection(at indexPath: IndexPath) {
+		selectedIndexPath = indexPath
+		placeholderLabel.text = items[indexPath.row]
+		state = .selected
+		dropdownTableView.reloadData()
+		updateCollapsedState()
+	}
+
+	private func updateCollapsedState() {
+		tableViewHeightConstraint?.update(offset: 0)
+		tableContainerHeightConstraint?.update(offset: 0)
+		customScrollIndicatorView.resetIndicatorState()
 	}
 
 	@objc private func didTap() {
@@ -280,13 +322,15 @@ extension DropdownView: UITableViewDataSource {
 extension DropdownView: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
-		let selectedItem = items[indexPath.row]
-		placeholderLabel.text = selectedItem
-		state = .selected
-		tableViewHeightConstraint?.update(offset: 0)
+		applySelection(at: indexPath)
 	}
 
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		return 50
+	}
+
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		guard scrollView === dropdownTableView else { return }
+		updateCustomScrollIndicator()
 	}
 }
