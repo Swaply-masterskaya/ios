@@ -107,7 +107,7 @@ final class DropdownView: UIView {
 			$0.edges.equalToSuperview()
 		}
 
-		dropdownItemContent.snp.makeConstraints {
+		dropdownView.snp.makeConstraints {
 			$0.height.equalTo(48)
 		}
 
