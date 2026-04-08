@@ -314,7 +314,10 @@ extension DropdownView: UITableViewDataSource {
 		) as? DropdownCell else {
 			return UITableViewCell()
 		}
-		cell.configureCell(text: items[indexPath.row])
+		cell.configureCell(
+			text: items[indexPath.row],
+			isSelected: indexPath == selectedIndexPath
+		)
 		return cell
 	}
 }
