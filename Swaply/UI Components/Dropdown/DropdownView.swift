@@ -233,10 +233,27 @@ extension DropdownView: UITableViewDataSource {
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		return UITableViewCell() // временная заглушка
+		guard let cell = tableView.dequeueReusableCell(
+			withIdentifier: DropdownCell.reuseIdentifier,
+			for: indexPath
+		) as? DropdownCell else {
+			return UITableViewCell()
+		}
+		cell.configureCell(text: items[indexPath.row])
+		return cell
 	}
 }
 
 extension DropdownView: UITableViewDelegate {
-	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		tableView.deselectRow(at: indexPath, animated: true)
+		let selectedItem = items[indexPath.row]
+		placeholderLabel.text = selectedItem
+		state = .selected
+		tableViewHeightConstraint?.update(offset: 0)
+	}
+
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return 50
+	}
 }
