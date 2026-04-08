@@ -10,13 +10,19 @@ import SnapKit
 
 final class DropdownView: UIView {
 
+	private var state: DropdownState = .normal {
+		didSet {
+			updateStyles()
+		}
+	}
+
 	private let maxVisibleRows = 7
 	private let rowHeight: CGFloat = 50
 	private var tableViewHeightConstraint: Constraint?
 
 	private var items: [String] = [
 		"Dropdown item one", "Dropdown item two", "Dropdown item three", "Dropdown item four",
-		"Dropdown item five", "Dropdown item six", "Dropdown item seven", "Dropdown item eight",
+		"Dropdown item five", "Dropdown item six", "Dropdown item seven", "Dropdown item eight"
 	]
 
 	private lazy var titleLabel: UILabel = {
@@ -33,6 +39,7 @@ final class DropdownView: UIView {
 		dropdownView.backgroundColor = AppColors.backgroundPrimary
 		dropdownView.layer.cornerRadius = AppRadius.medium
 		let tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
+		dropdownView.addGestureRecognizer(tap)
 		return dropdownView
 	}()
 
@@ -103,6 +110,115 @@ final class DropdownView: UIView {
 			$0.height.equalTo(48)
 		}
 
+		arrowImageView.snp.makeConstraints {
+			$0.trailing.equalToSuperview().inset(16)
+			$0.centerY.equalToSuperview()
+			$0.width.height.equalTo(20)
+		}
+
+		placeholderLabel.snp.makeConstraints {
+			$0.leading.equalTo(dropdownView.snp.leading).offset(16)
+			$0.centerY.equalToSuperview()
+			$0.trailing.lessThanOrEqualTo(arrowImageView.snp.leading).offset(-8)
+		}
+
+		dropdownTableView.snp.makeConstraints {
+			tableViewHeightConstraint = $0.height.equalTo(0).constraint
+		}
+	}
+
+	private func dropdownStyle(for state: DropdownState) -> DropdownStyle {
+		let base = DropdownStyle(
+			titleFont: AppTypography.subheadline,
+			titleColor: AppColors.textPrimary,
+			dropDownBackgroundColor: AppColors.backgroundPrimary,
+			placeholderFont: AppTypography.body,
+			placeholderColor: AppColors.textPlaceholder,
+			arrowTintColor: AppColors.white
+		)
+
+		switch state {
+		case .normal:
+			return base
+		case .selected:
+			return DropdownStyle(
+				titleFont: base.titleFont,
+				titleColor: base.titleColor,
+				dropDownBackgroundColor: base.dropDownBackgroundColor,
+				placeholderFont: base.placeholderFont,
+				placeholderColor: AppColors.textPrimary,
+				arrowTintColor: base.arrowTintColor
+				)
+		case .disabled:
+			return DropdownStyle(
+				titleFont: base.titleFont,
+				titleColor: base.titleColor,
+				dropDownBackgroundColor: base.dropDownBackgroundColor,
+				placeholderFont: base.placeholderFont,
+				placeholderColor: AppColors.textSecondary,
+				arrowTintColor: AppColors.textSecondary
+				)
+		case .expanded:
+			return DropdownStyle(
+				titleFont: base.titleFont,
+				titleColor: base.titleColor,
+				dropDownBackgroundColor: base.dropDownBackgroundColor,
+				placeholderFont: base.placeholderFont,
+				placeholderColor: AppColors.textPrimary,
+				arrowTintColor: base.arrowTintColor
+				)
+		}
+	}
+
+	private func updateStyles() {
+		let style = dropdownStyle(for: state)
+		titleLabel.font = style.titleFont
+		titleLabel.textColor = style.titleColor
+		dropdownView.backgroundColor = style.dropDownBackgroundColor
+		placeholderLabel.font = style.placeholderFont
+		placeholderLabel.textColor = style.placeholderColor
+		arrowImageView.tintColor = style.arrowTintColor
+
+		UIView.animate(withDuration: 0.2) {
+			self.arrowImageView.transform = (self.state == .expanded)
+			? CGAffineTransform(rotationAngle: .pi)
+			: .identity
+		}
+	}
+
+	func setState(_ newState: DropdownState) {
+		guard state != newState else { return }
+		state = newState
+	}
+
+	func setTitle(_ text: String) {
+		titleLabel.text = text
+	}
+
+	func setPlaceholder(_ text: String) {
+		placeholderLabel.text = text
+	}
+
+	func configureDropdown(
+		title: String,
+		placeholder: String,
+		state: DropdownState
+	) {
+		titleLabel.text = title
+		placeholderLabel.text = placeholder
+		self.state = state
+	}
+
+	func setItems(_ items: [String]) {
+		self.items = items
+		dropdownTableView.reloadData()
+	}
+
+	private func calculateHeightTableView() -> CFloat {
+		let contentHeight = CGFloat(items.count) * rowHeight
+		let maxHeight = CGFloat(maxVisibleRows) * rowHeight
+		dropdownTableView.isScrollEnabled = items.count > maxVisibleRows
+		return CFloat(min(contentHeight, maxHeight))
 	}
 
 	@objc private func didTap() {
