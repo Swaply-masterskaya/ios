@@ -226,9 +226,24 @@ final class DropdownView: UIView {
 		titleLabel.font = style.titleFont
 		titleLabel.textColor = style.titleColor
 		dropdownView.backgroundColor = style.dropDownBackgroundColor
+		dropdownTableContainerView.backgroundColor = style.dropDownBackgroundColor
 		placeholderLabel.font = style.placeholderFont
 		placeholderLabel.textColor = style.placeholderColor
 		arrowImageView.tintColor = style.arrowTintColor
+
+		if state == .expanded {
+			dropdownView.layer.maskedCorners = [
+				.layerMinXMinYCorner,
+				.layerMaxXMinYCorner
+			]
+		} else {
+			dropdownView.layer.maskedCorners = [
+				.layerMinXMinYCorner,
+				.layerMaxXMinYCorner,
+				.layerMinXMaxYCorner,
+				.layerMaxXMaxYCorner
+			]
+		}
 
 		UIView.animate(withDuration: 0.2) {
 			self.arrowImageView.transform = (self.state == .expanded)
