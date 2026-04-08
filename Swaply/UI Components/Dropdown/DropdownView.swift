@@ -65,6 +65,7 @@ final class DropdownView: UIView {
 		dropdownTableView.dataSource = self
 		dropdownTableView.delegate = self
 		dropdownTableView.separatorStyle = .none
+		dropdownTableView.register(DropdownCell.self, forCellReuseIdentifier: DropdownCell.reuseIdentifier)
 		return dropdownTableView
 	}()
 
