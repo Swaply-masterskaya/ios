@@ -15,8 +15,8 @@ enum AppColors {
 	static let secondaryOrange = UIColor(resource: .secondaryOrange)
     // Background Colors
     static let backgroundPrimary = UIColor(resource: .black900)
-    static let backgroundSecondary = UIColor(resource: .secondaryBg)
-    static let backgroundTertiary = UIColor(resource: .tertiary)
+	static let backgroundSecondary = UIColor(resource: .secondaryBg)
+	static let backgroundTertiary = UIColor(resource: .tertiary)
     // Accent Color
     static let accentColor = UIColor(resource: .accent)
     // Gradient Color
