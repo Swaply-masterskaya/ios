@@ -215,15 +215,21 @@ final class DropdownView: UIView {
 		dropdownTableView.reloadData()
 	}
 
-	private func calculateHeightTableView() -> CFloat {
+	private func calculateHeightTableView() -> CGFloat {
 		let contentHeight = CGFloat(items.count) * rowHeight
 		let maxHeight = CGFloat(maxVisibleRows) * rowHeight
 		dropdownTableView.isScrollEnabled = items.count > maxVisibleRows
-		return CFloat(min(contentHeight, maxHeight))
+		return min(contentHeight, maxHeight)
 	}
 
 	@objc private func didTap() {
-		//TO DO:
+		guard state != .disabled else { return }
+
+		let shouldExpand = state != .expanded
+		state = shouldExpand ? .expanded : .normal
+
+		let newHeight = shouldExpand ? calculateHeightTableView() : .zero
+		tableViewHeightConstraint?.update(offset: newHeight)
 	}
 }
 
