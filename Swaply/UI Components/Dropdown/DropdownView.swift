@@ -16,14 +16,15 @@ final class DropdownView: UIView {
 		}
 	}
 
+	private var items: [String] = [] {
+		didSet {
+			dropdownTableView.reloadData()
+		}
+	}
+
 	private let maxVisibleRows = 7
 	private let rowHeight: CGFloat = 50
 	private var tableViewHeightConstraint: Constraint?
-
-	private var items: [String] = [
-		"Dropdown item one", "Dropdown item two", "Dropdown item three", "Dropdown item four",
-		"Dropdown item five", "Dropdown item six", "Dropdown item seven", "Dropdown item eight"
-	]
 
 	private lazy var titleLabel: UILabel = {
 		let titleLabel = UILabel()
