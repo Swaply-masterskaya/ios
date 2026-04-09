@@ -9,8 +9,11 @@ import UIKit
 import SnapKit
 
 final class DropdownCell: UITableViewCell {
+
+	// MARK: - Constants
 	static let reuseIdentifier = "DropdownCell"
 
+	// MARK: - Internal Properties
 	private(set) lazy var checkboxImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.contentMode = .scaleAspectFit
@@ -30,10 +33,11 @@ final class DropdownCell: UITableViewCell {
 		let cellContent = UIStackView(arrangedSubviews: [checkboxImageView, valueLabel])
 		cellContent.axis = .horizontal
 		cellContent.spacing = 8
-		cellContent.alignment = .center // просмотреть вариант с fill
+		cellContent.alignment = .center
 		return cellContent
 	}()
 
+	// MARK: - Initializers
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		setupConstraints()
@@ -46,6 +50,14 @@ final class DropdownCell: UITableViewCell {
 		return nil
 	}
 
+	// MARK: - Internal Methods
+	func configureCell(text: String, isSelected: Bool = false) {
+		valueLabel.text = text
+		valueLabel.textColor = isSelected ? AppColors.textPrimary : AppColors.grey400
+		updateCheckBox(isSelected: isSelected)
+	}
+
+	// MARK: - Private Methods
 	private func setupConstraints() {
 		contentView.clipsToBounds = true
 		contentView.addSubview(cellContent)
@@ -61,12 +73,6 @@ final class DropdownCell: UITableViewCell {
 			$0.height.equalTo(24)
 		}
 		contentView.backgroundColor = .clear
-	}
-
-	func configureCell(text: String, isSelected: Bool = false) {
-		valueLabel.text = text
-		valueLabel.textColor = isSelected ? AppColors.textPrimary : AppColors.grey400
-		updateCheckBox(isSelected: isSelected)
 	}
 
 	private func updateCheckBox(isSelected: Bool) {

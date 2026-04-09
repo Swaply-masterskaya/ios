@@ -9,8 +9,14 @@ import UIKit
 import SnapKit
 
 final class CustomScrollIndicatorView: UIView {
+
+	// MARK: - Constants
 	private let thumbMinHeight: CGFloat = 8
 
+	// MARK: - Internal Properties
+	var onScrollProgressChanged: ((CGFloat) -> Void)?
+
+	// MARK: - Private Properties
 	private let scrollTrackView: UIView = {
 		let view = UIView()
 		view.backgroundColor = AppColors.backgroundSecondary
@@ -32,8 +38,7 @@ final class CustomScrollIndicatorView: UIView {
 	private var currentThumbHeight: CGFloat = 16
 	private var currentTrackHeight: CGFloat = .zero
 
-	var onScrollProgressChanged: ((CGFloat) -> Void)?
-
+	// MARK: - Initializers
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		initializeComponents()
@@ -44,35 +49,7 @@ final class CustomScrollIndicatorView: UIView {
 		initializeComponents()
 	}
 
-	private func initializeComponents() {
-		setupViews()
-		setupConstraints()
-		setupGestures()
-		isHidden = true
-	}
-
-	private func setupViews() {
-		addSubview(scrollTrackView)
-		scrollTrackView.addSubview(scrollThumbView)
-	}
-
-	private func setupConstraints() {
-		scrollTrackView.snp.makeConstraints {
-			$0.edges.equalToSuperview()
-		}
-
-		scrollThumbView.snp.makeConstraints {
-			$0.leading.trailing.equalToSuperview()
-			thumbTopConstraint = $0.top.equalToSuperview().constraint
-			thumbHeightConstraint = $0.height.equalTo(thumbMinHeight).constraint
-		}
-	}
-
-	private func setupGestures() {
-		let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleThumbPan(_:)))
-		scrollThumbView.addGestureRecognizer(panGesture)
-	}
-
+	// MARK: - Internal Methods
 	func updateIndicator(
 		contentHeight: CGFloat,
 		visibleHeight: CGFloat,
@@ -120,6 +97,36 @@ final class CustomScrollIndicatorView: UIView {
 		currentThumbHeight = thumbMinHeight
 		currentTrackHeight = .zero
 		updateThumbLayout(height: thumbMinHeight, top: 0)
+	}
+
+	// MARK: - Private Methods
+	private func initializeComponents() {
+		setupViews()
+		setupConstraints()
+		setupGestures()
+		isHidden = true
+	}
+
+	private func setupViews() {
+		addSubview(scrollTrackView)
+		scrollTrackView.addSubview(scrollThumbView)
+	}
+
+	private func setupConstraints() {
+		scrollTrackView.snp.makeConstraints {
+			$0.edges.equalToSuperview()
+		}
+
+		scrollThumbView.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview()
+			thumbTopConstraint = $0.top.equalToSuperview().constraint
+			thumbHeightConstraint = $0.height.equalTo(thumbMinHeight).constraint
+		}
+	}
+
+	private func setupGestures() {
+		let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleThumbPan(_:)))
+		scrollThumbView.addGestureRecognizer(panGesture)
 	}
 
 	private func shouldShowIndicator(

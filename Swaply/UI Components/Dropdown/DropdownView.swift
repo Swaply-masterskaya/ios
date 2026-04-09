@@ -10,20 +10,12 @@ import SnapKit
 
 final class DropdownView: UIView {
 
-	private var state: DropdownState = .normal {
-		didSet {
-			updateStyles()
-		}
-	}
-
-	private var items: [String] = [] {
-		didSet {
-			dropdownTableView.reloadData()
-		}
-	}
-
+	// MARK: - Constants
 	private let maxVisibleRows = 7
 	private let rowHeight: CGFloat = 50
+
+	// MARK: - Private Properties
+	private let dropdownViewModel = DropdownViewModel()
 	private let customScrollIndicatorView = CustomScrollIndicatorView()
 
 	private var tableViewHeightConstraint: Constraint?
@@ -111,6 +103,7 @@ final class DropdownView: UIView {
 		return dropdownContent
 	}()
 
+	// MARK: - Initializers
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		setupViews()
@@ -127,6 +120,20 @@ final class DropdownView: UIView {
 		updateStyles()
 	}
 
+	// MARK: - Internal Methods
+	func configureDropdown(
+		title: String,
+		placeholder: String,
+		items: [String],
+		state: DropdownState
+	) {
+		setTitle(title)
+		setPlaceholder(placeholder)
+		setItems(items)
+		setState(state)
+	}
+
+	// MARK: - Private Methods
 	private func setupViews() {
 		addSubview(dropdownContent)
 		dropdownView.addSubview(placeholderLabel)
@@ -180,51 +187,15 @@ final class DropdownView: UIView {
 		}
 	}
 
-	private func dropdownStyle(for state: DropdownState) -> DropdownStyle {
-		let base = DropdownStyle(
-			titleFont: AppTypography.subheadline,
-			titleColor: AppColors.textPrimary,
-			dropDownBackgroundColor: AppColors.backgroundPrimary,
-			placeholderFont: AppTypography.body,
-			placeholderColor: AppColors.textPlaceholder,
-			arrowTintColor: AppColors.white
-		)
+	private func updateStyles() {
+		let style = dropdownViewModel.dropdownStyle(for: dropdownViewModel.state)
+		let isExpanded = dropdownViewModel.state == .expanded
 
-		switch state {
-		case .normal:
-			return base
-		case .selected:
-			return DropdownStyle(
-				titleFont: base.titleFont,
-				titleColor: base.titleColor,
-				dropDownBackgroundColor: base.dropDownBackgroundColor,
-				placeholderFont: base.placeholderFont,
-				placeholderColor: AppColors.textPrimary,
-				arrowTintColor: base.arrowTintColor
-				)
-		case .disabled:
-			return DropdownStyle(
-				titleFont: base.titleFont,
-				titleColor: base.titleColor,
-				dropDownBackgroundColor: base.dropDownBackgroundColor,
-				placeholderFont: base.placeholderFont,
-				placeholderColor: AppColors.textSecondary,
-				arrowTintColor: AppColors.textSecondary
-				)
-		case .expanded:
-			return DropdownStyle(
-				titleFont: base.titleFont,
-				titleColor: base.titleColor,
-				dropDownBackgroundColor: base.dropDownBackgroundColor,
-				placeholderFont: base.placeholderFont,
-				placeholderColor: AppColors.textPrimary,
-				arrowTintColor: base.arrowTintColor
-				)
-		}
+		applyDropdownStyle(style)
+		updateExpandedAppearance(isExpanded)
 	}
 
-	private func updateStyles() {
-		let style = dropdownStyle(for: state)
+	private func applyDropdownStyle(_ style: DropdownStyle) {
 		titleLabel.font = style.titleFont
 		titleLabel.textColor = style.titleColor
 		dropdownView.backgroundColor = style.dropDownBackgroundColor
@@ -232,66 +203,54 @@ final class DropdownView: UIView {
 		placeholderLabel.font = style.placeholderFont
 		placeholderLabel.textColor = style.placeholderColor
 		arrowImageView.tintColor = style.arrowTintColor
+	}
 
-		if state == .expanded {
-			dropdownView.layer.maskedCorners = [
-				.layerMinXMinYCorner,
-				.layerMaxXMinYCorner
-			]
-		} else {
-			dropdownView.layer.maskedCorners = [
-				.layerMinXMinYCorner,
-				.layerMaxXMinYCorner,
-				.layerMinXMaxYCorner,
-				.layerMaxXMaxYCorner
-			]
-		}
+	private func updateExpandedAppearance(_ isExpanded: Bool) {
+		dropdownView.layer.maskedCorners = isExpanded
+		? [
+			.layerMinXMinYCorner,
+			.layerMaxXMinYCorner
+		]
+		: [
+			.layerMinXMinYCorner,
+			.layerMaxXMinYCorner,
+			.layerMinXMaxYCorner,
+			.layerMaxXMaxYCorner
+		]
 
 		UIView.animate(withDuration: 0.2) {
-			self.arrowImageView.transform = (self.state == .expanded)
+			self.arrowImageView.transform = isExpanded
 			? CGAffineTransform(rotationAngle: .pi)
 			: .identity
 		}
 	}
 
-	func setState(_ newState: DropdownState) {
-		guard state != newState else { return }
-		state = newState
+	private func setState(_ newState: DropdownState) {
+		dropdownViewModel.setState(newState)
+		updateStyles()
 	}
 
-	func setTitle(_ text: String) {
+	private func setTitle(_ text: String) {
 		titleLabel.text = text
 	}
 
-	func setPlaceholder(_ text: String) {
+	private func setPlaceholder(_ text: String) {
 		placeholderLabel.text = text
 	}
 
-	func configureDropdown(
-		title: String,
-		placeholder: String,
-		items: [String],
-		state: DropdownState
-	) {
-		titleLabel.text = title
-		placeholderLabel.text = placeholder
-		self.items = items
-		self.state = state
-	}
-
-	func setItems(_ items: [String]) {
-		self.items = items
+	private func setItems(_ items: [String]) {
+		dropdownViewModel.setItems(items)
+		dropdownTableView.reloadData()
 	}
 
 	private func calculateHeightTableView() -> CGFloat {
-		let contentHeight = CGFloat(items.count) * rowHeight
-		let maxHeight = CGFloat(maxVisibleRows) * rowHeight
-		let shouldScroll = items.count > maxVisibleRows
-
+		let shouldScroll = dropdownViewModel.shouldEnableScroll(maxVisibleRows: maxVisibleRows)
 		dropdownTableView.isScrollEnabled = shouldScroll
 		customScrollIndicatorView.isHidden = !shouldScroll
 
-		return min(contentHeight, maxHeight)
+		return dropdownViewModel.calculateTableHeight(
+			rowHeight: rowHeight,
+			maxVisibleRows: maxVisibleRows)
 	}
 
 	private func updateCustomScrollIndicator() {
@@ -321,8 +280,8 @@ final class DropdownView: UIView {
 
 	private func applySelection(at indexPath: IndexPath) {
 		selectedIndexPath = indexPath
-		placeholderLabel.text = items[indexPath.row]
-		state = .selected
+		placeholderLabel.text = dropdownViewModel.items[indexPath.row]
+		setState(.selected)
 		dropdownTableView.reloadData()
 		updateCollapsedState()
 	}
@@ -334,10 +293,8 @@ final class DropdownView: UIView {
 	}
 
 	@objc private func didTap() {
-		guard state != .disabled else { return }
-
-		let shouldExpand = state != .expanded
-		state = shouldExpand ? .expanded : .normal
+		guard let shouldExpand = dropdownViewModel.toggleState() else { return }
+		updateStyles()
 
 		let newHeight = shouldExpand ? calculateHeightTableView() : .zero
 		let containerHeight = shouldExpand ? newHeight + 1 : .zero
@@ -355,10 +312,10 @@ final class DropdownView: UIView {
 		}
 	}
 }
-
+// MARK: - UITableViewDataSource
 extension DropdownView: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return items.count
+		return dropdownViewModel.items.count
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -369,13 +326,13 @@ extension DropdownView: UITableViewDataSource {
 			return UITableViewCell()
 		}
 		cell.configureCell(
-			text: items[indexPath.row],
+			text: dropdownViewModel.items[indexPath.row],
 			isSelected: indexPath == selectedIndexPath
 		)
 		return cell
 	}
 }
-
+// MARK: - UITableViewDelegate
 extension DropdownView: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
