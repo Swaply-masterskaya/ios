@@ -129,10 +129,7 @@ final class CustomScrollIndicatorView: UIView {
 		scrollThumbView.addGestureRecognizer(panGesture)
 	}
 
-	private func shouldShowIndicator(
-		contentHeight: CGFloat,
-		visibleHeight: CGFloat
-	) -> Bool {
+	private func shouldShowIndicator(contentHeight: CGFloat, visibleHeight: CGFloat) -> Bool {
 		contentHeight > visibleHeight && visibleHeight > 0
 	}
 

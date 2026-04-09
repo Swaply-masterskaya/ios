@@ -12,6 +12,7 @@ final class DropdownViewModel {
 	// MARK: - Private Properties
 	private(set) var state: DropdownState = .normal
 	private(set) var items: [String] = []
+	private var selectedIndexes: Set<Int> = []
 
 	// MARK: - Internal Methods
 	func dropdownStyle(for state: DropdownState) -> DropdownStyle {
@@ -82,5 +83,41 @@ final class DropdownViewModel {
 		let shouldExpand = state != .expanded
 		setState(shouldExpand ? .expanded : .normal)
 		return shouldExpand
+	}
+
+	func toggleSelection(at indexPath: IndexPath, isMultipleSelectionEnabled: Bool) {
+		let row = indexPath.row
+
+		if isMultipleSelectionEnabled {
+			if selectedIndexes.contains(row) {
+				selectedIndexes.remove(row)
+			} else {
+				selectedIndexes.insert(row)
+			}
+		} else {
+			if selectedIndexes.contains(row) {
+				selectedIndexes.removeAll()
+			} else {
+				selectedIndexes = [row]
+			}
+		}
+	}
+
+	func selectedItemsText() -> String? {
+		let selectedItems = selectedIndexes
+			.sorted()
+			.map { items[$0] }
+
+		return selectedItems.isEmpty
+		? nil
+		: selectedItems.joined(separator: ", ")
+	}
+
+	func isItemSelected(at indexPath: IndexPath) -> Bool {
+		selectedIndexes.contains(indexPath.row)
+	}
+
+	func hasSelectedItems() -> Bool {
+		!selectedIndexes.isEmpty
 	}
 }

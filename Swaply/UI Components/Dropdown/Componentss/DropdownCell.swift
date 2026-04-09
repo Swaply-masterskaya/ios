@@ -51,10 +51,14 @@ final class DropdownCell: UITableViewCell {
 	}
 
 	// MARK: - Internal Methods
-	func configureCell(text: String, isSelected: Bool = false) {
+	func configureCell(
+		text: String,
+		isSelected: Bool = false,
+		iconType: DropdownIconType
+	) {
 		valueLabel.text = text
 		valueLabel.textColor = isSelected ? AppColors.textPrimary : AppColors.grey400
-		updateCheckBox(isSelected: isSelected)
+		updateCheckBox(isSelected: isSelected, iconType: iconType)
 	}
 
 	// MARK: - Private Methods
@@ -75,8 +79,8 @@ final class DropdownCell: UITableViewCell {
 		contentView.backgroundColor = .clear
 	}
 
-	private func updateCheckBox(isSelected: Bool) {
-		let imageName = isSelected ? "checkmark.square.fill" : "square"
+	private func updateCheckBox(isSelected: Bool, iconType: DropdownIconType) {
+		let imageName = isSelected ? iconType.selectedImageName : iconType.normalImageName
 		checkboxImageView.image = UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
 		checkboxImageView.tintColor = isSelected ? AppColors.secondaryOrange : AppColors.grey400
 	}

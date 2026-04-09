@@ -13,6 +13,8 @@ final class DropdownView: UIView {
 	// MARK: - Constants
 	private let maxVisibleRows = 7
 	private let rowHeight: CGFloat = 50
+	private var placeholderText: String = "Dropdown text"
+	private var iconType: DropdownIconType = .square
 
 	// MARK: - Private Properties
 	private let dropdownViewModel = DropdownViewModel()
@@ -20,7 +22,6 @@ final class DropdownView: UIView {
 
 	private var tableViewHeightConstraint: Constraint?
 	private var tableContainerHeightConstraint: Constraint?
-	private var selectedIndexPath: IndexPath?
 
 	private lazy var titleLabel: UILabel = {
 		let titleLabel = UILabel()
@@ -125,12 +126,15 @@ final class DropdownView: UIView {
 		title: String,
 		placeholder: String,
 		items: [String],
-		state: DropdownState
+		state: DropdownState,
+		iconType: DropdownIconType = .square
 	) {
 		setTitle(title)
 		setPlaceholder(placeholder)
 		setItems(items)
 		setState(state)
+		self.iconType = iconType
+		updateArrowIcon()
 	}
 
 	// MARK: - Private Methods
@@ -235,12 +239,17 @@ final class DropdownView: UIView {
 	}
 
 	private func setPlaceholder(_ text: String) {
+		placeholderText = text
 		placeholderLabel.text = text
 	}
 
 	private func setItems(_ items: [String]) {
 		dropdownViewModel.setItems(items)
 		dropdownTableView.reloadData()
+	}
+
+	private func updateArrowIcon() {
+		arrowImageView.image = iconType.arrowImage
 	}
 
 	private func calculateHeightTableView() -> CGFloat {
@@ -279,17 +288,26 @@ final class DropdownView: UIView {
 	}
 
 	private func applySelection(at indexPath: IndexPath) {
-		selectedIndexPath = indexPath
-		placeholderLabel.text = dropdownViewModel.items[indexPath.row]
-		setState(.selected)
-		dropdownTableView.reloadData()
-		updateCollapsedState()
+		dropdownViewModel.toggleSelection(
+			at: indexPath,
+			isMultipleSelectionEnabled: iconType.isMultipleSelectionEnabled
+		)
+
+		if iconType.isMultipleSelectionEnabled {
+			dropdownTableView.reloadRows(at: [indexPath], with: .none)
+		} else {
+			dropdownTableView.reloadData()
+		}
 	}
 
 	private func updateCollapsedState() {
 		tableViewHeightConstraint?.update(offset: 0)
 		tableContainerHeightConstraint?.update(offset: 0)
 		customScrollIndicatorView.resetIndicatorState()
+	}
+
+	private func updateSelectedItemsText() {
+		placeholderLabel.text = dropdownViewModel.selectedItemsText() ?? placeholderText
 	}
 
 	@objc private func didTap() {
@@ -306,9 +324,13 @@ final class DropdownView: UIView {
 		dropdownTableView.layoutIfNeeded()
 
 		if shouldExpand {
+			placeholderLabel.text = placeholderText
+			updateStyles()
 			updateCustomScrollIndicator()
 		} else {
+			updateSelectedItemsText()
 			updateCollapsedState()
+			setState(dropdownViewModel.hasSelectedItems() ? .selected : .normal)
 		}
 	}
 }
@@ -327,7 +349,8 @@ extension DropdownView: UITableViewDataSource {
 		}
 		cell.configureCell(
 			text: dropdownViewModel.items[indexPath.row],
-			isSelected: indexPath == selectedIndexPath
+			isSelected: dropdownViewModel.isItemSelected(at: indexPath),
+			iconType: iconType
 		)
 		return cell
 	}
