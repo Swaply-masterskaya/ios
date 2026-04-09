@@ -103,10 +103,14 @@ final class DropdownViewModel {
 		}
 	}
 
-	func selectedItemsText() -> String? {
-		let selectedItems = selectedIndexes
+	func selectedItems() -> [String] {
+		selectedIndexes
 			.sorted()
 			.map { items[$0] }
+	}
+
+	func selectedItemsText() -> String? {
+		let selectedItems = selectedItems()
 
 		return selectedItems.isEmpty
 		? nil
