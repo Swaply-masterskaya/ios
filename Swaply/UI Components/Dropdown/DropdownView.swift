@@ -16,6 +16,9 @@ final class DropdownView: UIView {
 	private var placeholderText: String = "Dropdown text"
 	private var iconType: DropdownIconType = .square
 
+	// MARK: - Public Properties
+	var onSelectionChanged: (([String]) -> Void)?
+
 	// MARK: - Private Properties
 	private let dropdownViewModel = DropdownViewModel()
 	private let customScrollIndicatorView = CustomScrollIndicatorView()
@@ -298,6 +301,8 @@ final class DropdownView: UIView {
 		} else {
 			dropdownTableView.reloadData()
 		}
+
+		onSelectionChanged?(dropdownViewModel.selectedItems())
 	}
 
 	private func updateCollapsedState() {
