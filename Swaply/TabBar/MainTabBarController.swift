@@ -10,11 +10,16 @@ import RxSwift
 import SnapKit
 
 final class MainTabBarController: UITabBarController {
+    
+    // MARK: - Private Properties
+    
     private let customTabBarView = MainTabBarView()
     private let tabBarItems: [TabBarItem] = TabBarItem.allCases
     private let viewModel = MainTabBarViewModel()
     private let disposeBag = DisposeBag()
-
+    
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCustomTabBar()
@@ -40,6 +45,9 @@ final class MainTabBarController: UITabBarController {
             }
         }
     }
+    
+    // MARK: - Private Methods
+    
     private func setupCustomTabBar() {
         customTabBarView.delegate = self
         customTabBarView.configure(with: tabBarItems)

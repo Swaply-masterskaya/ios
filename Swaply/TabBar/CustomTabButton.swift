@@ -9,11 +9,20 @@ import UIKit
 import SnapKit
 
 final class CustomTabButton: UIButton {
+    
+    // MARK: - Private Properties
+    
     private let imageViewCustom = UIImageView()
     private let titleLabelCustom = UILabel()
     private let selectionBackground = UIView()
     private let verticalStack = UIStackView()
+    
+    // MARK: - Internal Properties
+    
     var tabItem: TabBarItem?
+    
+    // MARK: - Initializers
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCustomViews()
@@ -21,6 +30,9 @@ final class CustomTabButton: UIButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Private Methods
+    
     private func setupCustomViews() {
         backgroundColor = .clear
         verticalStack.axis = .vertical
@@ -52,6 +64,9 @@ final class CustomTabButton: UIButton {
             make.width.height.equalTo(24)
         }
     }
+    
+    // MARK: - Internal Methods
+    
     func configure(with item: TabBarItem) {
         tabItem = item
         titleLabelCustom.text = item.title

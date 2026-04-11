@@ -16,11 +16,20 @@ protocol Coordinator: AnyObject {
 }
 
 final class MainCoordinator: Coordinator {
+
+    // MARK: - Public Properties
+
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
+
+    // MARK: - Initializers
+
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
+
+    // MARK: - Public Methods
+
     func start() {
         let tabBarController = MainTabBarController()
         navigationController.setViewControllers([tabBarController], animated: false)

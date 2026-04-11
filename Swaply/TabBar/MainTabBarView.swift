@@ -14,7 +14,13 @@ protocol MainTabBarViewDelegate: AnyObject {
 }
 
 final class MainTabBarView: UIView {
+    
+    // MARK: - Internal Properties
+    
     weak var delegate: MainTabBarViewDelegate?
+    
+    // MARK: - Private Properties
+    
     private var buttons: [CustomTabButton] = []
     private let stackView: UIStackView = {
         let stack = UIStackView()
@@ -34,6 +40,9 @@ final class MainTabBarView: UIView {
         view.layer.masksToBounds = true
         return view
     }()
+    
+    // MARK: - Initializers
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -41,6 +50,9 @@ final class MainTabBarView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Private Methods
+    
     private func setupUI() {
         backgroundColor = .clear
         addSubview(containerView)
@@ -58,6 +70,19 @@ final class MainTabBarView: UIView {
             make.bottom.equalTo(containerView).offset(-4)
         }
     }
+    
+    private func animateButtonTap(_ button: UIButton) {
+        UIView.animate(withDuration: 0.1, animations: {
+            button.transform = CGAffineTransform(scaleX: 0.92, y: 0.92)
+        }) { _ in
+            UIView.animate(withDuration: 0.15) {
+                button.transform = .identity
+            }
+        }
+    }
+    
+    // MARK: - Internal Methods
+    
     func configure(with items: [TabBarItem]) {
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         buttons.removeAll()
@@ -85,14 +110,5 @@ final class MainTabBarView: UIView {
         let index = sender.tag
         delegate?.didSelectTab(at: index)
         animateButtonTap(sender)
-    }
-    private func animateButtonTap(_ button: UIButton) {
-        UIView.animate(withDuration: 0.1, animations: {
-            button.transform = CGAffineTransform(scaleX: 0.92, y: 0.92)
-        }) { _ in
-            UIView.animate(withDuration: 0.15) {
-                button.transform = .identity
-            }
-        }
     }
 }

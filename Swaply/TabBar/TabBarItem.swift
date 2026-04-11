@@ -7,7 +7,7 @@
 
 import UIKit
 
-// пока на иконку профиля заглушку повесил, т.к. профиль это наверное другая задача, и когда уже будет ясно из чего брать - подгоню
+// TODO: пока на иконку профиля заглушку повесил, т.к. профиль это наверное другая задача, и когда уже будет ясно из чего брать - подгоню
 
 enum TabBarItem: Int, CaseIterable {
     case home = 0
@@ -15,6 +15,9 @@ enum TabBarItem: Int, CaseIterable {
     case projects
     case chats
     case profile
+
+    // MARK: - Internal Properties
+
     var title: String {
         switch self {
         case .home: return "Главная"
