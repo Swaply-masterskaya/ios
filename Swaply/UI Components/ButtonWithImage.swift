@@ -53,7 +53,7 @@ final class ButtonWithImage: UIButton {
         config.image = AppImages.iconAddProject.withTintColor(.white, renderingMode: .alwaysOriginal)
         config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(scale: .small)
         config.imagePlacement = .leading
-        config.imagePadding = AppSpacing.xxsmall
+        config.imagePadding = AppSpacing.xsmall
     }
 
     private func setupText() {
