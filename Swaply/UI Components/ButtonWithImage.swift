@@ -8,15 +8,6 @@
 import UIKit
 import SnapKit
 
-private enum Constants {
-    static let imagePadding: CGFloat = 3
-    static let height: CGFloat = 28
-    static let contentInsetTop: CGFloat = 4
-    static let contentInsetBottom: CGFloat = 4
-    static let contentInsetLeading: CGFloat = 10
-    static let contentInsetTrailing: CGFloat = 10
-}
-
 final class ButtonWithImage: UIButton {
 
     // MARK: - Constants
@@ -24,24 +15,21 @@ final class ButtonWithImage: UIButton {
     private var config = UIButton.Configuration.filled()
 
     // MARK: - Initializers
-    init(titleText: String = "Новый") {
+    init(height: CGFloat, titleText: String = "Новый") {
         self.titleText = titleText
         super.init(frame: .zero)
-        setup()
+        setup(with: height)
     }
 
-    required init?(coder: NSCoder) {
-        self.titleText = "Новый"
-        super.init(coder: coder)
-        setup()
-    }
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
 
     // MARK: - Private Methods
-    private func setup() {
+    private func setup(with height: CGFloat) {
         setupBackgroundColor()
         setupImage()
         setupText()
-        setupConstraints()
+        setupConstraints(with: height)
         configuration = config
     }
 
@@ -65,7 +53,7 @@ final class ButtonWithImage: UIButton {
         config.image = AppImages.iconAddProject.withTintColor(.white, renderingMode: .alwaysOriginal)
         config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(scale: .small)
         config.imagePlacement = .leading
-        config.imagePadding = Constants.imagePadding
+        config.imagePadding = AppSpacing.xxsmall
     }
 
     private func setupText() {
@@ -78,15 +66,15 @@ final class ButtonWithImage: UIButton {
         config.titleAlignment = .center
     }
 
-    private func setupConstraints() {
+    private func setupConstraints(with height: CGFloat) {
         snp.makeConstraints { make in
-            make.height.equalTo(Constants.height)
+            make.height.equalTo(height)
         }
         config.contentInsets = NSDirectionalEdgeInsets(
-            top: Constants.contentInsetTop,
-            leading: Constants.contentInsetLeading,
-            bottom: Constants.contentInsetBottom,
-            trailing: Constants.contentInsetTrailing)
+            top: AppSpacing.xsmall,
+            leading: AppSpacing.xmedium,
+            bottom: AppSpacing.xsmall,
+            trailing: AppSpacing.xmedium)
         config.background.cornerRadius = AppRadius.medium
     }
 }
