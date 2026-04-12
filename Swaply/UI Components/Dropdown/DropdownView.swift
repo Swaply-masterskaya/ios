@@ -126,13 +126,8 @@ final class DropdownView: UIView {
 		updateStyles()
 	}
 
-	required init?(coder: NSCoder) {
-		super.init(coder: coder)
-		setupViews()
-		setupConstraints()
-		setupActions()
-		updateStyles()
-	}
+	@available(*, unavailable)
+	required init?(coder: NSCoder) { nil }
 
 	// MARK: - Internal Methods
 	func configureDropdown(

@@ -47,10 +47,8 @@ final class CustomScrollIndicatorView: UIView {
 		initializeComponents()
 	}
 
-	required init?(coder: NSCoder) {
-		super.init(coder: coder)
-		initializeComponents()
-	}
+	@available(*, unavailable)
+	required init?(coder: NSCoder) { nil }
 
 	// MARK: - Internal Methods
 	func updateIndicator(
