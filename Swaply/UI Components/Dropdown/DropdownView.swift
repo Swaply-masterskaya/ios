@@ -237,7 +237,7 @@ final class DropdownView: UIView {
 		}
 	}
 
-	private func setState(_ newState: DropdownState) {
+	func setState(_ newState: DropdownState) {
 		dropdownViewModel.setState(newState)
 		updateStyles()
 	}
@@ -251,7 +251,7 @@ final class DropdownView: UIView {
 		placeholderLabel.text = text
 	}
 
-	private func setItems(_ items: [String]) {
+	func setItems(_ items: [String]) {
 		dropdownViewModel.setItems(items)
 		dropdownTableView.reloadData()
 	}
