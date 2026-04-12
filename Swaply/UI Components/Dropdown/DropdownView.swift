@@ -10,9 +10,19 @@ import SnapKit
 
 final class DropdownView: UIView {
 
+	private enum Layout {
+		static let dropdownHeight: CGFloat = 48
+		static let rowHeight: CGFloat = 50
+		static let maxVisibleRows: Int = 7
+		static let iconSize: CGFloat = 20
+		static let scrollIndicatorWidth: CGFloat = 8
+		static let separatorHeight: CGFloat = 1
+		static let animationDuration: TimeInterval = 0.2
+	}
+
 	// MARK: - Constants
-	private let maxVisibleRows = 7
-	private let rowHeight: CGFloat = 50
+	private let maxVisibleRows = Layout.maxVisibleRows
+	private let rowHeight: CGFloat = Layout.rowHeight
 	private var placeholderText: String = "Dropdown text"
 	private var iconType: DropdownIconType = .square
 
@@ -101,7 +111,7 @@ final class DropdownView: UIView {
 	private lazy var dropdownContent: UIStackView = {
 		let dropdownContent = UIStackView(arrangedSubviews: [titleLabel, dropdownItemContent])
 		dropdownContent.axis = .vertical
-		dropdownContent.spacing = 8
+		dropdownContent.spacing = AppSpacing.small
 		dropdownContent.alignment = .fill
 		dropdownContent.distribution = .fill
 		return dropdownContent
@@ -156,19 +166,19 @@ final class DropdownView: UIView {
 		}
 
 		dropdownView.snp.makeConstraints {
-			$0.height.equalTo(48)
+			$0.height.equalTo(Layout.dropdownHeight)
 		}
 
 		placeholderLabel.snp.makeConstraints {
-			$0.leading.equalTo(dropdownView.snp.leading).offset(16)
+			$0.leading.equalTo(dropdownView.snp.leading).offset(AppSpacing.large)
 			$0.centerY.equalToSuperview()
-			$0.trailing.lessThanOrEqualTo(arrowImageView.snp.leading).offset(-8)
+			$0.trailing.lessThanOrEqualTo(arrowImageView.snp.leading).offset(-AppSpacing.small)
 		}
 
 		arrowImageView.snp.makeConstraints {
-			$0.trailing.equalToSuperview().inset(16)
+			$0.trailing.equalToSuperview().inset(AppSpacing.large)
 			$0.centerY.equalToSuperview()
-			$0.width.height.equalTo(20)
+			$0.width.height.equalTo(Layout.iconSize)
 		}
 
 		dropdownTableContainerView.snp.makeConstraints {
@@ -177,14 +187,14 @@ final class DropdownView: UIView {
 
 		separatorView.snp.makeConstraints {
 			$0.top.leading.trailing.equalToSuperview()
-			$0.height.equalTo(1)
+			$0.height.equalTo(Layout.separatorHeight)
 		}
 
 		customScrollIndicatorView.snp.makeConstraints {
-			$0.top.equalTo(separatorView.snp.bottom).offset(8)
-			$0.trailing.equalToSuperview().inset(8)
-			$0.bottom.equalToSuperview().inset(8)
-			$0.width.equalTo(8)
+			$0.top.equalTo(separatorView.snp.bottom).offset(AppSpacing.small)
+			$0.trailing.equalToSuperview().inset(AppSpacing.small)
+			$0.bottom.equalToSuperview().inset(AppSpacing.small)
+			$0.width.equalTo(Layout.scrollIndicatorWidth)
 		}
 
 		dropdownTableView.snp.makeConstraints {
@@ -225,7 +235,7 @@ final class DropdownView: UIView {
 			.layerMaxXMaxYCorner
 		]
 
-		UIView.animate(withDuration: 0.2) {
+		UIView.animate(withDuration: Layout.animationDuration) {
 			self.arrowImageView.transform = isExpanded
 			? CGAffineTransform(rotationAngle: .pi)
 			: .identity
@@ -320,7 +330,7 @@ final class DropdownView: UIView {
 		updateStyles()
 
 		let newHeight = shouldExpand ? calculateHeightTableView() : .zero
-		let containerHeight = shouldExpand ? newHeight + 1 : .zero
+		let containerHeight = shouldExpand ? newHeight + Layout.separatorHeight : .zero
 
 		tableViewHeightConstraint?.update(offset: newHeight)
 		tableContainerHeightConstraint?.update(offset: containerHeight)
@@ -368,7 +378,7 @@ extension DropdownView: UITableViewDelegate {
 	}
 
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return 50
+		return Layout.rowHeight
 	}
 
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {

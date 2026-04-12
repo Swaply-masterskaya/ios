@@ -10,8 +10,11 @@ import SnapKit
 
 final class CustomScrollIndicatorView: UIView {
 
-	// MARK: - Constants
-	private let thumbMinHeight: CGFloat = 8
+	private enum Layout {
+		static let thumbMinHeight: CGFloat = 8
+		static let thumbInitialHeight: CGFloat = 16
+		static let cornerRadius: CGFloat = 4
+	}
 
 	// MARK: - Internal Properties
 	var onScrollProgressChanged: ((CGFloat) -> Void)?
@@ -20,14 +23,14 @@ final class CustomScrollIndicatorView: UIView {
 	private let scrollTrackView: UIView = {
 		let view = UIView()
 		view.backgroundColor = AppColors.backgroundSecondary
-		view.layer.cornerRadius = 4
+		view.layer.cornerRadius = Layout.cornerRadius
 		return view
 	}()
 
 	private let scrollThumbView: UIView = {
 		let view = UIView()
 		view.backgroundColor = AppColors.backgroundTertiary
-		view.layer.cornerRadius = 4
+		view.layer.cornerRadius = Layout.cornerRadius
 		view.isUserInteractionEnabled = true
 		return view
 	}()
@@ -35,7 +38,7 @@ final class CustomScrollIndicatorView: UIView {
 	private var thumbTopConstraint: Constraint?
 	private var thumbHeightConstraint: Constraint?
 
-	private var currentThumbHeight: CGFloat = 16
+	private var currentThumbHeight: CGFloat = Layout.thumbInitialHeight
 	private var currentTrackHeight: CGFloat = .zero
 
 	// MARK: - Initializers
@@ -94,9 +97,9 @@ final class CustomScrollIndicatorView: UIView {
 
 	func resetIndicatorState() {
 		isHidden = true
-		currentThumbHeight = thumbMinHeight
+		currentThumbHeight = Layout.thumbMinHeight
 		currentTrackHeight = .zero
-		updateThumbLayout(height: thumbMinHeight, top: 0)
+		updateThumbLayout(height: Layout.thumbMinHeight, top: 0)
 	}
 
 	// MARK: - Private Methods
@@ -120,7 +123,7 @@ final class CustomScrollIndicatorView: UIView {
 		scrollThumbView.snp.makeConstraints {
 			$0.leading.trailing.equalToSuperview()
 			thumbTopConstraint = $0.top.equalToSuperview().constraint
-			thumbHeightConstraint = $0.height.equalTo(thumbMinHeight).constraint
+			thumbHeightConstraint = $0.height.equalTo(Layout.thumbMinHeight).constraint
 		}
 	}
 
@@ -138,7 +141,7 @@ final class CustomScrollIndicatorView: UIView {
 		visibleHeight: CGFloat,
 		trackHeight: CGFloat
 	) -> CGFloat {
-		max((visibleHeight / contentHeight) * trackHeight, thumbMinHeight)
+		max((visibleHeight / contentHeight) * trackHeight, Layout.thumbMinHeight)
 	}
 
 	private func calculateScrollProgress(

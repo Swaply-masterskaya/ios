@@ -10,6 +10,12 @@ import SnapKit
 
 final class DropdownCell: UITableViewCell {
 
+	private enum Layout {
+		static let checkboxCornerRadius: CGFloat = 3
+		static let contentInset: CGFloat = 12
+		static let checkboxSize: CGFloat = 24
+	}
+
 	// MARK: - Constants
 	static let reuseIdentifier = "DropdownCell"
 
@@ -17,7 +23,7 @@ final class DropdownCell: UITableViewCell {
 	private(set) lazy var checkboxImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.contentMode = .scaleAspectFit
-		imageView.layer.cornerRadius = 3
+		imageView.layer.cornerRadius = Layout.checkboxCornerRadius
 		imageView.layer.masksToBounds = true
 		return imageView
 	}()
@@ -32,7 +38,7 @@ final class DropdownCell: UITableViewCell {
 	private(set) lazy var cellContent: UIStackView = {
 		let cellContent = UIStackView(arrangedSubviews: [checkboxImageView, valueLabel])
 		cellContent.axis = .horizontal
-		cellContent.spacing = 8
+		cellContent.spacing = AppSpacing.small
 		cellContent.alignment = .center
 		return cellContent
 	}()
@@ -67,14 +73,14 @@ final class DropdownCell: UITableViewCell {
 		contentView.addSubview(cellContent)
 
 		cellContent.snp.makeConstraints {
-			$0.leading.equalToSuperview().inset(12)
-			$0.trailing.equalToSuperview().inset(12)
+			$0.leading.equalToSuperview().inset(Layout.contentInset)
+			$0.trailing.equalToSuperview().inset(Layout.contentInset)
 			$0.centerY.equalToSuperview()
 		}
 
 		checkboxImageView.snp.makeConstraints {
-			$0.width.equalTo(24)
-			$0.height.equalTo(24)
+			$0.width.equalTo(Layout.checkboxSize)
+			$0.height.equalTo(Layout.checkboxSize)
 		}
 		contentView.backgroundColor = .clear
 	}
