@@ -4,13 +4,12 @@ final class PageControl: UIPageControl {
 
     init(numberOfPages: Int) {
         super.init(frame: .zero)
-        self.numberOfPages = numberOfPages
+        self.numberOfPages = max(0, numberOfPages)
         setupPageControl()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
 
     private func setupPageControl() {
         currentPage = 0
