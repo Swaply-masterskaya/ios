@@ -34,12 +34,8 @@ final class AccentButton: UIButton {
         setupButton()
     }
 
-    required init?(coder: NSCoder) {
-        self.buttonView = .defaultView
-        self.title = "Button"
-        super.init(coder: coder)
-        setupButton()
-    }
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
 
     // MARK: - Private Methods
     private func setupButton() {
