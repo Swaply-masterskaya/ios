@@ -15,7 +15,7 @@ protocol Coordinator: AnyObject {
     func start()
 }
 
-final class MainCoordinator: Coordinator {
+final class RootCoordinator: Coordinator {
 
     // MARK: - Public Properties
 
@@ -29,7 +29,7 @@ final class MainCoordinator: Coordinator {
     }
 
     // MARK: - Public Methods
-
+    
     func start() {
         let tabBarController = MainTabBarController()
         navigationController.setViewControllers([tabBarController], animated: false)

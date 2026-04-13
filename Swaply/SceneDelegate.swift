@@ -10,7 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    var mainCoordinator: MainCoordinator?
+    var rootCoordinator: RootCoordinator?
 
     func scene(
         _ scene: UIScene,
@@ -20,9 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         let navigationController = UINavigationController()
-        
-        mainCoordinator = MainCoordinator(navigationController: navigationController)
-        mainCoordinator?.start()
+
+        rootCoordinator = RootCoordinator(navigationController: navigationController)
+        rootCoordinator?.start()
 
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
@@ -30,17 +30,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
-        }
+    }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        }
+    }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        }
+    }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        }
+    }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        }
+    }
 }

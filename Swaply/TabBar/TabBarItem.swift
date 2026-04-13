@@ -20,29 +20,31 @@ enum TabBarItem: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .home: return "Главная"
-        case .likes: return "Лайки"
-        case .projects: return "Проекты"
-        case .chats: return "Чаты"
-        case .profile: return "Профиль"
+        case .home: return Resources.TabBar.homeTitle
+        case .likes: return Resources.TabBar.likesTitle
+        case .projects: return Resources.TabBar.projectsTitle
+        case .chats: return Resources.TabBar.chatsTitle
+        case .profile: return Resources.TabBar.profileTitle
         }
     }
+
     var defaultImage: UIImage? {
         switch self {
-        case .home: return AppImages.iconTabBarHome
-        case .likes: return AppImages.iconTabBarLikes
-        case .projects: return AppImages.iconTabBarProjects
-        case .chats: return AppImages.iconTabBarChats
-        case .profile: return AppImages.logoBlack
+        case .home: return Resources.TabBar.homeDefaultIcon
+        case .likes: return Resources.TabBar.likesDefaultIcon
+        case .projects: return Resources.TabBar.projectsDefaultIcon
+        case .chats: return Resources.TabBar.chatsDefaultIcon
+        case .profile: return Resources.TabBar.profileDefaultIcon
         }
     }
+
     var selectedImage: UIImage? {
         switch self {
-        case .home: return AppImages.iconTabBarHomeFilled
-        case .likes: return AppImages.iconTabBarLikesFilled
-        case .projects: return AppImages.iconTabBarProjectsFilled
-        case .chats: return AppImages.iconTabBarChatsFilled
-        case .profile: return AppImages.logoOrange
+        case .home: return Resources.TabBar.homeSelectedIcon
+        case .likes: return Resources.TabBar.likesSelectedIcon
+        case .projects: return Resources.TabBar.projectsSelectedIcon
+        case .chats: return Resources.TabBar.chatsSelectedIcon
+        case .profile: return Resources.TabBar.profileSelectedIcon
         }
     }
 }
