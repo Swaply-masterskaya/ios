@@ -11,21 +11,21 @@ enum DropdownIconType {
 	case square
 	case radio
 
-	var normalImageName: String {
+	var normalImageName: UIImage? {
 		switch self {
 		case .square:
-			return "square"
+				return AppImages.iconSquare
 		case .radio:
-			return "circle"
+				return AppImages.iconCircle
 		}
 	}
 
-	var selectedImageName: String {
+	var selectedImageName: UIImage? {
 		switch self {
 		case .square:
-			return "checkmark.square.fill"
+				return AppImages.iconSquareSelected
 		case .radio:
-			return "circle.inset.filled"
+				return AppImages.iconRadioSelected
 		}
 	}
 
