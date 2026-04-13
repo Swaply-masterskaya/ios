@@ -84,8 +84,8 @@ final class DropdownCell: UITableViewCell {
 	}
 
 	private func updateCheckBox(isSelected: Bool, iconType: DropdownIconType) {
-		let imageName = isSelected ? iconType.selectedImageName : iconType.normalImageName
-		checkboxImageView.image = UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
+		let image = isSelected ? iconType.selectedImageName : iconType.normalImageName
+		checkboxImageView.image = image?.withRenderingMode(.alwaysTemplate)
 		checkboxImageView.tintColor = isSelected ? AppColors.secondaryOrange : AppColors.grey400
 	}
 }
