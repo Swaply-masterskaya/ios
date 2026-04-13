@@ -19,8 +19,8 @@ final class DropdownCell: UITableViewCell {
 	// MARK: - Constants
 	static let reuseIdentifier = "DropdownCell"
 
-	// MARK: - Internal Properties
-	private(set) lazy var checkboxImageView: UIImageView = {
+	// MARK: - Private Properties
+	private lazy var checkboxImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.contentMode = .scaleAspectFit
 		imageView.layer.cornerRadius = Layout.checkboxCornerRadius
@@ -28,14 +28,14 @@ final class DropdownCell: UITableViewCell {
 		return imageView
 	}()
 
-	private(set) lazy var valueLabel: UILabel = {
+	private lazy var valueLabel: UILabel = {
 		let label = UILabel()
 		label.font = AppTypography.body
 		label.textColor = AppColors.grey400
 		return label
 	}()
 
-	private(set) lazy var cellContent: UIStackView = {
+	private lazy var cellContent: UIStackView = {
 		let cellContent = UIStackView(arrangedSubviews: [checkboxImageView, valueLabel])
 		cellContent.axis = .horizontal
 		cellContent.spacing = AppSpacing.small
@@ -51,12 +51,10 @@ final class DropdownCell: UITableViewCell {
 		backgroundColor = .clear
 	}
 
-	required init?(coder: NSCoder) {
-		assertionFailure("init(coder:) has not been implemented")
-		return nil
-	}
+	@available(*, unavailable)
+	required init?(coder: NSCoder) { nil }
 
-	// MARK: - Internal Methods
+	// MARK: - Public Methods
 	func configureCell(
 		text: String,
 		isSelected: Bool = false,

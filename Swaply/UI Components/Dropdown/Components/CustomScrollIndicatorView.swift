@@ -13,24 +13,23 @@ final class CustomScrollIndicatorView: UIView {
 	private enum Layout {
 		static let thumbMinHeight: CGFloat = 8
 		static let thumbInitialHeight: CGFloat = 16
-		static let cornerRadius: CGFloat = 4
 	}
 
-	// MARK: - Internal Properties
+	// MARK: - Public Properties
 	var onScrollProgressChanged: ((CGFloat) -> Void)?
 
 	// MARK: - Private Properties
-	private let scrollTrackView: UIView = {
+	private lazy var scrollTrackView: UIView = {
 		let view = UIView()
 		view.backgroundColor = AppColors.backgroundSecondary
-		view.layer.cornerRadius = Layout.cornerRadius
+		view.layer.cornerRadius = AppRadius.tiny
 		return view
 	}()
 
-	private let scrollThumbView: UIView = {
+	private lazy var scrollThumbView: UIView = {
 		let view = UIView()
 		view.backgroundColor = AppColors.backgroundTertiary
-		view.layer.cornerRadius = Layout.cornerRadius
+		view.layer.cornerRadius = AppRadius.tiny
 		view.isUserInteractionEnabled = true
 		return view
 	}()
@@ -50,7 +49,7 @@ final class CustomScrollIndicatorView: UIView {
 	@available(*, unavailable)
 	required init?(coder: NSCoder) { nil }
 
-	// MARK: - Internal Methods
+	// MARK: - Public Methods
 	func updateIndicator(
 		contentHeight: CGFloat,
 		visibleHeight: CGFloat,

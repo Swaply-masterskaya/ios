@@ -14,7 +14,7 @@ final class DropdownViewModel {
 	private(set) var items: [String] = []
 	private var selectedIndexes: Set<Int> = []
 
-	// MARK: - Internal Methods
+	// MARK: - Public Methods
 	func dropdownStyle(for state: DropdownState) -> DropdownStyle {
 		let base = DropdownStyle(
 			titleFont: AppTypography.subheadline,

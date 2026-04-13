@@ -129,7 +129,7 @@ final class DropdownView: UIView {
 	@available(*, unavailable)
 	required init?(coder: NSCoder) { nil }
 
-	// MARK: - Internal Methods
+	// MARK: - Public Methods
 	func configureDropdown(
 		title: String,
 		placeholder: String,
