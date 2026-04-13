@@ -145,6 +145,11 @@ final class DropdownView: UIView {
 		updateArrowIcon()
 	}
 
+	func setState(_ newState: DropdownState) {
+		dropdownViewModel.setState(newState)
+		updateStyles()
+	}
+
 	// MARK: - Private Methods
 	private func setupViews() {
 		addSubview(dropdownContent)
@@ -235,11 +240,6 @@ final class DropdownView: UIView {
 			? CGAffineTransform(rotationAngle: .pi)
 			: .identity
 		}
-	}
-
-	func setState(_ newState: DropdownState) {
-		dropdownViewModel.setState(newState)
-		updateStyles()
 	}
 
 	private func setTitle(_ text: String) {
