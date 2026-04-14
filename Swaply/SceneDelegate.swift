@@ -17,10 +17,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = ViewController()
+        window.backgroundColor = AppColors.backgroundPrimary
+        window.rootViewController = SplashViewController()
         window.makeKeyAndVisible()
         self.window = window
+    }
+
+    func showMain() {
+        window?.rootViewController = ViewController()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -30,9 +30,9 @@ final class SplashViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?
-                .showOnboarding()
+                .showMain()
         }
     }
 }
