@@ -24,7 +24,7 @@ final class AccentBannerCell: UICollectionViewCell {
         let label = UILabel()
         label.numberOfLines = 2
         label.textAlignment = .left
-        label.font = .systemFont(ofSize: 17, weight: .semibold)
+        label.font = AppTypography.bodyBold
         label.textColor = .white
         return label
     }()
@@ -39,9 +39,8 @@ final class AccentBannerCell: UICollectionViewCell {
         setupConstraints()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    @available(*, unavailable)
+        required init?(coder: NSCoder) { nil }
 
     // MARK: - Internal Methods
     override func layoutSubviews() {
@@ -60,7 +59,7 @@ final class AccentBannerCell: UICollectionViewCell {
         containerView.addSubview(logoImageView)
         containerView.addSubview(titleLabel)
 
-        containerView.layer.cornerRadius = 16
+        containerView.layer.cornerRadius = AppRadius.medium
         containerView.layer.masksToBounds = true
     }
 
