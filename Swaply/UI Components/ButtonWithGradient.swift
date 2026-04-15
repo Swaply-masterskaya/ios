@@ -1,0 +1,238 @@
+//
+//  GradientButton.swift
+//  Swaply
+//
+//  Created by Aleksandr Baliev on 15.04.2026.
+//
+
+import UIKit
+import SnapKit
+import RxSwift
+
+private enum Constants {
+    static let startPoint: CGFloat = 2
+    static let sizeForImage: CGFloat = 24
+    static let sizeForThumb: CGFloat = 48
+}
+
+final class ButtonWithGradient: UIView {
+
+    // MARK: - Private Properties
+    private let trackView = UIView()
+    private let fillView = UIView()
+    private let thumbView = UIView()
+    private let label = UILabel()
+    private let blurView = {
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        return blurView
+    }()
+    private let iconView = {
+        let image = AppImages.iconArrowForSlider.withRenderingMode(.alwaysOriginal)
+        let iconView = UIImageView(image: image)
+        iconView.contentMode = .scaleAspectFit
+        return iconView
+    }()
+    private var isConfirmed = false
+    private let fillGradientLayer = CAGradientLayer()
+    private var target: Any?
+    private var action: Selector?
+
+    // MARK: - Constants
+    private var thumbPosition = Constants.startPoint
+
+    // MARK: - Initializers
+    init(text: String = "Откликнуться") {
+        super.init(frame: .zero)
+        setup(with: text)
+    }
+
+    required init?(coder: NSCoder) { nil }
+
+    // MARK: - Private Methods
+    private func setup(with text: String) {
+        setupBlur()
+        setupWhiteOverlay()
+        setupFillView()
+        setupLabel(with: text)
+        setupThumbView()
+        setupFillGradient()
+    }
+
+    // Установка блюра для дальнейшего наложения оверлея
+    private func setupBlur() {
+        blurView.layer.cornerRadius = AppRadius.extraLarge
+        blurView.clipsToBounds = true
+        addSubview(blurView)
+    }
+
+    // Оверлей(серый фон)
+    private func setupWhiteOverlay() {
+        trackView.backgroundColor = .white20
+        trackView.layer.cornerRadius = AppRadius.extraLarge
+        addSubview(trackView)
+    }
+
+    // Фон для установки градиента
+    private func setupFillView() {
+        fillView.frame = CGRect(
+            x: Constants.startPoint,
+            y: Constants.startPoint,
+            width: Constants.sizeForThumb,
+            height: Constants.sizeForThumb
+        )
+        fillView.layer.cornerRadius = AppRadius.extraLarge
+        addSubview(fillView)
+    }
+
+    private func setupLabel(with text: String) {
+        label.text = text
+        label.textColor = .white
+        label.font = AppTypography.body
+        label.textAlignment = .center
+        addSubview(label)
+    }
+
+    // Настройка ползунка
+    private func setupThumbView() {
+        thumbView.backgroundColor = .clear
+        thumbView.layer.cornerRadius = AppRadius.extraLarge
+        thumbView.frame = CGRect(
+            x: Constants.startPoint,
+            y: Constants.startPoint,
+            width: Constants.sizeForThumb,
+            height: Constants.sizeForThumb
+        )
+        addSubview(thumbView)
+
+        iconView.frame = CGRect(
+            x: AppSpacing.medium,
+            y: AppSpacing.medium,
+            width: Constants.sizeForImage,
+            height: Constants.sizeForImage
+        )
+        thumbView.addSubview(iconView)
+
+        // Добавляем жест
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        thumbView.addGestureRecognizer(pan)
+    }
+
+    private func setupFillGradient() {
+        let colors = [
+            AppColors.gradientColor1.cgColor,
+            AppColors.gradientColor2.cgColor,
+            AppColors.gradientColor3.cgColor
+        ]
+
+        fillGradientLayer.colors = colors
+        fillGradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        fillGradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+
+        fillView.backgroundColor = .clear
+        fillView.clipsToBounds = true
+        fillView.layer.insertSublayer(fillGradientLayer, at: 0)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        blurView.frame = bounds
+        trackView.frame = bounds
+        label.frame = bounds
+
+        // При успешном свайпе устанавливаем полностью градиентный фон
+        if isConfirmed {
+            fillView.frame = bounds
+        } else {
+        // Иначе постепенно заполняем градиентным фоном
+            let fillWidth = thumbPosition + Constants.sizeForThumb - 2
+            fillView.frame = CGRect(
+                x: Constants.startPoint,
+                y: Constants.startPoint,
+                width: max(0, fillWidth),
+                height: Constants.sizeForThumb
+            )
+            fillView.layer.cornerRadius = AppRadius.extraLarge
+        }
+        fillGradientLayer.frame = fillView.bounds
+    }
+
+    @objc private func handlePan(_ position: UIPanGestureRecognizer) {
+        guard !isConfirmed else { return }
+
+        // Создаем и дальше накапливаем поинты при движении ползунка
+        let translation = position.translation(in: self)
+        let minX: CGFloat = Constants.startPoint
+        let maxX = bounds.width - Constants.sizeForThumb - Constants.startPoint
+
+        switch position.state {
+        case .changed:
+            thumbPosition += translation.x
+            thumbPosition = max(minX, min(thumbPosition, maxX))
+
+            // Стартовая позиция ползунка
+            thumbView.frame.origin.x = thumbPosition
+            // Рассчитываем на сколько надо заполнить градиентным фоном
+            let fillWidth = thumbPosition + Constants.sizeForThumb - Constants.startPoint
+            fillView.frame.size.width = max(0, fillWidth)
+
+            // Отменяем анимацию градиентного фона, чтобы он моментально двигался за ползунком
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            fillGradientLayer.frame = fillView.bounds
+            fillGradientLayer.cornerRadius = fillView.layer.cornerRadius
+            CATransaction.commit()
+
+            // Обнуляем накопление поинтов
+            position.setTranslation(.zero, in: self)
+
+        case .ended, .cancelled:
+            // Если ползунок дотянули миниммум до 75% от всей длины кнопки, то он автоматом дотягивается и получаем успешный свайп, иначе переходим в начальное положение
+            if thumbPosition > bounds.width * 0.75 {
+                confirm()
+            } else {
+                reset()
+            }
+        default:
+            break
+        }
+    }
+
+    private func confirm() {
+        isConfirmed = true
+        thumbPosition = bounds.width - Constants.sizeForThumb - Constants.startPoint
+
+        thumbView.alpha = 0
+        fillView.frame = bounds
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+
+        if let target = target, let action = action {
+            (target as AnyObject).perform(action, with: self)
+        }
+    }
+
+    private func reset() {
+        isConfirmed = false
+        thumbPosition = Constants.startPoint
+
+        thumbView.frame = CGRect(
+            x: Constants.startPoint,
+            y: Constants.startPoint,
+            width: Constants.sizeForThumb,
+            height: Constants.sizeForThumb
+        )
+        fillView.frame = CGRect(
+            x: Constants.startPoint,
+            y: Constants.startPoint,
+            width: Constants.sizeForThumb,
+            height: Constants.sizeForThumb
+        )
+    }
+
+    // MARK: - Public Methods
+    func addTarget(_ target: Any?, action: Selector) {
+        self.target = target
+        self.action = action
+    }
+}
