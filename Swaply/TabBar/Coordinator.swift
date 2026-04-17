@@ -7,8 +7,6 @@
 
 import UIKit
 
-// не уверен что я должен создавать координатор, но пока свой использую, а дальше уже посмотрим как в проекте будет все
-
 protocol Coordinator: AnyObject {
     var navigationController: UINavigationController { get set }
     var childCoordinators: [Coordinator] { get set }
