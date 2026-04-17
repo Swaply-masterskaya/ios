@@ -24,7 +24,7 @@ final class AccentBannerCell: UICollectionViewCell {
         let label = UILabel()
         label.numberOfLines = 2
         label.textAlignment = .left
-        label.font = AppTypography.bodyBold
+        label.font = AppTypography.bodySemibold
         label.textColor = .white
         return label
     }()
@@ -99,5 +99,8 @@ final class AccentBannerCell: UICollectionViewCell {
             make.width.equalTo(232)
             make.height.equalTo(44)
         }
+        
+        containerView.layoutIfNeeded()
+        gradientLayer.frame = containerView.bounds
     }
 }
