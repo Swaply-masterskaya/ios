@@ -70,15 +70,8 @@ final class AccentBannerCell: UICollectionViewCell {
             AppColors.gradientColor1.cgColor
         ]
         gradientLayer.locations = [0.0, 0.4423, 1.0]
-        let angle = 248.49 * .pi / 180
-        gradientLayer.startPoint = CGPoint(
-            x: 0.5 + cos(angle + .pi) * 0.5,
-            y: 0.5 + sin(angle + .pi) * 0.5
-        )
-        gradientLayer.endPoint = CGPoint(
-            x: 0.5 + cos(angle) * 0.5,
-            y: 0.5 + sin(angle) * 0.5
-        )
+        gradientLayer.startPoint = CGPoint(x: 1, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0, y: 1)
         containerView.layer.insertSublayer(gradientLayer, at: 0)
     }
 
@@ -99,7 +92,6 @@ final class AccentBannerCell: UICollectionViewCell {
             make.width.equalTo(232)
             make.height.equalTo(44)
         }
-        
         containerView.layoutIfNeeded()
         gradientLayer.frame = containerView.bounds
     }
