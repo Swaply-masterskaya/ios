@@ -19,6 +19,7 @@ enum AppTypography {
     static let titleExtraSmallBold = UIFont.systemFont(ofSize: 20, weight: .bold)
     static let titleExtraSmall = UIFont.systemFont(ofSize: 20, weight: .regular)
     static let headline = UIFont.systemFont(ofSize: 17, weight: .bold)
+    static let headline1 = UIFont.systemFont(ofSize: 17, weight: .semibold)
     static let subheadlineBold = UIFont.systemFont(ofSize: 15, weight: .bold)
     static let subheadline = UIFont.systemFont(ofSize: 15, weight: .regular)
 

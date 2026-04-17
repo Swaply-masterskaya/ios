@@ -12,9 +12,8 @@ final class BusinessCardPreviewViewController: UIViewController {
 
     // MARK: - Constants
     private enum Layout {
-        static let horizontalInset: CGFloat = 16
         static let topInset: CGFloat = 32
-        static let cellHeight: CGFloat = 280
+        static let cellSize = CGSize(width: 353, height: 148)
     }
 
     // MARK: - Private Properties
@@ -22,12 +21,6 @@ final class BusinessCardPreviewViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 0
-        layout.sectionInset = UIEdgeInsets(
-            top: Layout.topInset,
-            left: Layout.horizontalInset,
-            bottom: 0,
-            right: Layout.horizontalInset
-        )
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -71,7 +64,20 @@ extension BusinessCardPreviewViewController: UICollectionViewDelegateFlowLayout 
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let width = collectionView.bounds.width - (Layout.horizontalInset * 2)
-        return CGSize(width: width, height: Layout.cellHeight)
+        Layout.cellSize
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        let horizontalInset = max((collectionView.bounds.width - Layout.cellSize.width) / 2, 0)
+        return UIEdgeInsets(
+            top: Layout.topInset,
+            left: horizontalInset,
+            bottom: 0,
+            right: horizontalInset
+        )
     }
 }
