@@ -10,6 +10,18 @@ import SnapKit
 
 final class CustomSearchStripe: UISearchBar {
 
+	private enum Layout {
+		static let iconSize: CGFloat = 24
+		static let iconContainerSize: CGFloat = 44
+		static let searchBarHeight: CGFloat = 48
+		static let animationDuration: TimeInterval = 0.18
+	}
+
+	private enum Text {
+		static let placeholder = "Поиск"
+	}
+
+	// MARK: - Public Properties
 	weak var customDelegate: CustomSearchStripeDelegate?
 
 	var searchText: String? {
@@ -19,22 +31,56 @@ final class CustomSearchStripe: UISearchBar {
 			updateOverlayState(animated: false)
 		}
 	}
-
+	// MARK: - Private Properties
 	private var overlayCenterXConstraint: Constraint?
 	private var overlayLeadingConstraint: Constraint?
 
 	private lazy var iconSearchView: UIImageView = {
-		let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-		imageView.image = UIImage(systemName: "magnifyingglass")
+		let imageView = UIImageView(
+			frame: CGRect(
+				x: 0,
+				y: 0,
+				width: Layout.iconSize,
+				height: Layout.iconSize
+			)
+		)
+		imageView.image = AppImages.iconSearch
 		imageView.tintColor = AppColors.grey400
 		imageView.contentMode = .scaleAspectFit
 		return imageView
 	}()
 
+	private lazy var iconContainerView: UIView = {
+		let container = UIView(
+			frame: CGRect(
+				x: 0,
+				y: 0,
+				width: Layout.iconContainerSize,
+				height: Layout.iconContainerSize
+			)
+		)
+		container.addSubview(iconSearchView)
+		iconSearchView.frame = CGRect(
+			x: AppSpacing.xmedium,
+			y: AppSpacing.xmedium,
+			width: Layout.iconSize,
+			height: Layout.iconSize
+		)
+		container.isUserInteractionEnabled = true
+		let tap = UITapGestureRecognizer(target: self, action: #selector(didTapSearch))
+		container.addGestureRecognizer(tap)
+		return container
+	}()
+
 	private lazy var filterButton: UIButton = {
 		let button = UIButton(type: .system)
-		button.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-		button.setImage(UIImage(systemName: "slider.horizontal.3"), for: .normal)
+		button.frame = CGRect(
+			x: 0,
+			y: 0,
+			width: Layout.iconSize,
+			height: Layout.iconSize
+		)
+		button.setImage(AppImages.iconFilter, for: .normal)
 		button.imageView?.contentMode = .scaleAspectFit
 		button.tintColor = AppColors.grey400
 		button.addTarget(self, action: #selector(didTapFilterButton), for: .touchUpInside)
@@ -43,7 +89,7 @@ final class CustomSearchStripe: UISearchBar {
 
 	private lazy var overlayPlaceholderLabel: UILabel = {
 		let label = UILabel()
-		label.text = "Поиск"
+		label.text = Text.placeholder
 		label.textColor = AppColors.grey200
 		label.font = AppTypography.body
 		label.textAlignment = .center
@@ -53,16 +99,16 @@ final class CustomSearchStripe: UISearchBar {
 
 	private lazy var glassEffectView: GlassEffectView = {
 		let view = GlassEffectView(
-			configuration: GlassEffectConfiguration(cornerRadius: 24)
+			configuration: GlassEffectConfiguration(cornerRadius: AppRadius.extraLarge)
 		)
 		view.isUserInteractionEnabled = false
 		return view
 	}()
-
+	// MARK: - Override Properties
 	override var intrinsicContentSize: CGSize {
-		return CGSize(width: UIView.noIntrinsicMetric, height: 48)
+		return CGSize(width: UIView.noIntrinsicMetric, height: Layout.searchBarHeight)
 	}
-
+	// MARK: - Init
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		setupAppearance()
@@ -70,13 +116,18 @@ final class CustomSearchStripe: UISearchBar {
 
 	@available(*, unavailable)
 	required init?(coder: NSCoder) { nil }
-
+	// MARK: - Override Methods
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		updateCornerRadius()
 		updateOverlayState(animated: false)
 	}
-
+	// MARK: - Public Methods
+	func clearSearchStripe() {
+		text = ""
+		resignFirstResponder()
+	}
+	// MARK: - Private Methods
 	private func setupAppearance() {
 		setupBehavior()
 		setupStyle()
@@ -85,7 +136,7 @@ final class CustomSearchStripe: UISearchBar {
 
 	private func setupStyle() {
 		searchBarStyle = .minimal
-		searchTextField.leftView = iconSearchView
+		searchTextField.leftView = iconContainerView
 		searchTextField.leftViewMode = .always
 		searchTextField.tintColor = AppColors.accentOrange
 		searchTextField.textColor = AppColors.primary
@@ -100,13 +151,16 @@ final class CustomSearchStripe: UISearchBar {
 		glassEffectView.snp.makeConstraints {
 			$0.edges.equalToSuperview()
 		}
+		searchTextField.snp.makeConstraints {
+			$0.edges.equalToSuperview()
+		}
 	}
 
 	private func setupPlaceholder() {
 		searchTextField.placeholder = nil
 		searchTextField.addSubview(overlayPlaceholderLabel)
 
-		let leftInset = (searchTextField.leftView?.frame.maxX ?? 24) + 8
+		let leftInset = (searchTextField.leftView?.frame.maxX ?? Layout.iconContainerSize) + AppSpacing.small
 
 		overlayPlaceholderLabel.snp.makeConstraints {
 			$0.centerY.equalToSuperview()
@@ -148,7 +202,12 @@ final class CustomSearchStripe: UISearchBar {
 		}
 
 		if animated {
-			UIView.animate( withDuration: 0.18, delay: 0, options: .curveEaseOut, animations: animations)
+			UIView.animate(
+				withDuration: Layout.animationDuration,
+				delay: 0,
+				options: .curveEaseOut,
+				animations: animations
+			)
 		} else {
 			animations()
 		}
@@ -184,7 +243,7 @@ final class CustomSearchStripe: UISearchBar {
 	}
 
 	@objc private func didTapFilterButton() {
-
+		customDelegate?.customSearchStripeDidTapFilterButton(self)
 	}
 
 	@objc private func textDidChange() {
@@ -196,7 +255,7 @@ final class CustomSearchStripe: UISearchBar {
 	}
 
 }
-
+// MARK: - UITextFieldDelegate
 extension CustomSearchStripe: UITextFieldDelegate {
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 		updateOverlayState(animated: true)

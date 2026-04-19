@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class GlassEffectView: UIView {
-
+	// MARK: - Private Properties
 	private var configuration: GlassEffectConfiguration
 
 	private lazy var blurView: UIVisualEffectView = {
@@ -36,7 +36,7 @@ final class GlassEffectView: UIView {
 		let view = UIView()
 		return view
 	}()
-
+	// MARK: - Initializers
 	init(configuration: GlassEffectConfiguration) {
 		self.configuration = configuration
 		super.init(frame: .zero)
@@ -51,8 +51,15 @@ final class GlassEffectView: UIView {
 		super.layoutSubviews()
 		applyCornerRadius()
 	}
-
-	private func setupView() {
+	// MARK: - Public Methods
+	func update(configuration: GlassEffectConfiguration) {
+		self.configuration = configuration
+		applyConfiguration()
+	}
+}
+// MARK: - Extension GlassEffectView
+private extension GlassEffectView {
+	func setupView() {
 		clipsToBounds = true
 
 		addSubview(blurView)
@@ -81,7 +88,7 @@ final class GlassEffectView: UIView {
 		}
 	}
 
-	private func applyConfiguration() {
+	func applyConfiguration() {
 		blurView.effect = UIBlurEffect(style: configuration.blurStyle)
 		baseFillView.backgroundColor = configuration.baseFillColor
 		darkOverlayView.backgroundColor = configuration.darkOverlayColor
@@ -92,16 +99,11 @@ final class GlassEffectView: UIView {
 		applyCornerRadius()
 	}
 
-	private func applyCornerRadius() {
+	func applyCornerRadius() {
 		layer.cornerRadius = configuration.cornerRadius
 		layer.masksToBounds = true
 
 		blurView.layer.cornerRadius = configuration.cornerRadius
 		blurView.layer.masksToBounds = true
-	}
-
-	func update(configuration: GlassEffectConfiguration) {
-		self.configuration = configuration
-		applyConfiguration()
 	}
 }
