@@ -11,4 +11,5 @@ protocol CustomSearchFieldDelegate: AnyObject {
 	func customSearchField(_ customSearchField: CustomSearchField, didChangeText text: String)
 	func customSearchFieldDidTapSearch(_ customSearchField: CustomSearchField, text: String)
 	func customSearchFieldDidTapClose(_ customSearchField: CustomSearchField)
+	func customSearchFieldDidTapFilter(_ customSearchField: CustomSearchField)
 }
