@@ -9,4 +9,5 @@ import Foundation
 
 protocol CustomSearchStripeDelegate: AnyObject {
 	func customSearchStripeDidTapSearchIcon(_ customSearchStripe: CustomSearchStripe)
+	func customSearchStripeDidTapFilterButton(_ customSearchStripe: CustomSearchStripe)
 }
