@@ -10,6 +10,8 @@ import SnapKit
 
 final class CustomSearchStripe: UISearchBar {
 
+	weak var customDelegate: CustomSearchStripeDelegate?
+
 	var searchText: String? {
 		get { searchTextField.text }
 		set {
@@ -187,6 +189,10 @@ final class CustomSearchStripe: UISearchBar {
 
 	@objc private func textDidChange() {
 		updateOverlayState(animated: false)
+	}
+
+	@objc private func didTapSearch() {
+		customDelegate?.customSearchStripeDidTapSearchIcon(self)
 	}
 
 }
