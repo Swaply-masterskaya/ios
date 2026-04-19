@@ -124,4 +124,8 @@ extension CustomSearchField: CustomSearchStripeDelegate {
 	func customSearchStripeDidTapSearchIcon(_ customSearchStripe: CustomSearchStripe) {
 		performSearch()
 	}
+
+	func customSearchStripeDidTapFilterButton(_ customSearchStripe: CustomSearchStripe) {
+		delegate?.customSearchFieldDidTapFilter(self)
+	}
 }
