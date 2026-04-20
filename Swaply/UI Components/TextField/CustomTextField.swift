@@ -40,9 +40,12 @@ final class CustomTextField: UIView {
     func getText() -> String {
         textField.text ?? ""
     }
+}
+
+extension CustomTextField {
 
     // MARK: - Private Methods
-    private func setupUI() {
+    func setupUI() {
         textField.borderStyle = .none
         textField.backgroundColor = AppColors.backgroundTertiary
         textField.layer.cornerRadius = AppRadius.medium
@@ -59,20 +62,24 @@ final class CustomTextField: UIView {
         addSubview(textField)
     }
 
-    private func setupConstraints() {
+    func setupConstraints() {
         textField.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
 
-    private func setupActions() {
-        textField.addAction(UIAction { [weak self] _ in
+    func setupActions() {
+        textField.addAction(
+            UIAction {
+                [weak self] _ in
             guard let self else { return }
             textSubject.onNext(textField.text ?? "")
-        }, for: .editingChanged)
+        },
+            for: .editingChanged
+        )
     }
 
-    private func setupPlaceholder(_ text: String) {
+    func setupPlaceholder(_ text: String) {
         textField.attributedPlaceholder = NSAttributedString(
             string: text,
             attributes: [
@@ -82,7 +89,7 @@ final class CustomTextField: UIView {
         )
     }
 
-    private func makePadding(_ width: CGFloat) -> UIView {
+    func makePadding(_ width: CGFloat) -> UIView {
         UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
     }
 }
