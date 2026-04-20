@@ -10,7 +10,7 @@ import SnapKit
 
 final class SplashViewController: UIViewController {
 
-    private let logoImageView: UIImageView = {
+    private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(resource: .logo))
         imageView.contentMode = .scaleAspectFit
         return imageView
