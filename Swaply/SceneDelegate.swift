@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var rootCoordinator: RootCoordinator?
 
     func scene(
         _ scene: UIScene,
@@ -26,21 +27,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func showMain() {
-        window?.rootViewController = ViewController()
+        let navigationController = UINavigationController()
+
+        rootCoordinator = RootCoordinator(navigationController: navigationController)
+        rootCoordinator?.start()
+
+        window?.rootViewController = navigationController
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
-        }
+    }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        }
+    }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        }
+    }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        }
+    }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        }
+    }
 }
