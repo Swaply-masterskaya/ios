@@ -12,6 +12,7 @@ final class AccentButton: UIButton {
     // MARK: - Constants
     private let buttonView: ButtonView
     private let title: String
+    private let buttonHeight = 52
 
     // MARK: - Internal Properties
     override var isHighlighted: Bool {
@@ -43,8 +44,8 @@ final class AccentButton: UIButton {
         layer.masksToBounds = true
         titleLabel?.font = AppTypography.accentButtonTitle
         setTitle(title, for: .normal)
-        snp.makeConstraints { make in
-            make.height.equalTo(52)
+        snp.makeConstraints {
+            $0.height.equalTo(buttonHeight)
         }
 
         switch buttonView {
