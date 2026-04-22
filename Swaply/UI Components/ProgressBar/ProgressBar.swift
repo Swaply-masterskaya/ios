@@ -42,8 +42,7 @@ final class ProgressBar: UIView {
     private func getSection() -> ProgressSection? {
         let sectionIndex = Int(currentProgressValue)
 
-        guard sectionIndex >= 0,
-              sectionIndex < numberOfSections,
+        guard (0..<numberOfSections).contains(sectionIndex),
               let currentProgressSection = progressSectionsStackView.arrangedSubviews[sectionIndex] as? ProgressSection else {
             return nil
         }
@@ -56,11 +55,7 @@ final class ProgressBar: UIView {
     }
 
     private func isInRange(value: Double) -> Bool {
-        if value < 0 || value > Double(numberOfSections) {
-            return false
-        } else {
-            return true
-        }
+        (0...Double(numberOfSections)).contains(value) ? true : false
     }
 
     func completeHalfOfSection() {
@@ -78,11 +73,7 @@ final class ProgressBar: UIView {
 
         currentProgressValue = newValue
 
-        if isSectionEmpty {
-            currentProgressSection.setWidthToHalf()
-        } else {
-            currentProgressSection.setWidthToFull()
-        }
+        currentProgressSection.configureConstraints(multiplier: isSectionEmpty ? 0.5 : 1)
     }
 
     func finishSection() {
@@ -100,7 +91,7 @@ final class ProgressBar: UIView {
 
         currentProgressValue = newValue
 
-        currentProgressSection.setWidthToFull()
+        currentProgressSection.configureConstraints(multiplier: 1)
     }
 
     func cancelHalfOfSection() {
@@ -118,11 +109,7 @@ final class ProgressBar: UIView {
             return
         }
 
-        if isSectionFull {
-            currentProgressSection.setWidthToHalf()
-        } else {
-            currentProgressSection.setWidthToZero()
-        }
+        currentProgressSection.configureConstraints(multiplier: isSectionFull ? 0.5 : 0)
     }
 
     func cancelWholeSection() {
@@ -140,6 +127,6 @@ final class ProgressBar: UIView {
             return
         }
 
-        currentProgressSection.setWidthToZero()
+        currentProgressSection.configureConstraints(multiplier: 0)
     }
 }
