@@ -11,11 +11,11 @@ final class ProgressBar: UIView {
         return stackView
     }()
 
-    private let numberOfSegments: Int
+    private let numberOfSections: Int
     private var currentProgressValue = 0.0
 
     init(numberOfSegments: Int) {
-        self.numberOfSegments = numberOfSegments
+        self.numberOfSections = max(numberOfSegments, 1)
         super.init(frame: .zero)
         setupUI()
     }
@@ -24,7 +24,7 @@ final class ProgressBar: UIView {
     required init?(coder: NSCoder) { nil }
 
     private func setupUI() {
-        for _ in 0 ..< numberOfSegments {
+        for _ in 0 ..< numberOfSections {
             progressSectionsStackView.addArrangedSubview(ProgressSection())
         }
 
@@ -43,7 +43,7 @@ final class ProgressBar: UIView {
         let sectionIndex = Int(currentProgressValue)
 
         guard sectionIndex >= 0,
-              sectionIndex < numberOfSegments,
+              sectionIndex < numberOfSections,
               let currentProgressSection = progressSectionsStackView.arrangedSubviews[sectionIndex] as? ProgressSection else {
             return nil
         }
@@ -56,7 +56,7 @@ final class ProgressBar: UIView {
     }
 
     private func isInRange(value: Double) -> Bool {
-        if value < 0 || value > Double(numberOfSegments) {
+        if value < 0 || value > Double(numberOfSections) {
             return false
         } else {
             return true
