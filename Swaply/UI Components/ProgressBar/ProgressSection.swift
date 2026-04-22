@@ -30,14 +30,13 @@ class ProgressSection: UIView {
     private func setupConstraints() {
         progressView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+            $0.width.equalToSuperview().multipliedBy(0)
         }
-
-        setWidthToZero()
     }
 
     func setWidthToZero() {
         UIView.animate(withDuration: 0.3) {
-            self.progressView.snp.remakeConstraints {
+            self.progressView.snp.updateConstraints {
                 $0.width.equalToSuperview().multipliedBy(0)
             }
             self.layoutIfNeeded()
@@ -46,7 +45,7 @@ class ProgressSection: UIView {
 
     func setWidthToHalf() {
         UIView.animate(withDuration: 0.3) {
-            self.progressView.snp.remakeConstraints {
+            self.progressView.snp.updateConstraints {
                 $0.width.equalToSuperview().multipliedBy(0.5)
             }
             self.layoutIfNeeded()
@@ -55,7 +54,7 @@ class ProgressSection: UIView {
 
     func setWidthToFull() {
         UIView.animate(withDuration: 0.3) {
-            self.progressView.snp.remakeConstraints {
+            self.progressView.snp.updateConstraints {
                 $0.width.equalToSuperview().multipliedBy(1)
             }
             self.layoutIfNeeded()
