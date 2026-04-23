@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         window.backgroundColor = AppColors.backgroundPrimary
-        window.rootViewController = SplashViewController()
+        window.rootViewController = AuthorizationViewController(viewModel: AuthorizationViewModel()) //SplashViewController()
         window.makeKeyAndVisible()
         self.window = window
     }
