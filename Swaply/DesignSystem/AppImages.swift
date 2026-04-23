@@ -74,4 +74,9 @@ enum AppImages {
     static let iconSort = UIImage(resource: .sort)
     static let iconDelete = UIImage(resource: .trash)
     static let iconShare = UIImage(resource: .upload)
+	// System icons
+	static let iconSquare = UIImage(systemName: "square")
+	static let iconCircle = UIImage(systemName: "circle")
+	static let iconSquareSelected = UIImage(systemName: "checkmark.square.fill")
+	static let iconRadioSelected = UIImage(systemName: "circle.inset.filled")
 }
