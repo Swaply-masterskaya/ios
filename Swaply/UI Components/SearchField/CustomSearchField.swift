@@ -17,8 +17,8 @@ final class CustomSearchField: UIView {
 	weak var delegate: CustomSearchFieldDelegate?
 	// MARK: - Public Properties
 	var text: String {
-		get { searchStripe.text ?? "" }
-		set { searchStripe.text = newValue }
+		get { searchStripe.searchText ?? "" }
+		set { searchStripe.searchText = newValue }
 	}
 	// MARK: - Private Properties
 	private let searchStripe = CustomSearchStripe()
