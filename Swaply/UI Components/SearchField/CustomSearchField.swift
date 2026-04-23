@@ -103,7 +103,12 @@ final class CustomSearchField: UIView {
 		closeButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 	}
 
+	private func dismissKeyboard() {
+		searchStripe.resignFirstResponder()
+	}
+
 	private func performSearch() {
+		dismissKeyboard()
 		delegate?.customSearchFieldDidTapSearch(self, text: text)
 	}
 
@@ -119,7 +124,6 @@ extension CustomSearchField: UISearchBarDelegate {
 	}
 
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-		searchBar.resignFirstResponder()
 		performSearch()
 	}
 }
