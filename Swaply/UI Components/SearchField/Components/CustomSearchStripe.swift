@@ -124,7 +124,7 @@ final class CustomSearchStripe: UISearchBar {
 	}
 	// MARK: - Public Methods
 	func clearSearchStripe() {
-		text = ""
+		searchText = ""
 		resignFirstResponder()
 	}
 	// MARK: - Private Methods
