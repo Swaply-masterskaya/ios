@@ -6,16 +6,19 @@
 //
 
 import UIKit
-import SnapKit
-import RxSwift
 
 private enum Constants {
     static let startPoint: CGFloat = 2
     static let sizeForImage: CGFloat = 24
     static let sizeForThumb: CGFloat = 48
+    // Описывает какую часть кнопки надо пройти, после которой ползунок автоматом "доедет"
+    static let successForSwipe = 0.75
 }
 
 final class ButtonWithGradient: UIView {
+
+    // MARK: - Constants
+    private var thumbPosition = Constants.startPoint
 
     // MARK: - Private Properties
     private let trackView = UIView()
@@ -35,11 +38,7 @@ final class ButtonWithGradient: UIView {
     }()
     private var isConfirmed = false
     private let fillGradientLayer = CAGradientLayer()
-    private var target: Any?
-    private var action: Selector?
-
-    // MARK: - Constants
-    private var thumbPosition = Constants.startPoint
+    private var actionHandler: (() -> Void)?
 
     // MARK: - Initializers
     init(text: String = "Откликнуться") {
@@ -48,6 +47,11 @@ final class ButtonWithGradient: UIView {
     }
 
     required init?(coder: NSCoder) { nil }
+
+    // MARK: - Public Methods
+    func addAction(_ handler: @escaping () -> Void) {
+        self.actionHandler = handler
+    }
 
     // MARK: - Private Methods
     private func setup(with text: String) {
@@ -70,6 +74,7 @@ final class ButtonWithGradient: UIView {
     private func setupWhiteOverlay() {
         trackView.backgroundColor = .white20
         trackView.layer.cornerRadius = AppRadius.extraLarge
+        trackView.clipsToBounds = true
         addSubview(trackView)
     }
 
@@ -82,6 +87,7 @@ final class ButtonWithGradient: UIView {
             height: Constants.sizeForThumb
         )
         fillView.layer.cornerRadius = AppRadius.extraLarge
+        fillView.clipsToBounds = true
         addSubview(fillView)
     }
 
@@ -97,6 +103,7 @@ final class ButtonWithGradient: UIView {
     private func setupThumbView() {
         thumbView.backgroundColor = .clear
         thumbView.layer.cornerRadius = AppRadius.extraLarge
+        thumbView.clipsToBounds = true
         thumbView.frame = CGRect(
             x: Constants.startPoint,
             y: Constants.startPoint,
@@ -130,7 +137,7 @@ final class ButtonWithGradient: UIView {
         fillGradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
 
         fillView.backgroundColor = .clear
-        fillView.clipsToBounds = true
+        fillGradientLayer.cornerRadius = fillView.layer.cornerRadius
         fillView.layer.insertSublayer(fillGradientLayer, at: 0)
     }
 
@@ -143,9 +150,11 @@ final class ButtonWithGradient: UIView {
 
         // При успешном свайпе устанавливаем полностью градиентный фон
         if isConfirmed {
+            thumbView.alpha = 0
             fillView.frame = bounds
+            label.font = AppTypography.bodySemibold
         } else {
-        // Иначе постепенно заполняем градиентным фоном
+            // Иначе постепенно заполняем градиентным фоном
             let fillWidth = thumbPosition + Constants.sizeForThumb - 2
             fillView.frame = CGRect(
                 x: Constants.startPoint,
@@ -153,7 +162,6 @@ final class ButtonWithGradient: UIView {
                 width: max(0, fillWidth),
                 height: Constants.sizeForThumb
             )
-            fillView.layer.cornerRadius = AppRadius.extraLarge
         }
         fillGradientLayer.frame = fillView.bounds
     }
@@ -180,8 +188,8 @@ final class ButtonWithGradient: UIView {
             // Отменяем анимацию градиентного фона, чтобы он моментально двигался за ползунком
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            fillGradientLayer.frame = fillView.bounds
-            fillGradientLayer.cornerRadius = fillView.layer.cornerRadius
+            setNeedsLayout()
+            layoutIfNeeded()
             CATransaction.commit()
 
             // Обнуляем накопление поинтов
@@ -189,7 +197,7 @@ final class ButtonWithGradient: UIView {
 
         case .ended, .cancelled:
             // Если ползунок дотянули миниммум до 75% от всей длины кнопки, то он автоматом дотягивается и получаем успешный свайп, иначе переходим в начальное положение
-            if thumbPosition > bounds.width * 0.75 {
+            if thumbPosition > bounds.width * Constants.successForSwipe {
                 confirm()
             } else {
                 reset()
@@ -203,13 +211,10 @@ final class ButtonWithGradient: UIView {
         isConfirmed = true
         thumbPosition = bounds.width - Constants.sizeForThumb - Constants.startPoint
 
-        thumbView.alpha = 0
-        fillView.frame = bounds
-        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        setNeedsLayout()
+        layoutIfNeeded()
 
-        if let target = target, let action = action {
-            (target as AnyObject).perform(action, with: self)
-        }
+        actionHandler?()
     }
 
     private func reset() {
@@ -228,11 +233,5 @@ final class ButtonWithGradient: UIView {
             width: Constants.sizeForThumb,
             height: Constants.sizeForThumb
         )
-    }
-
-    // MARK: - Public Methods
-    func addTarget(_ target: Any?, action: Selector) {
-        self.target = target
-        self.action = action
     }
 }
