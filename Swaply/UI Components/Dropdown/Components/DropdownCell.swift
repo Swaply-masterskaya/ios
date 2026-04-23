@@ -12,7 +12,7 @@ final class DropdownCell: UITableViewCell {
 
 	private enum Layout {
 		static let checkboxCornerRadius: CGFloat = 3
-		static let contentInset: CGFloat = 12
+		static let contentInset: CGFloat = AppSpacing.medium
 		static let checkboxSize: CGFloat = 24
 	}
 
