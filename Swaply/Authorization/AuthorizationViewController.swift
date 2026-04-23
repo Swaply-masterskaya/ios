@@ -1,6 +1,11 @@
 import UIKit
 import SnapKit
 
+private enum AuthorizationLayout {
+    static let logoImageSize: CGFloat = 48
+    static let buttonHeight: CGFloat = 52
+}
+
 final class AuthorizationViewController: UIViewController {
     // MARK: - Private Properties
     private lazy var logoImage: UIImageView = {
@@ -8,41 +13,85 @@ final class AuthorizationViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    private lazy var registerButton: UIButton = makeButton(
+        title: registerText,
+        color: AppColors.buttonDefaultNormal
+    )
+    private lazy var entryButton: UIButton = makeButton(
+        title: entryText,
+        color: AppColors.buttonDefaultDisabledTypography
+    )
+    private lazy var stackOfButtons: UIStackView = {
+        let stack = UIStackView()
+        stack.addArrangedSubview(registerButton)
+        stack.addArrangedSubview(entryButton)
+        stack.axis = .vertical
+        stack.spacing = AppSpacing.medium
+        stack.distribution = .fill
+        return stack
+    }()
     // MARK: - Constants
     private let viewModel: AuthorizationViewModel
-    
+    private let registerText: String = "Зарегестрироваться"
+    private let entryText: String = "Войти"
     // MARK: - Initializers
     init(viewModel: AuthorizationViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     // MARK: - Internal Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupUI()
     }
-    
     // MARK: - Private Methods
     private func setupUI() {
         view.backgroundColor = AppColors.backgroundPrimary
+        setupContentView()
         setupLogoImage()
+        setupStackView()
     }
-    
-    private func setupLogoImage() {
-        view.addSubview(logoImage)
-        
-        logoImage.snp.makeConstraints { make in
-            make.height.width.equalTo(48)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(67)
+    private func setupContentView() {
+        view.addSubview(contentView)
+        contentView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
+    private func setupLogoImage() {
+        contentView.addSubview(logoImage)
+        logoImage.snp.makeConstraints { make in
+            make.size.equalTo(AuthorizationLayout.logoImageSize)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(AppSpacing.small)
+        }
+    }
+    private func setupStackView() {
+        contentView.addSubview(stackOfButtons)
+        registerButton.snp.makeConstraints { make in
+            make.height.equalTo(AuthorizationLayout.buttonHeight)
+        }
+        entryButton.snp.makeConstraints { make in
+            make.height.equalTo(AuthorizationLayout.buttonHeight)
+        }
+        stackOfButtons.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(AppSpacing.xlarge)
+            make.bottom.equalToSuperview().inset(AppSpacing.xxlarge)
+        }
+    }
+    private func makeButton(title: String, color: UIColor) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(AppColors.white, for: .normal)
+        button.titleLabel?.font = AppTypography.accentButtonTitle
+        button.backgroundColor = color
+        button.layer.cornerRadius = AppRadius.extraLarge
+        return button
+    }
 }
-
