@@ -19,6 +19,11 @@ final class CustomScrollIndicatorView: UIView {
 	var onScrollProgressChanged: ((CGFloat) -> Void)?
 
 	// MARK: - Private Properties
+	private var thumbTopConstraint: Constraint?
+	private var thumbHeightConstraint: Constraint?
+	private var currentThumbHeight: CGFloat = Layout.thumbInitialHeight
+	private var currentTrackHeight: CGFloat = .zero
+
 	private lazy var scrollTrackView: UIView = {
 		let view = UIView()
 		view.backgroundColor = AppColors.backgroundSecondary
@@ -33,13 +38,6 @@ final class CustomScrollIndicatorView: UIView {
 		view.isUserInteractionEnabled = true
 		return view
 	}()
-
-	private var thumbTopConstraint: Constraint?
-	private var thumbHeightConstraint: Constraint?
-
-	private var currentThumbHeight: CGFloat = Layout.thumbInitialHeight
-	private var currentTrackHeight: CGFloat = .zero
-
 	// MARK: - Initializers
 	override init(frame: CGRect) {
 		super.init(frame: frame)
