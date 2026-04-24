@@ -23,7 +23,6 @@ final class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCustomTabBar()
-        configureViewControllers()
         bindViewModel()
         view.backgroundColor = AppColors.black900
     }
@@ -55,33 +54,6 @@ final class MainTabBarController: UITabBarController {
                 self?.customTabBarView.renderTab(at: index)
             })
             .disposed(by: disposeBag)
-    }
-    private func configureViewControllers() {
-        var viewControllers: [UIViewController] = []
-        for item in tabBarItems {
-            let vc = createMockViewController(for: item)
-            viewControllers.append(vc)
-        }
-        self.viewControllers = viewControllers
-    }
-
-    private func createMockViewController(for item: TabBarItem) -> UIViewController {
-        let vc = UIViewController()
-        vc.view.backgroundColor = AppColors.black900
-
-        let label = UILabel()
-        label.text = item.title
-        label.textColor = AppColors.textPrimary
-        label.font = AppTypography.titleMedium
-        label.textAlignment = .center
-
-        vc.view.addSubview(label)
-        label.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(-40)
-        }
-
-        return vc
     }
 }
 

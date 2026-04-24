@@ -10,12 +10,22 @@ import SnapKit
 
 final class SplashViewController: UIViewController {
 
+    private weak var coordinator: SplashCoordinator?
+
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(resource: .logo))
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
 
+    init(coordinator: SplashCoordinator?) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = AppColors.backgroundPrimary
@@ -30,9 +40,8 @@ final class SplashViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?
-                .showMain()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.coordinator?.finish()
         }
     }
 }
