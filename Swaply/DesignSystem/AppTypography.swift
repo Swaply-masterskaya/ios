@@ -24,6 +24,7 @@ enum AppTypography {
 
     // Body Fonts
     static let bodyBold = UIFont.systemFont(ofSize: 17, weight: .bold)
+    static let bodySemibold = UIFont.systemFont(ofSize: 17, weight: .semibold)
     static let body = UIFont.systemFont(ofSize: 17, weight: .regular)
 
     // Caption Fonts
