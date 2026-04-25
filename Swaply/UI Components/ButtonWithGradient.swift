@@ -13,6 +13,9 @@ private enum Constants {
     static let sizeForThumb: CGFloat = 48
     // Описывает какую часть кнопки надо пройти, после которой ползунок автоматом "доедет"
     static let successForSwipe = 0.75
+    // buttonFadeCalculations1 и buttonFadeCalculations2, практическим путем расчитаны, для затухания лейбла
+    static let buttonFadeCalculations1 = 0.6
+    static let buttonFadeCalculations2: CGFloat = 150
 }
 
 final class ButtonWithGradient: UIView {
@@ -21,65 +24,25 @@ final class ButtonWithGradient: UIView {
     private var thumbPosition = Constants.startPoint
 
     // MARK: - Private Properties
-    private let trackView = UIView()
-    private let fillView = UIView()
-    private let thumbView = UIView()
-    private let label = UILabel()
-    private let blurView = {
+    // Установка блюра для дальнейшего наложения оверлея
+    private lazy var blurView: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         let blurView = UIVisualEffectView(effect: blurEffect)
-        return blurView
-    }()
-    private let iconView = {
-        let image = AppImages.iconArrowForSlider.withRenderingMode(.alwaysOriginal)
-        let iconView = UIImageView(image: image)
-        iconView.contentMode = .scaleAspectFit
-        return iconView
-    }()
-    private var isConfirmed = false
-    private let fillGradientLayer = CAGradientLayer()
-    private var actionHandler: (() -> Void)?
-
-    // MARK: - Initializers
-    init(text: String = "Откликнуться") {
-        super.init(frame: .zero)
-        setup(with: text)
-    }
-
-    required init?(coder: NSCoder) { nil }
-
-    // MARK: - Public Methods
-    func addAction(_ handler: @escaping () -> Void) {
-        self.actionHandler = handler
-    }
-
-    // MARK: - Private Methods
-    private func setup(with text: String) {
-        setupBlur()
-        setupWhiteOverlay()
-        setupFillView()
-        setupLabel(with: text)
-        setupThumbView()
-        setupFillGradient()
-    }
-
-    // Установка блюра для дальнейшего наложения оверлея
-    private func setupBlur() {
         blurView.layer.cornerRadius = AppRadius.extraLarge
         blurView.clipsToBounds = true
-        addSubview(blurView)
-    }
-
+        return blurView
+    }()
     // Оверлей(серый фон)
-    private func setupWhiteOverlay() {
+    private lazy var trackView: UIView = {
+        let trackView = UIView()
         trackView.backgroundColor = .white20
         trackView.layer.cornerRadius = AppRadius.extraLarge
         trackView.clipsToBounds = true
-        addSubview(trackView)
-    }
-
+        return trackView
+    }()
     // Фон для установки градиента
-    private func setupFillView() {
+    private lazy var fillView: UIView = {
+        let fillView = UIView()
         fillView.frame = CGRect(
             x: Constants.startPoint,
             y: Constants.startPoint,
@@ -88,19 +51,11 @@ final class ButtonWithGradient: UIView {
         )
         fillView.layer.cornerRadius = AppRadius.extraLarge
         fillView.clipsToBounds = true
-        addSubview(fillView)
-    }
-
-    private func setupLabel(with text: String) {
-        label.text = text
-        label.textColor = .white
-        label.font = AppTypography.body
-        label.textAlignment = .center
-        addSubview(label)
-    }
-
+        return fillView
+    }()
     // Настройка ползунка
-    private func setupThumbView() {
+    private lazy var thumbView: UIView = {
+        let thumbView = UIView()
         thumbView.backgroundColor = .clear
         thumbView.layer.cornerRadius = AppRadius.extraLarge
         thumbView.clipsToBounds = true
@@ -110,22 +65,33 @@ final class ButtonWithGradient: UIView {
             width: Constants.sizeForThumb,
             height: Constants.sizeForThumb
         )
-        addSubview(thumbView)
-
+        // Добавляем жест
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        thumbView.addGestureRecognizer(pan)
+        return thumbView
+    }()
+    private lazy var iconView: UIImageView = {
+        let image = AppImages.iconArrowForSlider.withRenderingMode(.alwaysOriginal)
+        let iconView = UIImageView(image: image)
+        iconView.contentMode = .scaleAspectFit
         iconView.frame = CGRect(
             x: AppSpacing.medium,
             y: AppSpacing.medium,
             width: Constants.sizeForImage,
             height: Constants.sizeForImage
         )
-        thumbView.addSubview(iconView)
-
-        // Добавляем жест
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        thumbView.addGestureRecognizer(pan)
-    }
-
-    private func setupFillGradient() {
+        return iconView
+    }()
+    private lazy var label: UILabel = {
+        let label = UILabel()
+        label.text = Resources.Common.respondButtonTitle
+        label.textColor = .white
+        label.font = AppTypography.body
+        label.textAlignment = .center
+        return label
+    }()
+    private lazy var fillGradientLayer: CAGradientLayer = {
+        let fillGradientLayer = CAGradientLayer()
         let colors = [
             AppColors.gradientColor1.cgColor,
             AppColors.gradientColor2.cgColor,
@@ -139,6 +105,32 @@ final class ButtonWithGradient: UIView {
         fillView.backgroundColor = .clear
         fillGradientLayer.cornerRadius = fillView.layer.cornerRadius
         fillView.layer.insertSublayer(fillGradientLayer, at: 0)
+        return fillGradientLayer
+    }()
+    private var isConfirmed = false
+    private var actionHandler: (() -> Void)?
+
+    // MARK: - Initializers
+    init() {
+        super.init(frame: .zero)
+        setupViews()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
+
+    // MARK: - Public Methods
+    func addAction(_ handler: @escaping () -> Void) {
+        self.actionHandler = handler
+    }
+
+    // MARK: - Private Methods
+    private func setupViews() {
+        let views = [blurView, trackView, fillView, thumbView, label, iconView]
+        views.forEach { view in
+            // Проверка на добавление картинки в ползунок
+            view is UIImageView ? thumbView.addSubview(iconView) : addSubview(view)
+        }
     }
 
     override func layoutSubviews() {
@@ -150,20 +142,39 @@ final class ButtonWithGradient: UIView {
 
         // При успешном свайпе устанавливаем полностью градиентный фон
         if isConfirmed {
-            thumbView.alpha = 0
-            fillView.frame = bounds
-            label.font = AppTypography.bodySemibold
+            changeViewWhenIsConfirm()
         } else {
-            // Иначе постепенно заполняем градиентным фоном
-            let fillWidth = thumbPosition + Constants.sizeForThumb - 2
-            fillView.frame = CGRect(
-                x: Constants.startPoint,
-                y: Constants.startPoint,
-                width: max(0, fillWidth),
-                height: Constants.sizeForThumb
-            )
+            changeViewWhenNotYetConfirm()
         }
+        makeLabelFade()
         fillGradientLayer.frame = fillView.bounds
+    }
+
+    private func changeViewWhenIsConfirm() {
+        thumbView.alpha = 0
+        fillView.frame = bounds
+        label.font = AppTypography.bodySemibold
+        label.alpha = 1
+    }
+
+    private func changeViewWhenNotYetConfirm() {
+        // Постепенно заполняем градиентным фоном
+        let fillWidth = thumbPosition + Constants.sizeForThumb - 2
+        fillView.frame = CGRect(
+            x: Constants.startPoint,
+            y: Constants.startPoint,
+            width: max(0, fillWidth),
+            height: Constants.sizeForThumb
+        )
+    }
+
+    private func makeLabelFade() {
+        let thumbCenter = thumbView.frame.midX
+        let buttonCenter = bounds.width * Constants.buttonFadeCalculations1
+        let fadeDistance = Constants.buttonFadeCalculations2
+
+        let distance = abs(thumbCenter - buttonCenter)
+        label.alpha = min(1, max(0, distance / fadeDistance))
     }
 
     @objc private func handlePan(_ position: UIPanGestureRecognizer) {
