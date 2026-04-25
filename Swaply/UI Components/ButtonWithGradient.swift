@@ -13,9 +13,11 @@ private enum Constants {
     static let sizeForThumb: CGFloat = 48
     // Описывает какую часть кнопки надо пройти, после которой ползунок автоматом "доедет"
     static let successForSwipe = 0.75
-    // buttonFadeCalculations1 и buttonFadeCalculations2, практическим путем расчитаны, для затухания лейбла
-    static let buttonFadeCalculations1 = 0.6
-    static let buttonFadeCalculations2: CGFloat = 150
+    // Границы визуальной области текста (в долях от ширины кнопки)
+    static let textVisualStart: CGFloat = 0.3
+    static let textVisualEnd: CGFloat = 0.7
+    // Ширина зоны плавного затухания/появления (в поинтах)
+    static let textFadeDistance: CGFloat = 25
 }
 
 final class ButtonWithGradient: UIView {
@@ -154,7 +156,6 @@ final class ButtonWithGradient: UIView {
         thumbView.alpha = 0
         fillView.frame = bounds
         label.font = AppTypography.bodySemibold
-        label.alpha = 1
     }
 
     private func changeViewWhenNotYetConfirm() {
@@ -170,11 +171,28 @@ final class ButtonWithGradient: UIView {
 
     private func makeLabelFade() {
         let thumbCenter = thumbView.frame.midX
-        let buttonCenter = bounds.width * Constants.buttonFadeCalculations1
-        let fadeDistance = Constants.buttonFadeCalculations2
+        let textStart = bounds.width * Constants.textVisualStart
+        let textEnd = bounds.width * Constants.textVisualEnd
+        let fadeDistance: CGFloat = Constants.textFadeDistance
 
-        let distance = abs(thumbCenter - buttonCenter)
-        label.alpha = min(1, max(0, distance / fadeDistance))
+        if thumbCenter < textStart - fadeDistance {
+            // Ползунок далеко слева — текст полностью виден
+            label.alpha = 1
+        } else if thumbCenter < textStart {
+            // Ползунок приближается к тексту слева — плавно затухаем
+            let progress = (thumbCenter - (textStart - fadeDistance)) / fadeDistance
+            label.alpha = max(0, 1 - progress)
+        } else if thumbCenter <= textEnd {
+            // Ползунок над областью текста — текст полностью скрыт
+            label.alpha = 0
+        } else if thumbCenter < textEnd + fadeDistance {
+            // Ползунок уезжает от текста справа — плавно появляемся
+            let progress = (thumbCenter - textEnd) / fadeDistance
+            label.alpha = min(1, progress)
+        } else {
+            // Ползунок далеко справа — текст полностью виден
+            label.alpha = 1
+        }
     }
 
     @objc private func handlePan(_ position: UIPanGestureRecognizer) {
