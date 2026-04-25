@@ -13,9 +13,6 @@ private enum Constants {
     static let sizeForThumb: CGFloat = 48
     // Описывает какую часть кнопки надо пройти, после которой ползунок автоматом "доедет"
     static let successForSwipe = 0.75
-    // Границы визуальной области текста (в долях от ширины кнопки)
-    static let textVisualStart: CGFloat = 0.3
-    static let textVisualEnd: CGFloat = 0.7
     // Ширина зоны плавного затухания/появления (в поинтах)
     static let textFadeDistance: CGFloat = 25
 }
@@ -26,6 +23,9 @@ final class ButtonWithGradient: UIView {
     private var thumbPosition = Constants.startPoint
 
     // MARK: - Private Properties
+    private var isConfirmed = false
+    private var actionHandler: (() -> Void)?
+
     // Установка блюра для дальнейшего наложения оверлея
     private lazy var blurView: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
@@ -34,6 +34,7 @@ final class ButtonWithGradient: UIView {
         blurView.clipsToBounds = true
         return blurView
     }()
+
     // Оверлей(серый фон)
     private lazy var trackView: UIView = {
         let trackView = UIView()
@@ -42,6 +43,7 @@ final class ButtonWithGradient: UIView {
         trackView.clipsToBounds = true
         return trackView
     }()
+
     // Фон для установки градиента
     private lazy var fillView: UIView = {
         let fillView = UIView()
@@ -55,6 +57,7 @@ final class ButtonWithGradient: UIView {
         fillView.clipsToBounds = true
         return fillView
     }()
+
     // Настройка ползунка
     private lazy var thumbView: UIView = {
         let thumbView = UIView()
@@ -72,6 +75,7 @@ final class ButtonWithGradient: UIView {
         thumbView.addGestureRecognizer(pan)
         return thumbView
     }()
+
     private lazy var iconView: UIImageView = {
         let image = AppImages.iconArrowForSlider.withRenderingMode(.alwaysOriginal)
         let iconView = UIImageView(image: image)
@@ -84,14 +88,17 @@ final class ButtonWithGradient: UIView {
         )
         return iconView
     }()
+
     private lazy var label: UILabel = {
         let label = UILabel()
         label.text = Resources.Common.respondButtonTitle
         label.textColor = .white
         label.font = AppTypography.body
         label.textAlignment = .center
+        label.sizeToFit()
         return label
     }()
+
     private lazy var fillGradientLayer: CAGradientLayer = {
         let fillGradientLayer = CAGradientLayer()
         let colors = [
@@ -109,8 +116,6 @@ final class ButtonWithGradient: UIView {
         fillView.layer.insertSublayer(fillGradientLayer, at: 0)
         return fillGradientLayer
     }()
-    private var isConfirmed = false
-    private var actionHandler: (() -> Void)?
 
     // MARK: - Initializers
     init() {
@@ -126,15 +131,7 @@ final class ButtonWithGradient: UIView {
         self.actionHandler = handler
     }
 
-    // MARK: - Private Methods
-    private func setupViews() {
-        let views = [blurView, trackView, fillView, thumbView, label, iconView]
-        views.forEach { view in
-            // Проверка на добавление картинки в ползунок
-            view is UIImageView ? thumbView.addSubview(iconView) : addSubview(view)
-        }
-    }
-
+    // MARK: - Lifecycle
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -150,6 +147,15 @@ final class ButtonWithGradient: UIView {
         }
         makeLabelFade()
         fillGradientLayer.frame = fillView.bounds
+    }
+
+    // MARK: - Private Methods
+    private func setupViews() {
+        let views = [blurView, trackView, fillView, thumbView, label, iconView]
+        views.forEach { view in
+            // Проверка на добавление картинки в ползунок
+            view is UIImageView ? thumbView.addSubview(iconView) : addSubview(view)
+        }
     }
 
     private func changeViewWhenIsConfirm() {
@@ -170,29 +176,49 @@ final class ButtonWithGradient: UIView {
     }
 
     private func makeLabelFade() {
-        let thumbCenter = thumbView.frame.midX
-        let textStart = bounds.width * Constants.textVisualStart
-        let textEnd = bounds.width * Constants.textVisualEnd
         let fadeDistance: CGFloat = Constants.textFadeDistance
+        let textRect = label.textRect(forBounds: label.bounds, limitedToNumberOfLines: label.numberOfLines)
+        let thumbCenter = thumbView.frame.midX
 
-        if thumbCenter < textStart - fadeDistance {
-            // Ползунок далеко слева — текст полностью виден
+        if thumbCenter < textRect.minX - fadeDistance {
             label.alpha = 1
-        } else if thumbCenter < textStart {
-            // Ползунок приближается к тексту слева — плавно затухаем
-            let progress = (thumbCenter - (textStart - fadeDistance)) / fadeDistance
-            label.alpha = max(0, 1 - progress)
-        } else if thumbCenter <= textEnd {
-            // Ползунок над областью текста — текст полностью скрыт
+        } else if thumbCenter < textRect.minX {
+            label.alpha = (textRect.minX - thumbCenter) / fadeDistance
+        } else if thumbCenter <= textRect.maxX {
             label.alpha = 0
-        } else if thumbCenter < textEnd + fadeDistance {
-            // Ползунок уезжает от текста справа — плавно появляемся
-            let progress = (thumbCenter - textEnd) / fadeDistance
-            label.alpha = min(1, progress)
+        } else if thumbCenter < textRect.maxX + fadeDistance {
+            label.alpha = (thumbCenter - textRect.maxX) / fadeDistance
         } else {
-            // Ползунок далеко справа — текст полностью виден
             label.alpha = 1
         }
+    }
+
+    private func confirm() {
+        isConfirmed = true
+        thumbPosition = bounds.width - Constants.sizeForThumb - Constants.startPoint
+
+        setNeedsLayout()
+        layoutIfNeeded()
+
+        actionHandler?()
+    }
+
+    private func reset() {
+        isConfirmed = false
+        thumbPosition = Constants.startPoint
+
+        thumbView.frame = CGRect(
+            x: Constants.startPoint,
+            y: Constants.startPoint,
+            width: Constants.sizeForThumb,
+            height: Constants.sizeForThumb
+        )
+        fillView.frame = CGRect(
+            x: Constants.startPoint,
+            y: Constants.startPoint,
+            width: Constants.sizeForThumb,
+            height: Constants.sizeForThumb
+        )
     }
 
     @objc private func handlePan(_ position: UIPanGestureRecognizer) {
@@ -234,33 +260,5 @@ final class ButtonWithGradient: UIView {
         default:
             break
         }
-    }
-
-    private func confirm() {
-        isConfirmed = true
-        thumbPosition = bounds.width - Constants.sizeForThumb - Constants.startPoint
-
-        setNeedsLayout()
-        layoutIfNeeded()
-
-        actionHandler?()
-    }
-
-    private func reset() {
-        isConfirmed = false
-        thumbPosition = Constants.startPoint
-
-        thumbView.frame = CGRect(
-            x: Constants.startPoint,
-            y: Constants.startPoint,
-            width: Constants.sizeForThumb,
-            height: Constants.sizeForThumb
-        )
-        fillView.frame = CGRect(
-            x: Constants.startPoint,
-            y: Constants.startPoint,
-            width: Constants.sizeForThumb,
-            height: Constants.sizeForThumb
-        )
     }
 }
