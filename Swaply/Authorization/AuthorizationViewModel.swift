@@ -1,6 +1,11 @@
 import Foundation
 
-final class AuthorizationViewModel {
+protocol AuthorizationViewModelProtocol {
+    func entryButtonTapped()
+    func registerButtonTapped()
+}
+
+final class AuthorizationViewModel: AuthorizationViewModelProtocol {
     func entryButtonTapped() {
         print("entryButtonTapped")
     }

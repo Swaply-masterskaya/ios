@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import AVFoundation
 
 private enum AuthorizationLayout {
     static let logoImageSize: CGFloat = 48
@@ -41,9 +42,10 @@ final class AuthorizationViewController: UIViewController {
         return stack
     }()
     // MARK: - Constants
-    private let viewModel: AuthorizationViewModel
+    private let viewModel: AuthorizationViewModelProtocol
+    private let videoBackgroundView = VideoBackgroundView()
     // MARK: - Initializers
-    init(viewModel: AuthorizationViewModel) {
+    init(viewModel: AuthorizationViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -57,6 +59,7 @@ final class AuthorizationViewController: UIViewController {
     // MARK: - Private Methods
     private func setupUI() {
         view.backgroundColor = AppColors.backgroundPrimary
+        setupVideoBackgroundView()
         setupContentView()
         setupLogoImage()
         setupStackView()
@@ -65,6 +68,12 @@ final class AuthorizationViewController: UIViewController {
         view.addSubview(contentView)
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    private func setupVideoBackgroundView() {
+        view.addSubview(videoBackgroundView)
+        videoBackgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
     private func setupLogoImage() {
