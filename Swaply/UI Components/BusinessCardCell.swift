@@ -19,8 +19,11 @@ final class BusinessCardCell: UICollectionViewCell {
         static let companyToCollaborationSpacing: CGFloat = 4
         static let collaborationToSocialSpacing: CGFloat = 32
         static let socialStackSize = CGSize(width: 80, height: 48)
-        static let socialIconSize = CGSize(width: 22, height: 22)
-        static let socialIconSpacing: CGFloat = 4
+        static let socialIconSize = CGSize(width: 20, height: 20)
+        static let instagramIconSize = CGSize(width: 24, height: 24)
+        static let instagramIconOffset = CGPoint(x: 2, y: -2)
+        static let instagramLeadingSpacing: CGFloat = 16
+        static let socialIconSpacing: CGFloat = 8
         static let brandImageLeading: CGFloat = 104.59
         static let brandImageSize = CGSize(width: 254.93560791015625, height: 252.03860473632812)
         static let socialToBrandSpacing: CGFloat = 22
@@ -100,6 +103,8 @@ final class BusinessCardCell: UICollectionViewCell {
     }()
 
     private var socialIconViews: [UIView] = []
+
+    private typealias SocialIconConfiguration = (image: UIImage, size: CGSize, offset: CGPoint)
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -204,12 +209,19 @@ final class BusinessCardCell: UICollectionViewCell {
         categoryLabel.text = "Спорт"
         likeImageView.image = AppImages.iconLikeFilled.withRenderingMode(.alwaysOriginal)
         configureSocialIcons([
-            [AppImages.iconTiktok, AppImages.iconTelegram],
-            [AppImages.iconYoutube, AppImages.iconDzen, AppImages.iconInstagram]
+            [
+                (AppImages.iconTiktokBlack, Layout.socialIconSize, .zero),
+                (AppImages.iconTelegramBlack, Layout.socialIconSize, .zero)
+            ],
+            [
+                (AppImages.iconYoutubeBlack, Layout.socialIconSize, .zero),
+                (AppImages.iconDzenBlack, Layout.socialIconSize, .zero),
+                (AppImages.iconInstagramBlack, Layout.instagramIconSize, Layout.instagramIconOffset)
+            ]
         ])
     }
 
-    private func configureSocialIcons(_ iconRows: [[UIImage]]) {
+    private func configureSocialIcons(_ iconRows: [[SocialIconConfiguration]]) {
         socialRowsStackView.arrangedSubviews.forEach {
             socialRowsStackView.removeArrangedSubview($0)
             $0.removeFromSuperview()
@@ -222,25 +234,43 @@ final class BusinessCardCell: UICollectionViewCell {
             rowStackView.alignment = .leading
             rowStackView.spacing = Layout.socialIconSpacing
 
-            rowIcons.forEach { icon in
-                let iconView = makeSocialIconView(image: icon)
+            rowIcons.enumerated().forEach { index, iconConfiguration in
+                let iconView = makeSocialIconView(
+                    image: iconConfiguration.image,
+                    imageSize: iconConfiguration.size,
+                    offset: iconConfiguration.offset
+                )
                 socialIconViews.append(iconView)
                 rowStackView.addArrangedSubview(iconView)
+
+                if index == rowIcons.count - 2,
+                    rowIcons.last?.image == AppImages.iconInstagramBlack {
+                    rowStackView.setCustomSpacing(Layout.instagramLeadingSpacing, after: iconView)
+                }
             }
 
             socialRowsStackView.addArrangedSubview(rowStackView)
         }
     }
 
-    private func makeSocialIconView(image: UIImage) -> UIView {
+    private func makeSocialIconView(image: UIImage, imageSize: CGSize, offset: CGPoint) -> UIView {
+        let containerView = UIView()
+
         let imageView = UIImageView(image: image.withRenderingMode(.alwaysOriginal))
         imageView.contentMode = .scaleAspectFit
+        containerView.addSubview(imageView)
 
-        imageView.snp.makeConstraints { make in
+        containerView.snp.makeConstraints { make in
             make.size.equalTo(Layout.socialIconSize)
         }
 
-        return imageView
+        imageView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview().offset(offset.x)
+            make.centerY.equalToSuperview().offset(offset.y)
+            make.size.equalTo(imageSize)
+        }
+
+        return containerView
     }
 }
 
