@@ -70,11 +70,10 @@ extension CustomTextField {
 
     func setupActions() {
         textField.addAction(
-            UIAction {
-                [weak self] _ in
-            guard let self else { return }
-            textSubject.onNext(textField.text ?? "")
-        },
+            UIAction { [weak self] _ in
+                guard let self else { return }
+                textSubject.onNext(textField.text ?? "")
+            },
             for: .editingChanged
         )
     }
