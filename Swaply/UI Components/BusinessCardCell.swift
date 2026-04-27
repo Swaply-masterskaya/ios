@@ -79,7 +79,7 @@ final class BusinessCardCell: UICollectionViewCell {
 
     private let likeView = VisualEffectBadgeView(
         cornerStyle: .circle,
-        overlayColor: UIColor.black.withAlphaComponent(0.12)
+        overlayColor: UIColor.black.withAlphaComponent(0.02)
     )
 
     private let likeImageView: UIImageView = {
@@ -90,7 +90,7 @@ final class BusinessCardCell: UICollectionViewCell {
 
     private let categoryView = VisualEffectBadgeView(
         cornerStyle: .pill,
-        overlayColor: UIColor.black.withAlphaComponent(0.12)
+        overlayColor: UIColor.black.withAlphaComponent(0.02)
     )
 
     private let categoryLabel: UILabel = {
@@ -283,7 +283,7 @@ private final class VisualEffectBadgeView: UIView {
 
     let contentView = UIView()
 
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
     private let cornerStyle: CornerStyle
     private let overlayColor: UIColor
 
@@ -312,6 +312,7 @@ private final class VisualEffectBadgeView: UIView {
         addSubview(blurView)
         addSubview(contentView)
 
+        blurView.alpha = 0.4
         contentView.backgroundColor = overlayColor
 
         blurView.snp.makeConstraints { make in
