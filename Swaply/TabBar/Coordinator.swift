@@ -14,6 +14,10 @@ protocol Coordinator: AnyObject {
 }
 
 final class RootCoordinator: Coordinator {
+    // MARK: - Private Properties
+    private var isAuthorized: Bool {
+        UserDefaults.standard.bool(forKey: "isAuthorized")
+    }
 
     // MARK: - Public Properties
 
@@ -27,10 +31,31 @@ final class RootCoordinator: Coordinator {
     }
 
     // MARK: - Public Methods
-    
+
     func start() {
+        // Для проверки экрана авторизации раскоментите строчку ниже
+//        UserDefaults.standard.set(false, forKey: "isAuthorized")
+        if isAuthorized {
+            showTabBar()
+        } else {
+            showAuthorization()
+        }
+    }
+
+    private func showTabBar() {
         let tabBarController = MainTabBarController()
         navigationController.setViewControllers([tabBarController], animated: false)
         navigationController.isNavigationBarHidden = true
+    }
+
+    private func showAuthorization() {
+        let coordinator = AuthorizationCoordinator(navigationController: navigationController)
+
+        coordinator.onFinish = { [weak self] in
+            self?.showTabBar()
+        }
+
+        childCoordinators.append(coordinator)
+        coordinator.start()
     }
 }

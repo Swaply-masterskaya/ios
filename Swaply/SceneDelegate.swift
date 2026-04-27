@@ -18,10 +18,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
+
         let window = UIWindow(windowScene: windowScene)
         window.backgroundColor = AppColors.backgroundPrimary
-        window.rootViewController = AuthorizationViewController(viewModel: AuthorizationViewModel()) //SplashViewController()
+        window.rootViewController = SplashViewController()
         window.makeKeyAndVisible()
         self.window = window
     }

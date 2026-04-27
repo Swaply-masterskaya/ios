@@ -1,15 +1,19 @@
 import UIKit
 
 final class AuthButton: UIButton {
+
     enum ButtonView {
         case registrationView
         case entryView
+        static let buttonHeight = 52
     }
+
     // MARK: - Constants
     private let buttonView: ButtonView
     private let title: String
-    private let buttonHeight = AuthorizationLayout.buttonHeight
+    private let buttonHeight = ButtonView.buttonHeight
     private let action: UIAction
+
     // MARK: - Private Properties
     private lazy var gradientLayer: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
@@ -24,24 +28,28 @@ final class AuthButton: UIButton {
         backgroundColor = .clear
         return gradientLayer
     }()
+
     // MARK: - Initializers
     init(title: String, buttonView: ButtonView = .registrationView, action: UIAction) {
         self.buttonView = buttonView
-        self.title = title.isEmpty ? "Зарегестрироваться" : title
+        self.title = title
         self.action = action
         super.init(frame: .zero)
         setupButton()
     }
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
+
     // MARK: - Internal Methods
     override func layoutSubviews() {
         super.layoutSubviews()
+
         if gradientLayer.superlayer != nil {
             gradientLayer.frame = bounds
             gradientLayer.cornerRadius = layer.cornerRadius
         }
     }
+
     // MARK: - Private Methods
     private func setupButton() {
         layer.cornerRadius = AppRadius.extraLarge
@@ -49,14 +57,11 @@ final class AuthButton: UIButton {
         titleLabel?.font = AppTypography.accentButtonTitle
         setTitle(title, for: .normal)
         addAction(action, for: .touchUpInside)
-        switch buttonView {
-        case .registrationView:
-            setTitleColor(AppColors.white, for: .normal)
-        case .entryView:
-            setTitleColor(AppColors.white, for: .normal)
-        }
+        setTitleColor(AppColors.white, for: .normal)
+
         configureAppearance()
     }
+
     private func configureAppearance() {
         switch buttonView {
         case .registrationView:
