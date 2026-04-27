@@ -15,19 +15,17 @@ final class BusinessCardCell: UICollectionViewCell {
         static let cellWidth: CGFloat = 353
         static let cellHeight: CGFloat = 148
         static let titleLeadingInset: CGFloat = 16
-        static let socialLeadingInset: CGFloat = 2.59
         static let titleTopInset: CGFloat = 12
         static let companyToCollaborationSpacing: CGFloat = 4
         static let collaborationToSocialSpacing: CGFloat = 32
         static let socialStackSize = CGSize(width: 80, height: 48)
-        static let socialBadgeSize: CGFloat = 22
-        static let socialIconSize = CGSize(width: 16, height: 16)
+        static let socialIconSize = CGSize(width: 22, height: 22)
         static let socialIconSpacing: CGFloat = 4
         static let brandImageLeading: CGFloat = 104.59
         static let brandImageSize = CGSize(width: 254.93560791015625, height: 252.03860473632812)
         static let socialToBrandSpacing: CGFloat = 22
         static let likeBadgeSize: CGFloat = 24
-        static let likeIconSize = CGSize(width: 13.333333969116211, height: 11.442066192626953)
+        static let likeIconSize = CGSize(width: 16, height: 14)
         static let likeTopInset: CGFloat = 12
         static let likeTrailingInset: CGFloat = 12
         static let categoryTrailingInset: CGFloat = 12
@@ -63,17 +61,22 @@ final class BusinessCardCell: UICollectionViewCell {
         return stackView
     }()
 
+    private let brandImageContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = AppColors.white
+        return view
+    }()
+
     private let brandImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.backgroundColor = AppColors.white
         return imageView
     }()
 
     private let likeView = VisualEffectBadgeView(
         cornerStyle: .circle,
-        overlayColor: UIColor.black.withAlphaComponent(0.2)
+        overlayColor: UIColor.black.withAlphaComponent(0.12)
     )
 
     private let likeImageView: UIImageView = {
@@ -84,7 +87,7 @@ final class BusinessCardCell: UICollectionViewCell {
 
     private let categoryView = VisualEffectBadgeView(
         cornerStyle: .pill,
-        overlayColor: UIColor.black.withAlphaComponent(0.2)
+        overlayColor: UIColor.black.withAlphaComponent(0.12)
     )
 
     private let categoryLabel: UILabel = {
@@ -121,9 +124,10 @@ final class BusinessCardCell: UICollectionViewCell {
         containerView.addSubview(titleLabel)
         containerView.addSubview(collaborationTypeLabel)
         containerView.addSubview(socialRowsStackView)
-        containerView.addSubview(brandImageView)
+        containerView.addSubview(brandImageContainerView)
         containerView.addSubview(likeView)
         containerView.addSubview(categoryView)
+        brandImageContainerView.addSubview(brandImageView)
         likeView.contentView.addSubview(likeImageView)
         categoryView.contentView.addSubview(categoryLabel)
 
@@ -132,8 +136,8 @@ final class BusinessCardCell: UICollectionViewCell {
         containerView.layer.cornerRadius = AppRadius.large
         containerView.layer.masksToBounds = true
 
-        brandImageView.layer.cornerRadius = AppRadius.large
-        brandImageView.layer.masksToBounds = true
+        brandImageContainerView.layer.cornerRadius = AppRadius.large
+        brandImageContainerView.layer.masksToBounds = true
     }
 
     private func setupConstraints() {
@@ -141,9 +145,14 @@ final class BusinessCardCell: UICollectionViewCell {
             make.edges.equalToSuperview()
         }
 
-        brandImageView.snp.makeConstraints { make in
+        brandImageContainerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(Layout.brandImageLeading)
+            make.top.bottom.trailing.equalToSuperview()
+        }
+
+        brandImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
+            make.leading.equalToSuperview()
             make.size.equalTo(Layout.brandImageSize)
         }
 
@@ -171,20 +180,20 @@ final class BusinessCardCell: UICollectionViewCell {
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(Layout.titleTopInset)
             make.leading.equalToSuperview().inset(Layout.titleLeadingInset)
-            make.trailing.lessThanOrEqualTo(brandImageView.snp.leading).offset(-Layout.socialToBrandSpacing)
+            make.trailing.lessThanOrEqualTo(brandImageContainerView.snp.leading).offset(-Layout.socialToBrandSpacing)
         }
 
         collaborationTypeLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(Layout.companyToCollaborationSpacing)
             make.leading.equalTo(titleLabel)
-            make.trailing.lessThanOrEqualTo(brandImageView.snp.leading).offset(-Layout.socialToBrandSpacing)
+            make.trailing.lessThanOrEqualTo(brandImageContainerView.snp.leading).offset(-Layout.socialToBrandSpacing)
         }
 
         socialRowsStackView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(Layout.socialLeadingInset)
+            make.leading.equalTo(titleLabel)
             make.top.equalTo(collaborationTypeLabel.snp.bottom).offset(Layout.collaborationToSocialSpacing)
             make.size.equalTo(Layout.socialStackSize)
-            make.trailing.lessThanOrEqualTo(brandImageView.snp.leading).offset(-Layout.socialToBrandSpacing)
+            make.trailing.lessThanOrEqualTo(brandImageContainerView.snp.leading).offset(-Layout.socialToBrandSpacing)
         }
     }
 
@@ -224,25 +233,14 @@ final class BusinessCardCell: UICollectionViewCell {
     }
 
     private func makeSocialIconView(image: UIImage) -> UIView {
-        let container = UIView()
-        container.backgroundColor = AppColors.black900
-        container.layer.cornerRadius = Layout.socialBadgeSize / 2
-        container.layer.masksToBounds = true
-
         let imageView = UIImageView(image: image.withRenderingMode(.alwaysOriginal))
         imageView.contentMode = .scaleAspectFit
-        container.addSubview(imageView)
-
-        container.snp.makeConstraints { make in
-            make.size.equalTo(Layout.socialBadgeSize)
-        }
 
         imageView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
             make.size.equalTo(Layout.socialIconSize)
         }
 
-        return container
+        return imageView
     }
 }
 
