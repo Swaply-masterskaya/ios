@@ -21,11 +21,11 @@ final class BusinessCardCell: UICollectionViewCell {
         static let socialStackSize = CGSize(width: 80, height: 48)
         static let socialIconSize = CGSize(width: 20, height: 20)
         static let instagramIconSize = CGSize(width: 24, height: 24)
-        static let instagramIconOffset = CGPoint(x: 2, y: -2)
+        static let instagramIconOffset = CGPoint(x: -4, y: -2)
         static let instagramLeadingSpacing: CGFloat = 16
         static let socialIconSpacing: CGFloat = 8
-        static let brandImageLeading: CGFloat = 104.59
-        static let brandImageSize = CGSize(width: 254.93560791015625, height: 252.03860473632812)
+        static let brandImageLeading: CGFloat = 119
+        static let brandImageSize = CGSize(width: 234, height: 148)
         static let socialToBrandSpacing: CGFloat = 22
         static let likeBadgeSize: CGFloat = 24
         static let likeIconSize = CGSize(width: 16, height: 14)
