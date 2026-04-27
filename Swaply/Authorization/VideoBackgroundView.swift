@@ -29,7 +29,7 @@ class VideoBackgroundView: UIView {
     // MARK: - Private Methods
     private func setupBackgroundVideo() {
         guard let videoURL = Bundle.main.url(forResource: "swaplyBackground", withExtension: "mp4") else { return }
-        let playerItem: AVPlayerItem = AVPlayerItem(url: videoURL)
+        let playerItem = AVPlayerItem(url: videoURL)
         player = AVQueuePlayer()
         guard let player else { return }
         looper = AVPlayerLooper(player: player, templateItem: playerItem)

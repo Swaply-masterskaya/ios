@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-private enum AuthorizationLayout {
+enum AuthorizationLayout {
     static let logoImageSize: CGFloat = 48
     static let buttonHeight: CGFloat = 52
 }
@@ -18,16 +18,16 @@ final class AuthorizationViewController: UIViewController {
         let view = UIView()
         return view
     }()
-    private lazy var registerButton: UIButton = makeButton(
+    private lazy var registerButton: UIButton = AuthButton(
         title: Resources.WelcomeScreen.registerButtonTitle,
-        color: AppColors.buttonDefaultNormal,
+        buttonView: .registrationView,
         action: UIAction { [weak self] _ in
             self?.viewModel.registerButtonTapped()
         }
     )
-    private lazy var entryButton: UIButton = makeButton(
+    private lazy var entryButton: UIButton = AuthButton(
         title: Resources.WelcomeScreen.enterButtonTitle,
-        color: AppColors.buttonDefaultDisabledTypography,
+        buttonView: .entryView,
         action: UIAction { [weak self] _ in
             self?.viewModel.entryButtonTapped()
         }
@@ -96,19 +96,5 @@ final class AuthorizationViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(AppSpacing.xlarge)
             make.bottom.equalToSuperview().inset(AppSpacing.xxlarge)
         }
-    }
-    private func makeButton(
-        title: String,
-        color: UIColor,
-        action: UIAction
-    ) -> UIButton {
-        let button = UIButton(type: .system)
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(AppColors.white, for: .normal)
-        button.titleLabel?.font = AppTypography.accentButtonTitle
-        button.backgroundColor = color
-        button.layer.cornerRadius = AppRadius.extraLarge
-        button.addAction(action, for: .touchUpInside)
-        return button
     }
 }
