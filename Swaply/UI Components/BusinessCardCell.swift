@@ -17,7 +17,7 @@ final class BusinessCardCell: UICollectionViewCell {
         static let titleLeadingInset: CGFloat = 16
         static let titleTopInset: CGFloat = 12
         static let companyToCollaborationSpacing: CGFloat = 4
-        static let collaborationToSocialSpacing: CGFloat = 32
+        static let socialStackBottomInset: CGFloat = 12
         static let socialStackSize = CGSize(width: 80, height: 48)
         static let socialIconSize = CGSize(width: 20, height: 20)
         static let instagramIconSize = CGSize(width: 24, height: 24)
@@ -28,7 +28,7 @@ final class BusinessCardCell: UICollectionViewCell {
         static let brandImageSize = CGSize(width: 234, height: 148)
         static let socialToBrandSpacing: CGFloat = 22
         static let likeBadgeSize: CGFloat = 24
-        static let likeIconSize = CGSize(width: 16, height: 14)
+        static let likeIconSize = CGSize(width: 16, height: 16)
         static let likeTopInset: CGFloat = 12
         static let likeTrailingInset: CGFloat = 12
         static let categoryTrailingInset: CGFloat = 12
@@ -196,7 +196,7 @@ final class BusinessCardCell: UICollectionViewCell {
 
         socialRowsStackView.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel)
-            make.top.equalTo(collaborationTypeLabel.snp.bottom).offset(Layout.collaborationToSocialSpacing)
+            make.bottom.equalToSuperview().inset(Layout.socialStackBottomInset)
             make.size.equalTo(Layout.socialStackSize)
             make.trailing.lessThanOrEqualTo(brandImageContainerView.snp.leading).offset(-Layout.socialToBrandSpacing)
         }
@@ -205,7 +205,7 @@ final class BusinessCardCell: UICollectionViewCell {
     private func setupContent() {
         titleLabel.text = "WeGym"
         collaborationTypeLabel.text = "Бартер"
-        brandImageView.image = nil
+        brandImageView.image = .logo
         categoryLabel.text = "Спорт"
         likeImageView.image = AppImages.iconLikeFilled.withRenderingMode(.alwaysOriginal)
         configureSocialIcons([
