@@ -20,9 +20,9 @@ final class BusinessCardCell: UICollectionViewCell {
         static let companyToCollaborationSpacing: CGFloat = 4
         static let collaborationToSocialSpacing: CGFloat = 32
         static let socialStackSize = CGSize(width: 80, height: 48)
-        static let socialIconSize = CGSize(width: 38, height: 22)
+        static let socialBadgeSize: CGFloat = 22
+        static let socialIconSize = CGSize(width: 16, height: 16)
         static let socialIconSpacing: CGFloat = 4
-        static let maxIconsPerRow = 2
         static let brandImageLeading: CGFloat = 104.59
         static let brandImageSize = CGSize(width: 254.93560791015625, height: 252.03860473632812)
         static let socialToBrandSpacing: CGFloat = 22
@@ -92,6 +92,7 @@ final class BusinessCardCell: UICollectionViewCell {
         label.font = AppTypography.caption2
         label.textColor = AppColors.grey50
         label.numberOfLines = 1
+        label.textAlignment = .center
         return label
     }()
 
@@ -194,26 +195,22 @@ final class BusinessCardCell: UICollectionViewCell {
         categoryLabel.text = "Спорт"
         likeImageView.image = AppImages.iconLikeFilled.withRenderingMode(.alwaysOriginal)
         configureSocialIcons([
-            AppImages.iconTiktok,
-            AppImages.iconTelegram,
-            AppImages.iconYoutube,
-            AppImages.iconDzen,
-            AppImages.iconInstagram
-        ].compactMap { $0 })
+            [AppImages.iconTiktok, AppImages.iconTelegram],
+            [AppImages.iconYoutube, AppImages.iconDzen, AppImages.iconInstagram]
+        ])
     }
 
-    private func configureSocialIcons(_ icons: [UIImage]) {
+    private func configureSocialIcons(_ iconRows: [[UIImage]]) {
         socialRowsStackView.arrangedSubviews.forEach {
             socialRowsStackView.removeArrangedSubview($0)
             $0.removeFromSuperview()
         }
         socialIconViews.removeAll()
 
-        icons.chunked(into: Layout.maxIconsPerRow).forEach { rowIcons in
+        iconRows.forEach { rowIcons in
             let rowStackView = UIStackView()
             rowStackView.axis = .horizontal
             rowStackView.alignment = .leading
-            rowStackView.distribution = .fillEqually
             rowStackView.spacing = Layout.socialIconSpacing
 
             rowIcons.forEach { icon in
@@ -222,23 +219,30 @@ final class BusinessCardCell: UICollectionViewCell {
                 rowStackView.addArrangedSubview(iconView)
             }
 
-            while rowStackView.arrangedSubviews.count < Layout.maxIconsPerRow {
-                let spacerView = UIView()
-                spacerView.backgroundColor = .clear
-                rowStackView.addArrangedSubview(spacerView)
-            }
-
             socialRowsStackView.addArrangedSubview(rowStackView)
         }
     }
 
     private func makeSocialIconView(image: UIImage) -> UIView {
+        let container = UIView()
+        container.backgroundColor = AppColors.black900
+        container.layer.cornerRadius = Layout.socialBadgeSize / 2
+        container.layer.masksToBounds = true
+
         let imageView = UIImageView(image: image.withRenderingMode(.alwaysOriginal))
         imageView.contentMode = .scaleAspectFit
+        container.addSubview(imageView)
+
+        container.snp.makeConstraints { make in
+            make.size.equalTo(Layout.socialBadgeSize)
+        }
+
         imageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
             make.size.equalTo(Layout.socialIconSize)
         }
-        return imageView
+
+        return container
     }
 }
 
@@ -288,16 +292,6 @@ private final class VisualEffectBadgeView: UIView {
 
         contentView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-    }
-}
-
-private extension Array {
-    func chunked(into size: Int) -> [[Element]] {
-        guard size > 0 else { return [] }
-
-        return stride(from: 0, to: count, by: size).map {
-            Array(self[$0 ..< Swift.min($0 + size, count)])
         }
     }
 }

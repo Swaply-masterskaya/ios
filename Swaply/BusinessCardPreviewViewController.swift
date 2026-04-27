@@ -50,7 +50,10 @@ extension BusinessCardPreviewViewController: UICollectionViewDataSource {
         1
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         collectionView.dequeueReusableCell(
             withReuseIdentifier: Self.cellReuseIdentifier,
             for: indexPath
