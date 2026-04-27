@@ -25,6 +25,7 @@ enum AppTypography {
 
     // Body Fonts
     static let bodyBold = UIFont.systemFont(ofSize: 17, weight: .bold)
+    static let bodySemibold = UIFont.systemFont(ofSize: 17, weight: .semibold)
     static let body = UIFont.systemFont(ofSize: 17, weight: .regular)
 
     // Caption Fonts
@@ -34,4 +35,7 @@ enum AppTypography {
     static let caption1 = UIFont.systemFont(ofSize: 12, weight: .regular)
     static let caption2Bold = UIFont.systemFont(ofSize: 11, weight: .bold)
     static let caption2 = UIFont.systemFont(ofSize: 11, weight: .regular)
+
+    // Button Fonts
+    static let accentButtonTitle = UIFont.systemFont(ofSize: 16, weight: .semibold)
 }
