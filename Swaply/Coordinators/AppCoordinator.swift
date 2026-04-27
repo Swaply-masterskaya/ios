@@ -1,6 +1,6 @@
 import UIKit
 
-final class AppCoordinator: Coordinator {
+final class AppCoordinator: BaseCoordinator {
 
     private let window: UIWindow
     private var splashCoordinator: SplashCoordinator?
@@ -9,11 +9,12 @@ final class AppCoordinator: Coordinator {
 
     init(window: UIWindow) {
         self.window = window
+        super.init()
     }
 
     // MARK: - Public Methods
-    
-    func start() {
+
+    override func start() {
         showSplash()
         window.makeKeyAndVisible()
     }
@@ -29,6 +30,7 @@ final class AppCoordinator: Coordinator {
     }
 
     private func showMain() {
+        splashCoordinator = nil
         let tabBarCoordinator = TabBarCoordinator()
         window.rootViewController = tabBarCoordinator.tabBarController
         tabBarCoordinator.start()

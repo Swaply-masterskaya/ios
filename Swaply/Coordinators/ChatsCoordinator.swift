@@ -1,16 +1,10 @@
 import UIKit
 
-final class ChatsCoordinator: TabCoordinator {
-    
-    var navigationController: UINavigationController
+final class ChatsCoordinator: BaseCoordinator {
 
-    init() {
-        navigationController = UINavigationController()
-    }
-
-    func start() {
+    override func start() {
         let vc = ViewController()
         vc.view.backgroundColor = .green
-        navigationController.setViewControllers([vc], animated: false)
+        navigationController?.setViewControllers([vc], animated: false)
     }
 }

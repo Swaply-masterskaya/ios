@@ -1,16 +1,10 @@
 import UIKit
 
-final class LikesCoordinator: TabCoordinator {
+final class LikesCoordinator: BaseCoordinator {
 
-    var navigationController: UINavigationController
-
-    init() {
-        navigationController = UINavigationController()
-    }
-
-    func start() {
+    override func start() {
         let vc = ViewController()
         vc.view.backgroundColor = .orange
-        navigationController.setViewControllers([vc], animated: false)
+        navigationController?.setViewControllers([vc], animated: false)
     }
 }

@@ -1,17 +1,10 @@
 import UIKit
 
-final class ProjectsCoordinator: TabCoordinator {
+final class ProjectsCoordinator: BaseCoordinator {
 
-    var navigationController: UINavigationController
-
-    init() {
-        navigationController = UINavigationController()
-    }
-
-    func start() {
+    override func start() {
         let vc = ViewController()
         vc.view.backgroundColor = .yellow
-        navigationController.setViewControllers([vc], animated: false)
+        navigationController?.setViewControllers([vc], animated: false)
     }
 }
-

@@ -11,6 +11,8 @@ import SnapKit
 
 final class MainTabBarController: UITabBarController {
 
+    var coordinator: TabBarCoordinator?
+
     // MARK: - Private Properties
 
     private let customTabBarView = MainTabBarView()

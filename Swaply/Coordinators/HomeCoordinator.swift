@@ -1,16 +1,10 @@
 import UIKit
 
-final class HomeCoordinator: TabCoordinator {
+final class HomeCoordinator: BaseCoordinator {
 
-    let navigationController: UINavigationController
-
-    init() {
-        navigationController = UINavigationController()
-    }
-
-    func start() {
+    override func start() {
         let vc = ViewController()
         vc.view.backgroundColor = .red
-        navigationController.setViewControllers([vc], animated: false)
+        navigationController?.setViewControllers([vc], animated: false)
     }
 }

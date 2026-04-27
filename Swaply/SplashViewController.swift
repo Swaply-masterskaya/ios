@@ -23,9 +23,11 @@ final class SplashViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
+    deinit { coordinator = nil }
+
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = AppColors.backgroundPrimary

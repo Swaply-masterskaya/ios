@@ -1,17 +1,10 @@
 import UIKit
 
-final class ProfileCoordinator: TabCoordinator {
+final class ProfileCoordinator: BaseCoordinator {
 
-    var navigationController: UINavigationController
-
-    init() {
-        navigationController = UINavigationController()
-    }
-
-    func start() {
+    override func start() {
         let vc = ViewController()
         vc.view.backgroundColor = .cyan
-        navigationController.setViewControllers([vc], animated: false)
+        navigationController?.setViewControllers([vc], animated: false)
     }
 }
-
