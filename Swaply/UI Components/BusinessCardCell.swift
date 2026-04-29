@@ -14,25 +14,15 @@ final class BusinessCardCell: UICollectionViewCell {
     private enum Layout {
         static let cellWidth: CGFloat = 353
         static let cellHeight: CGFloat = 148
-        static let titleLeadingInset: CGFloat = 16
-        static let titleTopInset: CGFloat = 12
-        static let companyToCollaborationSpacing: CGFloat = 4
-        static let socialStackBottomInset: CGFloat = 12
         static let socialStackSize = CGSize(width: 80, height: 48)
         static let socialIconSize = CGSize(width: 20, height: 20)
         static let instagramIconSize = CGSize(width: 24, height: 24)
         static let instagramIconOffset = CGPoint(x: -4, y: -2)
-        static let instagramLeadingSpacing: CGFloat = 16
-        static let socialIconSpacing: CGFloat = 8
         static let brandImageLeading: CGFloat = 119
         static let brandImageSize = CGSize(width: 234, height: 148)
         static let socialToBrandSpacing: CGFloat = 22
         static let likeBadgeSize: CGFloat = 24
         static let likeIconSize = CGSize(width: 16, height: 16)
-        static let likeTopInset: CGFloat = 12
-        static let likeTrailingInset: CGFloat = 12
-        static let categoryTrailingInset: CGFloat = 12
-        static let categoryBottomInset: CGFloat = 12
         static let categoryBadgeSize = CGSize(width: 50, height: 21)
     }
 
@@ -60,7 +50,7 @@ final class BusinessCardCell: UICollectionViewCell {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.distribution = .fillEqually
-        stackView.spacing = Layout.socialIconSpacing
+        stackView.spacing = AppSpacing.small
         return stackView
     }()
 
@@ -162,8 +152,8 @@ final class BusinessCardCell: UICollectionViewCell {
         }
 
         likeView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(Layout.likeTopInset)
-            make.trailing.equalToSuperview().inset(Layout.likeTrailingInset)
+            make.top.equalToSuperview().inset(AppSpacing.medium)
+            make.trailing.equalToSuperview().inset(AppSpacing.medium)
             make.size.equalTo(Layout.likeBadgeSize)
         }
 
@@ -173,8 +163,8 @@ final class BusinessCardCell: UICollectionViewCell {
         }
 
         categoryView.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(Layout.categoryTrailingInset)
-            make.bottom.equalToSuperview().inset(Layout.categoryBottomInset)
+            make.trailing.equalToSuperview().inset(AppSpacing.medium)
+            make.bottom.equalToSuperview().inset(AppSpacing.medium)
             make.size.equalTo(Layout.categoryBadgeSize)
         }
 
@@ -183,20 +173,20 @@ final class BusinessCardCell: UICollectionViewCell {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(Layout.titleTopInset)
-            make.leading.equalToSuperview().inset(Layout.titleLeadingInset)
+            make.top.equalToSuperview().inset(AppSpacing.medium)
+            make.leading.equalToSuperview().inset(AppSpacing.large)
             make.trailing.lessThanOrEqualTo(brandImageContainerView.snp.leading).offset(-Layout.socialToBrandSpacing)
         }
 
         collaborationTypeLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(Layout.companyToCollaborationSpacing)
+            make.top.equalTo(titleLabel.snp.bottom).offset(AppSpacing.xsmall)
             make.leading.equalTo(titleLabel)
             make.trailing.lessThanOrEqualTo(brandImageContainerView.snp.leading).offset(-Layout.socialToBrandSpacing)
         }
 
         socialRowsStackView.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel)
-            make.bottom.equalToSuperview().inset(Layout.socialStackBottomInset)
+            make.bottom.equalToSuperview().inset(AppSpacing.medium)
             make.size.equalTo(Layout.socialStackSize)
             make.trailing.lessThanOrEqualTo(brandImageContainerView.snp.leading).offset(-Layout.socialToBrandSpacing)
         }
@@ -232,7 +222,7 @@ final class BusinessCardCell: UICollectionViewCell {
             let rowStackView = UIStackView()
             rowStackView.axis = .horizontal
             rowStackView.alignment = .leading
-            rowStackView.spacing = Layout.socialIconSpacing
+            rowStackView.spacing = AppSpacing.small
 
             rowIcons.enumerated().forEach { index, iconConfiguration in
                 let iconView = makeSocialIconView(
@@ -245,7 +235,7 @@ final class BusinessCardCell: UICollectionViewCell {
 
                 if index == rowIcons.count - 2,
                     rowIcons.last?.image == AppImages.iconInstagramBlack {
-                    rowStackView.setCustomSpacing(Layout.instagramLeadingSpacing, after: iconView)
+                    rowStackView.setCustomSpacing(AppSpacing.large, after: iconView)
                 }
             }
 
