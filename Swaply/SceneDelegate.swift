@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         window.backgroundColor = AppColors.backgroundPrimary
-        window.rootViewController = SplashViewController()
+        window.rootViewController = BusinessCardPreviewViewController()
         window.makeKeyAndVisible()
         self.window = window
     }
