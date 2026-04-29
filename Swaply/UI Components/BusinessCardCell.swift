@@ -12,8 +12,6 @@ final class BusinessCardCell: UICollectionViewCell {
 
     // MARK: - Constants
     private enum Layout {
-        static let cellWidth: CGFloat = 353
-        static let cellHeight: CGFloat = 148
         static let socialStackSize = CGSize(width: 80, height: 48)
         static let socialIconSize = CGSize(width: 20, height: 20)
         static let instagramIconSize = CGSize(width: 24, height: 24)
