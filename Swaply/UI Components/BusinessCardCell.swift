@@ -105,12 +105,6 @@ final class BusinessCardCell: UICollectionViewCell {
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
 
-    // MARK: - Internal Methods
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        setupContent()
-    }
-
     // MARK: - Private Methods
     private func setupUI() {
         contentView.addSubview(containerView)
