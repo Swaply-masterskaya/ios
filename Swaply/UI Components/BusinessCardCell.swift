@@ -24,6 +24,21 @@ final class BusinessCardCell: UICollectionViewCell {
         static let categoryBadgeSize = CGSize(width: 50, height: 21)
     }
 
+    private enum SocialIconType {
+        case tiktok
+        case telegram
+        case youtube
+        case dzen
+        case instagram
+    }
+
+    private struct SocialIconConfiguration {
+        let type: SocialIconType
+        let image: UIImage
+        let size: CGSize
+        let offset: CGPoint
+    }
+
     // MARK: - Private Properties
     private let containerView = UIView()
 
@@ -91,8 +106,6 @@ final class BusinessCardCell: UICollectionViewCell {
     }()
 
     private var socialIconViews: [UIView] = []
-
-    private typealias SocialIconConfiguration = (image: UIImage, size: CGSize, offset: CGPoint)
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -192,13 +205,38 @@ final class BusinessCardCell: UICollectionViewCell {
         likeImageView.image = AppImages.iconLikeFilled.withRenderingMode(.alwaysOriginal)
         configureSocialIcons([
             [
-                (AppImages.iconTiktokBlack, Layout.socialIconSize, .zero),
-                (AppImages.iconTelegramBlack, Layout.socialIconSize, .zero)
+                SocialIconConfiguration(
+                    type: .tiktok,
+                    image: AppImages.iconTiktokBlack,
+                    size: Layout.socialIconSize,
+                    offset: .zero
+                ),
+                SocialIconConfiguration(
+                    type: .telegram,
+                    image: AppImages.iconTelegramBlack,
+                    size: Layout.socialIconSize,
+                    offset: .zero
+                )
             ],
             [
-                (AppImages.iconYoutubeBlack, Layout.socialIconSize, .zero),
-                (AppImages.iconDzenBlack, Layout.socialIconSize, .zero),
-                (AppImages.iconInstagramBlack, Layout.instagramIconSize, Layout.instagramIconOffset)
+                SocialIconConfiguration(
+                    type: .youtube,
+                    image: AppImages.iconYoutubeBlack,
+                    size: Layout.socialIconSize,
+                    offset: .zero
+                ),
+                SocialIconConfiguration(
+                    type: .dzen,
+                    image: AppImages.iconDzenBlack,
+                    size: Layout.socialIconSize,
+                    offset: .zero
+                ),
+                SocialIconConfiguration(
+                    type: .instagram,
+                    image: AppImages.iconInstagramBlack,
+                    size: Layout.instagramIconSize,
+                    offset: Layout.instagramIconOffset
+                )
             ]
         ])
     }
@@ -226,7 +264,7 @@ final class BusinessCardCell: UICollectionViewCell {
                 rowStackView.addArrangedSubview(iconView)
 
                 if index == rowIcons.count - 2,
-                    rowIcons.last?.image == AppImages.iconInstagramBlack {
+                    rowIcons.last?.type == .instagram {
                     rowStackView.setCustomSpacing(AppSpacing.large, after: iconView)
                 }
             }
