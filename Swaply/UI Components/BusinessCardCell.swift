@@ -9,9 +9,8 @@ import UIKit
 import SnapKit
 
 final class BusinessCardCell: UICollectionViewCell {
-    
     // MARK: - Constants
-    private enum Layout {
+    enum Layout {
         static let socialStackSize = CGSize(width: 80, height: 48)
         static let socialIconSize = CGSize(width: 20, height: 20)
         static let instagramIconSize = CGSize(width: 24, height: 24)
@@ -23,7 +22,7 @@ final class BusinessCardCell: UICollectionViewCell {
         static let likeIconSize = CGSize(width: 16, height: 16)
         static let categoryBadgeSize = CGSize(width: 50, height: 21)
     }
-    
+
     enum SocialIconType {
         case tiktok
         case telegram
@@ -31,14 +30,14 @@ final class BusinessCardCell: UICollectionViewCell {
         case dzen
         case instagram
     }
-    
+
     struct SocialIconConfiguration {
         let type: SocialIconType
         let image: UIImage
         let size: CGSize
         let offset: CGPoint
     }
-    
+
     struct BusinessCardViewModel {
         let title: String
         let collaborationType: String
@@ -276,7 +275,7 @@ final class BusinessCardCell: UICollectionViewCell {
     }
     
     // MARK: - Public Methods
-    func configure(with model: BusinessCardModel, onLikeTap: ((Bool) -> Void)? = nil) {
+    func configure(with model: BusinessCardViewModel, onLikeTap: ((Bool) -> Void)? = nil) {
         self.onLikeTap = onLikeTap
         
         titleLabel.text = model.title
