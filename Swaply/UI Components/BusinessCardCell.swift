@@ -39,7 +39,7 @@ final class BusinessCardCell: UICollectionViewCell {
         let offset: CGPoint
     }
     
-    struct BusinessCardModel {
+    struct BusinessCardViewModel {
         let title: String
         let collaborationType: String
         let brandImage: UIImage?
