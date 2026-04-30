@@ -56,7 +56,7 @@ final class BusinessCardCell: UICollectionViewCell {
         let label = UILabel()
         label.font = AppTypography.headline1
         label.textColor = AppColors.white
-        label.numberOfLines = 1
+        label.numberOfLines = 2
         return label
     }()
     
@@ -184,12 +184,12 @@ final class BusinessCardCell: UICollectionViewCell {
         categoryView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(AppSpacing.medium)
             make.bottom.equalToSuperview().inset(AppSpacing.medium)
-            make.size.equalTo(Layout.categoryBadgeSize)
+            make.height.equalTo(Layout.categoryBadgeSize.height)
         }
         
         categoryLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
+            make.top.bottom.equalToSuperview().inset(4)
+            make.leading.trailing.equalToSuperview().inset(12)        }
         
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(AppSpacing.medium)
