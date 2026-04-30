@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class BusinessCardCell: UICollectionViewCell {
-
+    
     // MARK: - Constants
     private enum Layout {
         static let socialStackSize = CGSize(width: 80, height: 48)
@@ -23,27 +23,36 @@ final class BusinessCardCell: UICollectionViewCell {
         static let likeIconSize = CGSize(width: 16, height: 16)
         static let categoryBadgeSize = CGSize(width: 50, height: 21)
     }
-
-    private enum SocialIconType {
+    
+    enum SocialIconType {
         case tiktok
         case telegram
         case youtube
         case dzen
         case instagram
     }
-
-    private struct SocialIconConfiguration {
+    
+    struct SocialIconConfiguration {
         let type: SocialIconType
         let image: UIImage
         let size: CGSize
         let offset: CGPoint
     }
-
+    
+    struct BusinessCardModel {
+        let title: String
+        let collaborationType: String
+        let brandImage: UIImage?
+        let category: String
+        let isLiked: Bool
+        let socialIconRows: [[SocialIconConfiguration]]
+    }
+    
     // MARK: - Private Properties
     private var isLiked = false
     private var onLikeTap: ((Bool) -> Void)?
     private let containerView = UIView()
-
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppTypography.headline1
@@ -51,7 +60,7 @@ final class BusinessCardCell: UICollectionViewCell {
         label.numberOfLines = 1
         return label
     }()
-
+    
     private let collaborationTypeLabel: UILabel = {
         let label = UILabel()
         label.font = AppTypography.footnote
@@ -59,7 +68,7 @@ final class BusinessCardCell: UICollectionViewCell {
         label.numberOfLines = 1
         return label
     }()
-
+    
     private let socialRowsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -68,36 +77,36 @@ final class BusinessCardCell: UICollectionViewCell {
         stackView.spacing = AppSpacing.small
         return stackView
     }()
-
+    
     private let brandImageContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = AppColors.white
         return view
     }()
-
+    
     private let brandImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
-
+    
     private let likeView = VisualEffectBadgeView(
         cornerStyle: .circle,
         overlayColor: UIColor.black.withAlphaComponent(0.02)
     )
-
+    
     private let likeImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-
+    
     private let categoryView = VisualEffectBadgeView(
         cornerStyle: .pill,
         overlayColor: UIColor.black.withAlphaComponent(0.02)
     )
-
+    
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.font = AppTypography.caption2
@@ -106,20 +115,19 @@ final class BusinessCardCell: UICollectionViewCell {
         label.textAlignment = .center
         return label
     }()
-
+    
     private var socialIconViews: [UIView] = []
-
+    
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
         setupConstraints()
-        setupContent()
     }
-
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
-
+    
     // MARK: - Private Methods
     private func setupUI() {
         contentView.addSubview(containerView)
@@ -132,12 +140,12 @@ final class BusinessCardCell: UICollectionViewCell {
         brandImageContainerView.addSubview(brandImageView)
         likeView.contentView.addSubview(likeImageView)
         categoryView.contentView.addSubview(categoryLabel)
-
+        
         contentView.backgroundColor = .clear
         containerView.backgroundColor = AppColors.grey400
         containerView.layer.cornerRadius = AppRadius.large
         containerView.layer.masksToBounds = true
-
+        
         brandImageContainerView.layer.cornerRadius = AppRadius.large
         brandImageContainerView.layer.masksToBounds = true
         
@@ -146,56 +154,56 @@ final class BusinessCardCell: UICollectionViewCell {
         likeView.isUserInteractionEnabled = true
         updateLikeAppearance()
     }
-
+    
     private func setupConstraints() {
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
+        
         brandImageContainerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(Layout.brandImageLeading)
             make.top.bottom.trailing.equalToSuperview()
         }
-
+        
         brandImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview()
             make.size.equalTo(Layout.brandImageSize)
         }
-
+        
         likeView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(AppSpacing.medium)
             make.trailing.equalToSuperview().inset(AppSpacing.medium)
             make.size.equalTo(Layout.likeBadgeSize)
         }
-
+        
         likeImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.size.equalTo(Layout.likeIconSize)
         }
-
+        
         categoryView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(AppSpacing.medium)
             make.bottom.equalToSuperview().inset(AppSpacing.medium)
             make.size.equalTo(Layout.categoryBadgeSize)
         }
-
+        
         categoryLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
-
+        
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(AppSpacing.medium)
             make.leading.equalToSuperview().inset(AppSpacing.large)
             make.trailing.lessThanOrEqualTo(brandImageContainerView.snp.leading).offset(-Layout.socialToBrandSpacing)
         }
-
+        
         collaborationTypeLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(AppSpacing.xsmall)
             make.leading.equalTo(titleLabel)
             make.trailing.lessThanOrEqualTo(brandImageContainerView.snp.leading).offset(-Layout.socialToBrandSpacing)
         }
-
+        
         socialRowsStackView.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel)
             make.bottom.equalToSuperview().inset(AppSpacing.medium)
@@ -214,64 +222,20 @@ final class BusinessCardCell: UICollectionViewCell {
         let imageName = isLiked ? AppImages.iconLikeFilled : AppImages.iconLike
         likeImageView.image = imageName.withRenderingMode(.alwaysOriginal)
     }
-
-    private func setupContent() {
-        titleLabel.text = "WeGym"
-        collaborationTypeLabel.text = "Бартер"
-        brandImageView.image = .logo
-        categoryLabel.text = "Спорт"
-        
-        configureSocialIcons([
-            [
-                SocialIconConfiguration(
-                    type: .tiktok,
-                    image: AppImages.iconTiktokBlack,
-                    size: Layout.socialIconSize,
-                    offset: .zero
-                ),
-                SocialIconConfiguration(
-                    type: .telegram,
-                    image: AppImages.iconTelegramBlack,
-                    size: Layout.socialIconSize,
-                    offset: .zero
-                )
-            ],
-            [
-                SocialIconConfiguration(
-                    type: .youtube,
-                    image: AppImages.iconYoutubeBlack,
-                    size: Layout.socialIconSize,
-                    offset: .zero
-                ),
-                SocialIconConfiguration(
-                    type: .dzen,
-                    image: AppImages.iconDzenBlack,
-                    size: Layout.socialIconSize,
-                    offset: .zero
-                ),
-                SocialIconConfiguration(
-                    type: .instagram,
-                    image: AppImages.iconInstagramBlack,
-                    size: Layout.instagramIconSize,
-                    offset: Layout.instagramIconOffset
-                )
-            ]
-        ])
-    }
-
+    
     private func configureSocialIcons(_ iconRows: [[SocialIconConfiguration]]) {
         socialRowsStackView.arrangedSubviews.forEach {
             socialRowsStackView.removeArrangedSubview($0)
             $0.removeFromSuperview()
         }
         socialIconViews.removeAll()
-
+        
         iconRows.forEach { rowIcons in
             let rowStackView = UIStackView()
             rowStackView.axis = .horizontal
             rowStackView.alignment = .leading
             rowStackView.spacing = AppSpacing.small
-
+            
             rowIcons.enumerated().forEach { index, iconConfiguration in
                 let iconView = makeSocialIconView(
                     image: iconConfiguration.image,
@@ -280,34 +244,65 @@ final class BusinessCardCell: UICollectionViewCell {
                 )
                 socialIconViews.append(iconView)
                 rowStackView.addArrangedSubview(iconView)
-
+                
                 if index == rowIcons.count - 2,
-                    rowIcons.last?.type == .instagram {
+                   rowIcons.last?.type == .instagram {
                     rowStackView.setCustomSpacing(AppSpacing.large, after: iconView)
                 }
             }
-
+            
             socialRowsStackView.addArrangedSubview(rowStackView)
         }
     }
-
+    
     private func makeSocialIconView(image: UIImage, imageSize: CGSize, offset: CGPoint) -> UIView {
         let containerView = UIView()
-
+        
         let imageView = UIImageView(image: image.withRenderingMode(.alwaysOriginal))
         imageView.contentMode = .scaleAspectFit
         containerView.addSubview(imageView)
-
+        
         containerView.snp.makeConstraints { make in
             make.size.equalTo(Layout.socialIconSize)
         }
-
+        
         imageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview().offset(offset.x)
             make.centerY.equalToSuperview().offset(offset.y)
             make.size.equalTo(imageSize)
         }
-
+        
         return containerView
+    }
+    
+    // MARK: - Public Methods
+    func configure(with model: BusinessCardModel, onLikeTap: ((Bool) -> Void)? = nil) {
+        self.onLikeTap = onLikeTap
+        
+        titleLabel.text = model.title
+        collaborationTypeLabel.text = model.collaborationType
+        brandImageView.image = model.brandImage
+        categoryLabel.text = model.category
+        isLiked = model.isLiked
+        updateLikeAppearance()
+        
+        configureSocialIcons(model.socialIconRows)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        titleLabel.text = nil
+        collaborationTypeLabel.text = nil
+        brandImageView.image = nil
+        categoryLabel.text = nil
+        likeImageView.image = nil
+        isLiked = false
+        onLikeTap = nil
+        
+        socialRowsStackView.arrangedSubviews.forEach {
+            socialRowsStackView.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
+        socialIconViews.removeAll()
     }
 }
