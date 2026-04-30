@@ -22,7 +22,7 @@ final class BusinessCardCell: UICollectionViewCell {
         static let likeIconSize = CGSize(width: 16, height: 16)
         static let categoryBadgeSize = CGSize(width: 50, height: 21)
     }
-
+    
     enum SocialIconType {
         case tiktok
         case telegram
@@ -30,14 +30,14 @@ final class BusinessCardCell: UICollectionViewCell {
         case dzen
         case instagram
     }
-
+    
     struct SocialIconConfiguration {
         let type: SocialIconType
         let image: UIImage
         let size: CGSize
         let offset: CGPoint
     }
-
+    
     struct BusinessCardViewModel {
         let title: String
         let collaborationType: String
