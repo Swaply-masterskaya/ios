@@ -42,7 +42,6 @@ final class BusinessCardCell: UICollectionViewCell {
     // MARK: - Private Properties
     private var isLiked = false
     private var onLikeTap: ((Bool) -> Void)?
-    
     private let containerView = UIView()
 
     private let titleLabel: UILabel = {
@@ -145,6 +144,7 @@ final class BusinessCardCell: UICollectionViewCell {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(likeTapped))
         likeView.addGestureRecognizer(tapGesture)
         likeView.isUserInteractionEnabled = true
+        updateLikeAppearance()
     }
 
     private func setupConstraints() {
@@ -220,6 +220,7 @@ final class BusinessCardCell: UICollectionViewCell {
         collaborationTypeLabel.text = "Бартер"
         brandImageView.image = .logo
         categoryLabel.text = "Спорт"
+        
         configureSocialIcons([
             [
                 SocialIconConfiguration(
