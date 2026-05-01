@@ -2,23 +2,23 @@ import UIKit
 
 final class AppCoordinator: BaseCoordinator {
 
+    // MARK: - Private Properties
     private let window: UIWindow
     private var splashCoordinator: SplashCoordinator?
 
     // MARK: - Initializers
-
     init(window: UIWindow) {
         self.window = window
         super.init()
     }
 
-    // MARK: - Public Methods
-
+    // MARK: - Internal Methods
     override func start() {
         showSplash()
         window.makeKeyAndVisible()
     }
 
+    // MARK: - Private Methods
     private func showSplash() {
         let splashCoordinator = SplashCoordinator()
         self.splashCoordinator = splashCoordinator

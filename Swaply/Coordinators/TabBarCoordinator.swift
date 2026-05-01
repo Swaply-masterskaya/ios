@@ -2,10 +2,11 @@ import UIKit
 
 final class TabBarCoordinator: BaseCoordinator {
 
+    // MARK: - Internal Properties
     let tabBarController = MainTabBarController()
-
     var childCoordinators: [Coordinator] = []
 
+    // MARK: - Internal Methods
     override func start() {
         childCoordinators = [
             HomeCoordinator(navigationController: UINavigationController()),
