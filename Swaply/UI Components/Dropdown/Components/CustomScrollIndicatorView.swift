@@ -27,14 +27,14 @@ final class CustomScrollIndicatorView: UIView {
 	private lazy var scrollTrackView: UIView = {
 		let view = UIView()
 		view.backgroundColor = AppColors.backgroundSecondary
-		view.layer.cornerRadius = AppRadius.tiny
+		view.layer.cornerRadius = AppRadius.extraExtraSmall
 		return view
 	}()
 
 	private lazy var scrollThumbView: UIView = {
 		let view = UIView()
 		view.backgroundColor = AppColors.backgroundTertiary
-		view.layer.cornerRadius = AppRadius.tiny
+		view.layer.cornerRadius = AppRadius.extraExtraSmall
 		view.isUserInteractionEnabled = true
 		return view
 	}()
