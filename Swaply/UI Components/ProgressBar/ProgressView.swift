@@ -2,6 +2,7 @@ import UIKit
 
 final class ProgressView: UIView {
 
+    // MARK: - Private Properties
     private lazy var gradientLayer: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
 
@@ -17,10 +18,12 @@ final class ProgressView: UIView {
         return gradientLayer
     }()
 
+    // MARK: - Internal Properties
     override var intrinsicContentSize: CGSize {
         CGSize(width: UIView.noIntrinsicMetric, height: 8)
     }
 
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.addSublayer(gradientLayer)
@@ -29,6 +32,7 @@ final class ProgressView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
 
+    // MARK: - Internal Methods
     override func layoutSubviews() {
         super.layoutSubviews()
         gradientLayer.frame = bounds

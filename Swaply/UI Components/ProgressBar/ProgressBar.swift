@@ -3,6 +3,7 @@ import SnapKit
 
 final class ProgressBar: UIView {
 
+    // MARK: - Private Properties
     private lazy var progressSectionsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -14,6 +15,7 @@ final class ProgressBar: UIView {
     private let numberOfSections: Int
     private var currentProgressValue = 0.0
 
+    // MARK: - Initializers
     init(numberOfSegments: Int) {
         self.numberOfSections = max(numberOfSegments, 1)
         super.init(frame: .zero)
@@ -23,41 +25,7 @@ final class ProgressBar: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
 
-    private func setupUI() {
-        for _ in 0 ..< numberOfSections {
-            progressSectionsStackView.addArrangedSubview(ProgressSection())
-        }
-
-        addSubview(progressSectionsStackView)
-
-        setupConstraints()
-    }
-
-    private func setupConstraints() {
-        progressSectionsStackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-    }
-
-    private func getSection() -> ProgressSection? {
-        let sectionIndex = Int(currentProgressValue)
-
-        guard (0..<numberOfSections).contains(sectionIndex),
-              let currentProgressSection = progressSectionsStackView.arrangedSubviews[sectionIndex] as? ProgressSection else {
-            return nil
-        }
-
-        return currentProgressSection
-    }
-
-    private func isWhole(_ number: Double) -> Bool {
-        number.truncatingRemainder(dividingBy: 1) == 0
-    }
-
-    private func isInRange(value: Double) -> Bool {
-        (0...Double(numberOfSections)).contains(value) ? true : false
-    }
-
+    // MARK: - Internal Methods
     func completeHalfOfSection() {
         let isSectionEmpty = isWhole(currentProgressValue)
 
@@ -128,5 +96,41 @@ final class ProgressBar: UIView {
         }
 
         currentProgressSection.configureConstraints(multiplier: 0)
+    }
+
+    // MARK: - Private Methods
+    private func setupUI() {
+        for _ in 0 ..< numberOfSections {
+            progressSectionsStackView.addArrangedSubview(ProgressSection())
+        }
+
+        addSubview(progressSectionsStackView)
+
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
+        progressSectionsStackView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+
+    private func getSection() -> ProgressSection? {
+        let sectionIndex = Int(currentProgressValue)
+
+        guard (0..<numberOfSections).contains(sectionIndex),
+              let currentProgressSection = progressSectionsStackView.arrangedSubviews[sectionIndex] as? ProgressSection else {
+            return nil
+        }
+
+        return currentProgressSection
+    }
+
+    private func isWhole(_ number: Double) -> Bool {
+        number.truncatingRemainder(dividingBy: 1) == 0
+    }
+
+    private func isInRange(value: Double) -> Bool {
+        (0...Double(numberOfSections)).contains(value) ? true : false
     }
 }

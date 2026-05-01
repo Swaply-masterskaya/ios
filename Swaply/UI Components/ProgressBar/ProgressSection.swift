@@ -3,12 +3,15 @@ import SnapKit
 
 class ProgressSection: UIView {
 
+    // MARK: - Private Properties
     private let progressView = ProgressView()
 
+    // MARK: - Internal Properties
     override var intrinsicContentSize: CGSize {
         CGSize(width: UIView.noIntrinsicMetric, height: 8)
     }
 
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -17,16 +20,7 @@ class ProgressSection: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
 
-    private func setupUI() {
-        backgroundColor = AppColors.grey600
-        layer.cornerRadius = AppRadius.extraExtraSmall
-        layer.masksToBounds = true
-
-        addSubview(progressView)
-
-        configureConstraints(multiplier: 0)
-    }
-
+    // MARK: - Internal Methods
     func configureConstraints(multiplier: Double) {
         UIView.animate(withDuration: 0.3) {
             self.progressView.snp.remakeConstraints {
@@ -35,5 +29,16 @@ class ProgressSection: UIView {
             }
             self.layoutIfNeeded()
         }
+    }
+
+    // MARK: - Private Methods
+    private func setupUI() {
+        backgroundColor = AppColors.grey600
+        layer.cornerRadius = AppRadius.extraExtraSmall
+        layer.masksToBounds = true
+
+        addSubview(progressView)
+
+        configureConstraints(multiplier: 0)
     }
 }
