@@ -8,25 +8,13 @@
 import UIKit
 import SnapKit
 
-final class SplashViewController: UIViewController {
-
-    private weak var coordinator: SplashCoordinator?
+final class SplashViewController: BaseCoordinatingController {
 
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(resource: .logo))
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-
-    init(coordinator: SplashCoordinator?) {
-        self.coordinator = coordinator
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    deinit { coordinator = nil }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) { nil }
 
     override func viewDidLoad() {
         super.viewDidLoad()

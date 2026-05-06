@@ -21,18 +21,18 @@ final class AppCoordinator: BaseCoordinator {
     // MARK: - Private Methods
     private func showSplash() {
         let splashCoordinator = SplashCoordinator()
-        self.splashCoordinator = splashCoordinator
         splashCoordinator.onFinish = { [weak self] in
             self?.showMain()
         }
-        window.rootViewController = splashCoordinator.viewController
         splashCoordinator.start()
+        self.splashCoordinator = splashCoordinator
+        window.rootViewController = splashCoordinator.viewController
     }
 
     private func showMain() {
         splashCoordinator = nil
         let tabBarCoordinator = TabBarCoordinator()
-        window.rootViewController = tabBarCoordinator.tabBarController
         tabBarCoordinator.start()
+        window.rootViewController = tabBarCoordinator.tabBarController
     }
 }

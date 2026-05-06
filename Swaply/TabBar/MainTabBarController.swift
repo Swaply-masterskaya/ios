@@ -9,9 +9,11 @@ import UIKit
 import RxSwift
 import SnapKit
 
-final class MainTabBarController: UITabBarController {
+final class MainTabBarController: UITabBarController, Coordinating {
 
-    var coordinator: TabBarCoordinator?
+    // MARK: - Internal Properties
+
+    weak var coordinator: Coordinator?
 
     // MARK: - Private Properties
 
@@ -19,6 +21,16 @@ final class MainTabBarController: UITabBarController {
     private let tabBarItems: [TabBarItem] = TabBarItem.allCases
     private let viewModel = MainTabBarViewModel()
     private let disposeBag = DisposeBag()
+
+    // MARK: - Initializers
+
+    init(coordinator: Coordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
 
     // MARK: - Lifecycle
 

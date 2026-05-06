@@ -4,8 +4,21 @@ final class HomeCoordinator: BaseCoordinator {
 
     // MARK: - Internal Methods
     override func start() {
-        let vc = ViewController()
-        vc.view.backgroundColor = .red
-        navigationController?.setViewControllers([vc], animated: false)
+        viewController = ViewController(coordinator: self)
+
+        guard let viewController else { return }
+
+        viewController.view.backgroundColor = .red
+        navigationController?.setViewControllers([viewController], animated: false)
+    }
+
+    override func push() {
+        // Место для пуша нового координатора
+        // Обязательно передайте навигационный контроллер этого координатора
+
+        // Демонстрационный пример
+        // let childCoordinator = ChildCoordinator(navigationController: navigationController)
+        // childCoordinator.start()
+        // addChild(childCoordinator)
     }
 }

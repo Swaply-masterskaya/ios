@@ -3,8 +3,7 @@ import UIKit
 final class TabBarCoordinator: BaseCoordinator {
 
     // MARK: - Internal Properties
-    let tabBarController = MainTabBarController()
-    var childCoordinators: [Coordinator] = []
+    lazy var tabBarController = MainTabBarController(coordinator: self)
 
     // MARK: - Internal Methods
     override func start() {
@@ -15,9 +14,9 @@ final class TabBarCoordinator: BaseCoordinator {
             ChatsCoordinator(navigationController: UINavigationController()),
             ProfileCoordinator(navigationController: UINavigationController())
         ]
+
         childCoordinators.forEach { $0.start() }
 
-        tabBarController.coordinator = self
         tabBarController.viewControllers = childCoordinators.compactMap { $0.navigationController }
     }
 }

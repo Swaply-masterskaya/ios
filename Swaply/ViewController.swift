@@ -7,11 +7,10 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: BaseCoordinatingController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
     }
-
 }
