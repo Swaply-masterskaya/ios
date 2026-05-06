@@ -5,6 +5,7 @@ final class AppCoordinator: BaseCoordinator {
     // MARK: - Private Properties
     private let window: UIWindow
     private var splashCoordinator: SplashCoordinator?
+    private var tabBarCoordinator: TabBarCoordinator?
 
     // MARK: - Initializers
     init(window: UIWindow) {
@@ -34,6 +35,7 @@ final class AppCoordinator: BaseCoordinator {
         splashCoordinator = nil
         let tabBarCoordinator = TabBarCoordinator()
         tabBarCoordinator.start()
+        self.tabBarCoordinator = tabBarCoordinator
         window.rootViewController = tabBarCoordinator.tabBarController
     }
 }
