@@ -4,6 +4,8 @@ final class ProfileCoordinator: BaseCoordinator {
 
     // MARK: - Internal Methods
     override func start() {
+        navigationController?.delegate = self
+
         viewController = ViewController(coordinator: self)
 
         guard let viewController else { return }
