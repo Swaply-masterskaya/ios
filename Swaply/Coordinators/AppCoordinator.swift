@@ -22,6 +22,7 @@ final class AppCoordinator: BaseCoordinator {
     private func showSplash() {
         let splashCoordinator = SplashCoordinator()
         splashCoordinator.onFinish = { [weak self] in
+            // TODO: - Сделать выбор флоу авторизации или мейн
             self?.showMain()
         }
         splashCoordinator.start()
