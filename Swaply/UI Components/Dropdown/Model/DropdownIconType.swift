@@ -14,18 +14,18 @@ enum DropdownIconType {
 	var normalImageName: UIImage? {
 		switch self {
 		case .square:
-				return AppImages.iconSquare
+            return AppImages.iconSquare
 		case .radio:
-				return AppImages.iconCircle
+            return AppImages.iconCircle
 		}
 	}
 
 	var selectedImageName: UIImage? {
 		switch self {
 		case .square:
-				return AppImages.iconSquareSelected
+            return AppImages.iconSquareSelected
 		case .radio:
-				return AppImages.iconRadioSelected
+            return AppImages.iconRadioSelected
 		}
 	}
 
