@@ -22,6 +22,7 @@ final class CustomSearchField: UIView {
 	}
 	// MARK: - Private Properties
 	private let searchStripe = CustomSearchStripe()
+	private let colors: CustomSearchFieldColors
 
 	private lazy var closeButton: UIButton = {
 		var config = UIButton.Configuration.plain()
@@ -60,7 +61,11 @@ final class CustomSearchField: UIView {
 		return stack
 	}()
 	// MARK: - Init
-	override init(frame: CGRect) {
+	init(
+		frame: CGRect = .zero,
+		colors: CustomSearchFieldColors = CustomSearchFieldColors()
+	) {
+		self.colors = colors
 		super.init(frame: frame)
 		setupView()
 		setupHierarchy()
@@ -75,6 +80,16 @@ final class CustomSearchField: UIView {
 		backgroundColor = .clear
 		searchStripe.delegate = self
 		searchStripe.customDelegate = self
+		closeButton.isHidden = true
+		searchStripe.configureColors(colors)
+		closeButton.configuration?.baseForegroundColor = colors.closeIconColor
+
+		closeButtonGlassEffectView.update(
+			configuration: GlassEffectConfiguration(
+				baseFillColor: colors.backgroundColor,
+				cornerRadius: AppRadius.extraLarge
+			)
+		)
 	}
 
 	private func setupHierarchy() {
@@ -107,6 +122,10 @@ final class CustomSearchField: UIView {
 		searchStripe.resignFirstResponder()
 	}
 
+	private func setCloseButtonVisible(_ isVisible: Bool) {
+		closeButton.isHidden = !isVisible
+	}
+
 	private func performSearch() {
 		dismissKeyboard()
 		delegate?.customSearchFieldDidTapSearch(self, text: text)
@@ -114,6 +133,7 @@ final class CustomSearchField: UIView {
 
 	@objc private func didTapCloseButton() {
 		searchStripe.clearSearchStripe()
+		setCloseButtonVisible(false)
 		delegate?.customSearchFieldDidTapClose(self)
 	}
 }
@@ -125,6 +145,16 @@ extension CustomSearchField: UISearchBarDelegate {
 
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 		performSearch()
+	}
+
+	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+		setCloseButtonVisible(true)
+	}
+
+	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+		if text.isEmpty {
+			setCloseButtonVisible(false)
+		}
 	}
 }
 // MARK: - CustomSearchStripeDelegate
