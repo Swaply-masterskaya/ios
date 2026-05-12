@@ -16,7 +16,7 @@ final class MainTabBarController: UITabBarController {
     private let customTabBarView = MainTabBarView()
     private let tabBarItems: [TabBarItem] = TabBarItem.allCases
     private let viewModel = MainTabBarViewModel()
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
 
     // MARK: - Lifecycle
 
@@ -40,6 +40,7 @@ final class MainTabBarController: UITabBarController {
         )
     }
 
+
     // MARK: - Private Methods
 
     private func setupCustomTabBar() {
@@ -48,6 +49,8 @@ final class MainTabBarController: UITabBarController {
         view.addSubview(customTabBarView)
     }
     private func bindViewModel() {
+        disposeBag = DisposeBag()
+        
         viewModel.selectedIndex
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] index in

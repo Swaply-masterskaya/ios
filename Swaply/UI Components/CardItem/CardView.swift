@@ -13,7 +13,7 @@ final class CardView: UIView {
 
     // MARK: - Private Properties
 
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     private var viewModel: CardViewModelProtocol?
 
     private let containerView: UIView = {
@@ -99,20 +99,23 @@ final class CardView: UIView {
     // MARK: - Private Methods
 
     private func setupUI() {
+        setupSubviews()
+        setupConstraints()
+    }
+
+    private func setupSubviews() {
         addSubview(containerView)
         containerView.addSubview(imageView)
-
         containerView.addSubview(firstTitleContainer)
         firstTitleContainer.addSubview(firstTitleLabel)
-
         containerView.addSubview(secondTitleContainer)
         secondTitleContainer.addSubview(secondTitleLabel)
-
         containerView.addSubview(subtitleLabel)
-
         containerView.addSubview(likeButtonContainer)
         likeButtonContainer.addSubview(likeButton)
+    }
 
+    private func setupConstraints() {
         containerView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -163,20 +166,6 @@ final class CardView: UIView {
         }
     }
 
-    // MARK: - Internal Methods
-
-    func configure(with viewModel: CardViewModelProtocol) {
-        self.viewModel = viewModel
-
-        imageView.image = viewModel.image
-        firstTitleLabel.text = viewModel.firstTitle
-        secondTitleLabel.text = viewModel.secondTitle
-        subtitleLabel.text = viewModel.subtitle
-        subtitleLabel.isHidden = viewModel.subtitle == nil
-
-        bindLikeButton()
-    }
-
     private func bindLikeButton() {
         viewModel?.isLiked
             .observe(on: MainScheduler.instance)
@@ -188,5 +177,21 @@ final class CardView: UIView {
                 self.likeButton.tintColor = isLiked ? AppColors.accentColor : UIColor.white.withAlphaComponent(0.8)
             })
             .disposed(by: disposeBag)
+    }
+
+    // MARK: - Internal Methods
+    
+    func configure(with viewModel: CardViewModelProtocol) {
+        self.viewModel = viewModel
+
+        disposeBag = DisposeBag()
+
+        imageView.image = viewModel.image
+        firstTitleLabel.text = viewModel.firstTitle
+        secondTitleLabel.text = viewModel.secondTitle
+        subtitleLabel.text = viewModel.subtitle
+        subtitleLabel.isHidden = viewModel.subtitle == nil
+
+        bindLikeButton()
     }
 }
