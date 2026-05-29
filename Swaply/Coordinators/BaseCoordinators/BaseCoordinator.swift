@@ -20,7 +20,9 @@ class BaseCoordinator: NSObject, Coordinator {
 
     func push() { }
 
-    func pop() { }
+    func pop() {
+        navigationController?.popViewController(animated: true)
+    }
 }
 
 extension BaseCoordinator: UINavigationControllerDelegate {
