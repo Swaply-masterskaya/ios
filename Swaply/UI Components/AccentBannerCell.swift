@@ -9,13 +9,14 @@ import UIKit
 import SnapKit
 
 final class AccentBannerCell: UICollectionViewCell {
+
     private enum Layout {
         static let contentInset: CGFloat = AppSpacing.large
         static let logoSize: CGFloat = 48
         static let logoTopInset: CGFloat = 64
         static let titleHeight: CGFloat = 44
     }
-    
+
     // MARK: - Private Properties
     private lazy var containerView: UIView = {
         let view = UIView()

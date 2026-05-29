@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class SplashViewController: UIViewController {
+final class SplashViewController: BaseCoordinatingController {
 
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(resource: .logo))
@@ -30,9 +30,8 @@ final class SplashViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?
-                .showMain()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.coordinator?.finish()
         }
     }
 }
