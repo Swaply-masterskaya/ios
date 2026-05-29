@@ -21,6 +21,12 @@ final class CustomSearchStripe: UISearchBar {
 		static let placeholder = "Поиск"
 	}
 
+	private enum Colors {
+		static let placeholderInactiveColor: UIColor = AppColors.grey200
+		static let placeholderActiveColor: UIColor = AppColors.grey400
+		static let searchFieldBackgroundColor: UIColor = AppColors.backgroundTertiary
+	}
+
 	// MARK: - Public Properties
 	weak var customDelegate: CustomSearchStripeDelegate?
 
@@ -34,9 +40,6 @@ final class CustomSearchStripe: UISearchBar {
 	// MARK: - Private Properties
 	private var overlayCenterXConstraint: Constraint?
 	private var overlayLeadingConstraint: Constraint?
-	private var placeholderInactiveColor: UIColor = AppColors.grey200
-	private var placeholderActiveColor: UIColor = AppColors.grey400
-	private var searchFieldBackgroundColor: UIColor = AppColors.glaseBase
 
 	private lazy var iconSearchView: UIImageView = {
 		let imageView = UIImageView(
@@ -130,20 +133,6 @@ final class CustomSearchStripe: UISearchBar {
 		searchText = ""
 		resignFirstResponder()
 	}
-
-	func configureColors(_ colors: CustomSearchFieldColors) {
-		self.placeholderInactiveColor = colors.placeholderInactiveColor
-		self.placeholderActiveColor = colors.placeholderActiveColor
-		self.searchFieldBackgroundColor = colors.backgroundColor
-
-		searchTextField.textColor = colors.textColor
-		searchTextField.tintColor = colors.cursorTintColor
-		iconSearchView.tintColor = colors.searchIconColor
-		filterButton.tintColor = colors.filterIconColor
-
-		updateCornerRadius()
-		updateOverlayState(animated: false)
-	}
 	// MARK: - Private Methods
 	private func setupAppearance() {
 		setupBehavior()
@@ -231,7 +220,7 @@ final class CustomSearchStripe: UISearchBar {
 	}
 
 	private func updateOverlayPlaceholderColor(isInactive: Bool) {
-		overlayPlaceholderLabel.textColor = isInactive ? placeholderInactiveColor : placeholderActiveColor
+		overlayPlaceholderLabel.textColor = isInactive ? Colors.placeholderInactiveColor : Colors.placeholderActiveColor
 	}
 
 	private func updateOverlayState(animated: Bool) {
@@ -254,7 +243,7 @@ final class CustomSearchStripe: UISearchBar {
 
 		glassEffectView.update(
 			configuration: GlassEffectConfiguration(
-				baseFillColor: searchFieldBackgroundColor,
+				baseFillColor: Colors.searchFieldBackgroundColor,
 				cornerRadius: cornerRadius
 			)
 		)

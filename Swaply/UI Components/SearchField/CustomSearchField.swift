@@ -22,7 +22,6 @@ final class CustomSearchField: UIView {
 	}
 	// MARK: - Private Properties
 	private let searchStripe = CustomSearchStripe()
-	private let colors: CustomSearchFieldColors
 
 	private lazy var closeButton: UIButton = {
 		var config = UIButton.Configuration.plain()
@@ -61,11 +60,7 @@ final class CustomSearchField: UIView {
 		return stack
 	}()
 	// MARK: - Init
-	init(
-		frame: CGRect = .zero,
-		colors: CustomSearchFieldColors = CustomSearchFieldColors()
-	) {
-		self.colors = colors
+	override init( frame: CGRect = .zero) {
 		super.init(frame: frame)
 		setupView()
 		setupHierarchy()
@@ -81,12 +76,10 @@ final class CustomSearchField: UIView {
 		searchStripe.delegate = self
 		searchStripe.customDelegate = self
 		closeButton.isHidden = true
-		searchStripe.configureColors(colors)
-		closeButton.configuration?.baseForegroundColor = colors.closeIconColor
 
 		closeButtonGlassEffectView.update(
 			configuration: GlassEffectConfiguration(
-				baseFillColor: colors.backgroundColor,
+				baseFillColor: AppColors.backgroundTertiary,
 				cornerRadius: AppRadius.extraLarge
 			)
 		)
