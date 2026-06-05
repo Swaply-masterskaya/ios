@@ -49,10 +49,10 @@ final class BusinessCardCell: UICollectionViewCell {
     
     // MARK: - Private Properties
     private var isLiked = false
-    private var onLikeTap: ((Bool) -> Void)?
+    private let onLikeTap: ((Bool) -> Void)?
     private let containerView = UIView()
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppTypography.headline1
         label.textColor = AppColors.white
@@ -60,7 +60,7 @@ final class BusinessCardCell: UICollectionViewCell {
         return label
     }()
     
-    private let collaborationTypeLabel: UILabel = {
+    private lazy var collaborationTypeLabel: UILabel = {
         let label = UILabel()
         label.font = AppTypography.footnote
         label.textColor = AppColors.grey200
@@ -68,7 +68,7 @@ final class BusinessCardCell: UICollectionViewCell {
         return label
     }()
     
-    private let socialRowsStackView: UIStackView = {
+    private lazy var socialRowsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
@@ -77,36 +77,36 @@ final class BusinessCardCell: UICollectionViewCell {
         return stackView
     }()
     
-    private let brandImageContainerView: UIView = {
+    private lazy var brandImageContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = AppColors.white
         return view
     }()
     
-    private let brandImageView: UIImageView = {
+    private lazy var brandImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
     
-    private let likeView = VisualEffectBadgeView(
+    private lazy var likeView = VisualEffectBadgeView(
         cornerStyle: .circle,
         overlayColor: UIColor.black.withAlphaComponent(0.02)
     )
     
-    private let likeImageView: UIImageView = {
+    private lazy var likeImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    private let categoryView = VisualEffectBadgeView(
+    private lazy var categoryView = VisualEffectBadgeView(
         cornerStyle: .pill,
         overlayColor: UIColor.black.withAlphaComponent(0.02)
     )
     
-    private let categoryLabel: UILabel = {
+    private lazy var categoryLabel: UILabel = {
         let label = UILabel()
         label.font = AppTypography.caption2
         label.textColor = AppColors.grey50
@@ -130,12 +130,9 @@ final class BusinessCardCell: UICollectionViewCell {
     // MARK: - Private Methods
     private func setupUI() {
         contentView.addSubview(containerView)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(collaborationTypeLabel)
-        containerView.addSubview(socialRowsStackView)
-        containerView.addSubview(brandImageContainerView)
-        containerView.addSubview(likeView)
-        containerView.addSubview(categoryView)
+        [titleLabel, collaborationTypeLabel, socialRowsStackView, brandImageContainerView, likeView, categoryView].forEach {
+            containerView.addSubview($0)
+        }
         brandImageContainerView.addSubview(brandImageView)
         likeView.contentView.addSubview(likeImageView)
         categoryView.contentView.addSubview(categoryLabel)
@@ -189,7 +186,8 @@ final class BusinessCardCell: UICollectionViewCell {
         
         categoryLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(4)
-            make.leading.trailing.equalToSuperview().inset(12)        }
+            make.leading.trailing.equalToSuperview().inset(12)
+        }
         
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(AppSpacing.medium)
@@ -217,7 +215,7 @@ final class BusinessCardCell: UICollectionViewCell {
         onLikeTap?(isLiked)
     }
     
-    private func  updateLikeAppearance() {
+    private func updateLikeAppearance() {
         let imageName = isLiked ? AppImages.iconLikeFilled : AppImages.iconLike
         likeImageView.image = imageName.withRenderingMode(.alwaysOriginal)
     }
@@ -305,3 +303,4 @@ final class BusinessCardCell: UICollectionViewCell {
         socialIconViews.removeAll()
     }
 }
+

@@ -13,7 +13,7 @@ final class VisualEffectBadgeView: UIView {
         case pill
     }
     
-    let contentView = UIView()
+    lazy var contentView = UIView()
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
     private let cornerStyle: CornerStyle
