@@ -1,5 +1,5 @@
 //
-//  CardView.swift
+//  CardCell.swift
 //  Swaply
 //
 //  Created by Георгий on 27.04.2026.
@@ -9,7 +9,9 @@ import UIKit
 import SnapKit
 import RxSwift
 
-final class CardView: UIView {
+final class CardCell: UICollectionViewCell {
+
+    static let reuseIdentifier = "CardCell"
 
     // MARK: - Private Properties
 
@@ -96,6 +98,16 @@ final class CardView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+        viewModel = nil
+        imageView.image = nil
+        firstTitleLabel.text = nil
+        secondTitleLabel.text = nil
+        subtitleLabel.text = nil
+    }
+
     // MARK: - Private Methods
 
     private func setupUI() {
@@ -104,7 +116,7 @@ final class CardView: UIView {
     }
 
     private func setupSubviews() {
-        addSubview(containerView)
+        contentView.addSubview(containerView)
         containerView.addSubview(imageView)
         containerView.addSubview(firstTitleContainer)
         firstTitleContainer.addSubview(firstTitleLabel)
@@ -180,10 +192,9 @@ final class CardView: UIView {
     }
 
     // MARK: - Internal Methods
-    
+
     func configure(with viewModel: CardViewModelProtocol) {
         self.viewModel = viewModel
-
         disposeBag = DisposeBag()
 
         imageView.image = viewModel.image
