@@ -49,7 +49,7 @@ final class BusinessCardCell: UICollectionViewCell {
     
     // MARK: - Private Properties
     private var isLiked = false
-    private let onLikeTap: ((Bool) -> Void)?
+    private var onLikeTap: ((Bool) -> Void)?
     private let containerView = UIView()
     
     private lazy var titleLabel: UILabel = {
