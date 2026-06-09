@@ -37,6 +37,7 @@ final class CustomSearchStripe: UISearchBar {
 			updateOverlayState(animated: false)
 		}
 	}
+
 	// MARK: - Private Properties
 	private var overlayCenterXConstraint: Constraint?
 	private var overlayLeadingConstraint: Constraint?
@@ -110,10 +111,12 @@ final class CustomSearchStripe: UISearchBar {
 		view.isUserInteractionEnabled = false
 		return view
 	}()
+
 	// MARK: - Override Properties
 	override var intrinsicContentSize: CGSize {
 		return CGSize(width: UIView.noIntrinsicMetric, height: Layout.searchBarHeight)
 	}
+
 	// MARK: - Init
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -122,17 +125,20 @@ final class CustomSearchStripe: UISearchBar {
 
 	@available(*, unavailable)
 	required init?(coder: NSCoder) { nil }
+
 	// MARK: - Override Methods
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		updateCornerRadius()
 		updateOverlayState(animated: false)
 	}
+
 	// MARK: - Public Methods
 	func clearSearchStripe() {
 		searchText = ""
 		resignFirstResponder()
 	}
+
 	// MARK: - Private Methods
 	private func setupAppearance() {
 		setupBehavior()
@@ -262,6 +268,7 @@ final class CustomSearchStripe: UISearchBar {
 	}
 
 }
+
 // MARK: - UITextFieldDelegate
 extension CustomSearchStripe: UITextFieldDelegate {
 	func textFieldDidBeginEditing(_ textField: UITextField) {

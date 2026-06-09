@@ -15,11 +15,13 @@ final class CustomSearchField: UIView {
 	}
 
 	weak var delegate: CustomSearchFieldDelegate?
+
 	// MARK: - Public Properties
 	var text: String {
 		get { searchStripe.searchText ?? "" }
 		set { searchStripe.searchText = newValue }
 	}
+
 	// MARK: - Private Properties
 	private let searchStripe = CustomSearchStripe()
 
@@ -59,6 +61,7 @@ final class CustomSearchField: UIView {
 		stack.distribution = .fill
 		return stack
 	}()
+
 	// MARK: - Init
 	override init( frame: CGRect = .zero) {
 		super.init(frame: frame)
@@ -70,6 +73,7 @@ final class CustomSearchField: UIView {
 
 	@available(*, unavailable)
 	required init?(coder: NSCoder) { nil }
+
 	// MARK: - Private Methods
 	private func setupView() {
 		backgroundColor = .clear
@@ -130,8 +134,10 @@ final class CustomSearchField: UIView {
 		delegate?.customSearchFieldDidTapClose(self)
 	}
 }
+
 // MARK: - UISearchBarDelegate
 extension CustomSearchField: UISearchBarDelegate {
+
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 		delegate?.customSearchField(self, didChangeText: searchText)
 	}
@@ -150,8 +156,10 @@ extension CustomSearchField: UISearchBarDelegate {
 		}
 	}
 }
+
 // MARK: - CustomSearchStripeDelegate
 extension CustomSearchField: CustomSearchStripeDelegate {
+
 	func customSearchStripeDidTapSearchIcon(_ customSearchStripe: CustomSearchStripe) {
 		performSearch()
 	}

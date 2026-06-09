@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 final class GlassEffectView: UIView {
+
 	// MARK: - Private Properties
 	private var configuration: GlassEffectConfiguration
 
@@ -36,6 +37,7 @@ final class GlassEffectView: UIView {
 		let view = UIView()
 		return view
 	}()
+
 	// MARK: - Initializers
 	init(configuration: GlassEffectConfiguration) {
 		self.configuration = configuration
@@ -51,14 +53,17 @@ final class GlassEffectView: UIView {
 		super.layoutSubviews()
 		applyCornerRadius()
 	}
+
 	// MARK: - Public Methods
 	func update(configuration: GlassEffectConfiguration) {
 		self.configuration = configuration
 		applyConfiguration()
 	}
 }
+
 // MARK: - Extension GlassEffectView
 private extension GlassEffectView {
+
 	func setupView() {
 		clipsToBounds = true
 
@@ -67,24 +72,11 @@ private extension GlassEffectView {
 			$0.edges.equalToSuperview()
 		}
 
-		blurView.contentView.addSubview(baseFillView)
-		baseFillView.snp.makeConstraints {
-			$0.edges.equalToSuperview()
-		}
-
-		blurView.contentView.addSubview(darkOverlayView)
-		darkOverlayView.snp.makeConstraints {
-			$0.edges.equalToSuperview()
-		}
-
-		blurView.contentView.addSubview(lightOverlayView)
-		lightOverlayView.snp.makeConstraints {
-			$0.edges.equalToSuperview()
-		}
-
-		blurView.contentView.addSubview(blurTintView)
-		blurTintView.snp.makeConstraints {
-			$0.edges.equalToSuperview()
+		[baseFillView, darkOverlayView, lightOverlayView, blurTintView].forEach { view in
+			blurView.contentView.addSubview(view)
+			view.snp.makeConstraints {
+				$0.edges.equalToSuperview()
+			}
 		}
 	}
 
