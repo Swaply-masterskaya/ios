@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 
 protocol CardViewModelProtocol {
-    var image: UIImage? { get }
+    var imageUrl: String? { get }
     var firstTitle: String { get }
     var secondTitle: String { get }
     var subtitle: String? { get }
@@ -21,8 +21,8 @@ final class CardViewModel: CardViewModelProtocol {
 
     // MARK: - Internal Properties
 
-    var image: UIImage? {
-        return AppImages.logoOrange
+    var imageUrl: String? {
+        return model.imageUrl
     }
 
     var firstTitle: String {

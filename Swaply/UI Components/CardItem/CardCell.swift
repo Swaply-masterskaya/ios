@@ -74,7 +74,7 @@ final class CardCell: UICollectionViewCell {
     private let likeButtonContainer: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = AppRadius.extraMedium
         view.layer.masksToBounds = true
         return view
     }()
@@ -82,9 +82,6 @@ final class CardCell: UICollectionViewCell {
     private lazy var likeButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = UIColor.white
-        button.addAction(UIAction { [weak self] _ in
-            self?.viewModel?.likeTapped()
-        }, for: .touchUpInside)
         return button
     }()
 
@@ -102,6 +99,9 @@ final class CardCell: UICollectionViewCell {
         super.prepareForReuse()
         disposeBag = DisposeBag()
         viewModel = nil
+
+        likeButton.removeAllActions(for: .touchUpInside)
+
         imageView.image = nil
         firstTitleLabel.text = nil
         secondTitleLabel.text = nil
@@ -139,7 +139,7 @@ final class CardCell: UICollectionViewCell {
         firstTitleContainer.snp.makeConstraints {
             $0.top.equalToSuperview().offset(AppSpacing.medium)
             $0.leading.equalToSuperview().offset(AppSpacing.medium)
-            $0.height.equalTo(24)
+            $0.height.equalTo(AppSpacing.xxlarge)
         }
 
         firstTitleLabel.snp.makeConstraints {
@@ -151,7 +151,7 @@ final class CardCell: UICollectionViewCell {
         secondTitleContainer.snp.makeConstraints {
             $0.top.equalToSuperview().offset(AppSpacing.medium)
             $0.leading.equalTo(firstTitleContainer.snp.trailing).offset(AppSpacing.xsmall)
-            $0.height.equalTo(24)
+            $0.height.equalTo(AppSpacing.xxlarge)
         }
 
         secondTitleLabel.snp.makeConstraints {
@@ -163,12 +163,12 @@ final class CardCell: UICollectionViewCell {
         likeButtonContainer.snp.makeConstraints {
             $0.top.equalToSuperview().offset(AppSpacing.medium)
             $0.trailing.equalToSuperview().offset(-AppSpacing.medium)
-            $0.width.height.equalTo(24)
+            $0.width.height.equalTo(AppSpacing.xxlarge)
         }
 
         likeButton.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.width.height.equalTo(16)
+            $0.width.height.equalTo(AppSpacing.large)
         }
 
         subtitleLabel.snp.makeConstraints {
@@ -190,6 +190,14 @@ final class CardCell: UICollectionViewCell {
             })
             .disposed(by: disposeBag)
     }
+    private func loadImage(from urlString: String?) {
+        guard let urlString = urlString, let url = URL(string: urlString) else {
+            imageView.image = AppImages.logoOrange
+            return
+        }
+        // Пока просто заглушка
+        imageView.image = AppImages.logoOrange
+    }
 
     // MARK: - Internal Methods
 
@@ -197,12 +205,29 @@ final class CardCell: UICollectionViewCell {
         self.viewModel = viewModel
         disposeBag = DisposeBag()
 
-        imageView.image = viewModel.image
+        likeButton.removeAllActions(for: .touchUpInside)
+
+        likeButton.addAction(UIAction { [weak self] _ in
+            self?.viewModel?.likeTapped()
+        }, for: .touchUpInside)
+
+        loadImage(from: viewModel.imageUrl)
+        
         firstTitleLabel.text = viewModel.firstTitle
         secondTitleLabel.text = viewModel.secondTitle
         subtitleLabel.text = viewModel.subtitle
         subtitleLabel.isHidden = viewModel.subtitle == nil
 
         bindLikeButton()
+    }
+}
+
+private extension UIButton {
+    func removeAllActions(for controlEvents: UIControl.Event) {
+        enumerateEventHandlers { action, _, event, _ in
+            if event == controlEvents, let action = action {
+                removeAction(action, for: controlEvents)
+            }
+        }
     }
 }
